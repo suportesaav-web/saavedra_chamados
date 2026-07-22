@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard de Chamados | Saavedra</title>
+    <script src="auth.js"></script>
+    <style>
+        :root {
+            --saavedra-black: #25282a;
+            --saavedra-orange: #dc4405;
+            --saavedra-red: #da291c;
+            --saavedra-green: #1e8e3e;
+            --saavedra-blue: #0066cc;
+            --bg-color: #f8f9fa;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: var(--bg-color); color: var(--saavedra-black); }
+        
+        .navbar { background: var(--saavedra-black); color: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .navbar-brand { font-size: 22px; margin: 0; font-weight: normal; }
+        .navbar-brand span { color: var(--saavedra-orange); font-weight: bold; }
+        .nav-actions { display: flex; gap: 10px; align-items: center; }
+        .nav-actions a, .nav-actions button { text-decoration: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; font-size: 14px; transition: 0.3s; cursor: pointer; border: 1px solid transparent; font-family: inherit;}
+        
+        .btn-outline { border-color: var(--saavedra-orange); color: var(--saavedra-orange); background: transparent; }
+        .btn-outline:hover { background: var(--saavedra-orange); color: white; }
+        .btn-solid { background: var(--saavedra-orange); color: white; }
+        .btn-solid:hover { background: #b83804; }
+        .btn-danger { border-color: var(--saavedra-red); color: var(--saavedra-red); background: transparent;}
+        .btn-danger:hover { background: var(--saavedra-red); color: white; }
+
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        
+        .kpi-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .kpi-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-left: 5px solid var(--saavedra-black); transition: transform 0.2s; cursor: pointer; user-select: none; }
+        .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+        .kpi-card.ativo { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); background-color: #fff9f6; border-color: var(--saavedra-orange); }
+        
+        .kpi-title { font-size: 11px; text-transform: uppercase; color: #888; font-weight: bold; }
+        .kpi-value { font-size: 28px; font-weight: bold; margin-top: 10px; display: block; }
+        
+        .border-orange { border-left-color: var(--saavedra-orange); }
+        .border-red { border-left-color: var(--saavedra-red); }
+        .border-green { border-left-color: var(--saavedra-green); }
+        .border-blue { border-left-color: var(--saavedra-blue); }
+        .border-dark { border-left-color: #555; }
+        .text-red { color: var(--saavedra-red); }
+        .text-orange { color: var(--saavedra-orange); }
+        .text-green { color: var(--saavedra-green); }
+        .text-blue { color: var(--saavedra-blue); }
+
+        .fila-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 15px; }
+        .fila-header h2 { margin: 0; font-size: 20px; border-left: 4px solid var(--saavedra-orange); padding-left: 10px; }
+        
+        .filter-controls { display: flex; gap: 10px; align-items: center; }
+        .date-input { padding: 9px 12px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 13px; outline: none; }
+        .date-input:focus { border-color: var(--saavedra-orange); }
+        .search-bar { padding: 10px 15px; border: 1px solid #ccc; border-radius: 4px; width: 220px; outline: none; font-family: inherit; }
+        .search-bar:focus { border-color: var(--saavedra-orange); }
+
+        .table-card { background: white; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eaeaea; }
+        th { background: var(--saavedra-black); color: white; font-weight: normal; font-size: 14px; }
+        tr:hover { background: #fafafa; }
+        
+        .badge { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; display: inline-block; }
+        .badge-status { background: #eaeaea; color: #555; }
+        .badge-sla-ok { background: #e6f4ea; color: #1e8e3e; }
+        .badge-sla-warn { background: #fef0db; color: var(--saavedra-orange); }
+        .badge-sla-danger { background: #fce8e6; color: var(--saavedra-red); }
+        .badge-prioridade-alta { background: #fce8e6; color: var(--saavedra-red); border: 1px solid #fad2cf; }
+
+        .btn-view { background: transparent; color: var(--saavedra-orange); border: 1px solid var(--saavedra-orange); padding: 6px 12px; border-radius: 4px; cursor: pointer; transition: 0.2s; font-size: 12px; font-weight: bold; text-decoration: none; }
+        .btn-view:hover { background: var(--saavedra-orange); color: white; }
+
+        .pagination-container { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 20px; padding-bottom: 30px; }
+        .pagination-btn { background: white; border: 1px solid #ccc; padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 13px; transition: 0.2s; font-family: inherit;}
+        .pagination-btn:hover:not(:disabled) { border-color: var(--saavedra-orange); color: var(--saavedra-orange); }
+        .pagination-btn:disabled { background: #f0f0f0; color: #aaa; cursor: not-allowed; border-color: #eee; }
+        .pagination-info { font-size: 14px; color: #555; font-weight: 500; }
+
+        .toast-notification { position: fixed; top: 25px; right: -400px; background: white; border-left: 5px solid var(--saavedra-green); box-shadow: 0 4px 15px rgba(0,0,0,0.15); padding: 18px 25px; border-radius: 4px; display: flex; align-items: center; gap: 15px; z-index: 2000; transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .toast-notification.show { right: 25px; }
+
+        .modal-overlay { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); width: 100%; max-width: 360px; border-top: 5px solid var(--saavedra-orange); }
+        .modal-content h3 { margin-top: 0; margin-bottom: 20px; font-size: 18px; color: var(--saavedra-black); border-bottom: 1px solid #eaeaea; padding-bottom: 10px; }
+        .modal-group { display: flex; flex-direction: column; margin-bottom: 15px; }
+        .modal-group label { font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #555; }
+        .modal-group input { padding: 10px; border: 1px solid #ccc; border-radius: 4px; outline: none; font-family: inherit; font-size: 14px; }
+        .modal-group input:focus { border-color: var(--saavedra-orange); }
+        .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .modal-actions button { flex: 1; padding: 11px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-family: inherit; transition: 0.2s; }
+        .modal-status { text-align: center; font-size: 13px; font-weight: bold; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <h1 class="navbar-brand">Saavedra <span>Chamados</span></h1>
+        <div class="nav-actions">
+            <span id="userGreeting" style="color: #ccc; font-size: 14px; margin-right: 15px;">Carregando perfil...</span>
+            <button onclick="abrirModalSenha()" class="btn-outline">Alterar Senha</button>
+            <a href="relatorios.html" class="btn-outline" data-admin-only>Relatórios</a>
+            <a href="novo_chamado.html" class="btn-solid">+ Novo Chamado</a>
+            <a href="admin.html" class="btn-outline" data-admin-only>Painel Admin</a>
+            <button onclick="fazerLogout()" class="btn-danger">Sair</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="kpi-section" id="kpiContainer"></div>
+
+        <div class="fila-header">
+            <h2 id="tituloFila">Fila de Atendimento</h2>
+            <div class="filter-controls">
+                <select id="txtFiltroTipo" class="date-input" style="font-weight: bold; border-color: var(--saavedra-orange);" onchange="carregarDashboard(1)">
+                    <option value="">🔍 Filtrar por Classificação (Todos)</option>
+                </select>
+                
+                <label style="font-size: 12px; font-weight: bold; color: #666; margin-left: 5px;">Período:</label>
+                <input type="date" id="txtDataInicio" class="date-input" onchange="carregarDashboard(1)">
+                <label style="font-size: 12px; font-weight: bold; color: #666;">até</label>
+                <input type="date" id="txtDataFim" class="date-input" onchange="carregarDashboard(1)">
+                <input type="text" id="inputPesquisa" class="search-bar" placeholder="🔍 Filtrar texto na página..." onkeyup="renderizarTabela()">
+            </div>
+        </div>
+
+        <div class="table-card">
+            <table id="tabelaChamados">
+                <thead>
+                    <tr>
+                        <th style="width: 70px;">ID</th>
+                        <th>Título</th>
+                        <th>Solicitante</th>
+                        <th>Técnico</th>
+                        <th>Status</th>
+                        <th>Prazo SLA</th>
+                        <th style="text-align: center; width: 100px;">Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="listaCorpo">
+                    <tr><td colspan="7" style="text-align:center; color: #888; padding: 30px;">Carregando chamados...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination-container">
+            <button id="btnPagAnt" class="pagination-btn" onclick="mudarPagina(-1)">&larr; Anterior</button>
+            <span id="lblPagInfo" class="pagination-info">Página 1 de 1</span>
+            <button id="btnPagProx" class="pagination-btn" onclick="mudarPagina(1)">Próximo &rarr;</button>
+        </div>
+    </div>
+
+    <div id="toastNotification" class="toast-notification">
+        <div style="background: var(--saavedra-green); color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold;">✓</div>
+        <div>
+            <strong style="display: block; font-size: 14px; color: var(--saavedra-black);">Sucesso!</strong>
+            <span id="toastMessage" style="font-size: 13px; color: #666;">Chamado processado com êxito.</span>
+        </div>
+    </div>
+
+    <div id="modalSenha" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Alterar Minha Senha</h3>
+            <div class="modal-group">
+                <label>Senha Atual</label>
+                <input type="password" id="txtSenhaAtual" placeholder="Digite sua senha atual">
+            </div>
+            <div class="modal-group">
+                <label>Nova Senha</label>
+                <input type="password" id="txtNovaSenha" placeholder="Mínimo de 6 caracteres">
+            </div>
+            <div class="modal-group">
+                <label>Confirmar Nova Senha</label>
+                <input type="password" id="txtConfirmaNovaSenha" placeholder="Repita a nova senha">
+            </div>
+            <div id="msgModalSenha" class="modal-status"></div>
+            <div class="modal-actions">
+                <button onclick="salvarNovaSenha()" class="btn-solid">Salvar</button>
+                <button onclick="fecharModalSenha()" class="btn-cancel">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let chamadosGlobais = [];
+        let filtroAtivo = null; 
+        let paginaAtual = 1;
+        let totalPaginas = 1;
+        let tiposCarregados = false;
+
+        async function carregarTiposDropdown() {
+            if (tiposCarregados) return;
+            try {
+                const res = await fetch(`${API_BASE_URL}/cadastros/tipo`, {credentials: 'include'});
+                if (res.ok) {
+                    const tipos = await res.json();
+                    const cmb = document.getElementById('txtFiltroTipo');
+                    tipos.forEach(t => {
+                        const opt = document.createElement('option');
+                        opt.value = t.id;
+                        opt.textContent = `📁 ${t.nome}`;
+                        cmb.appendChild(opt);
+                    });
+                    tiposCarregados = true;
+                }
+            } catch(e) { console.error("Erro ao carregar tipos de chamados:", e); }
+        }
+
+        async function carregarDashboard(page = 1) {
+            paginaAtual = page;
+            try {
+                if (window.usuarioLogado) {
+                    document.getElementById('userGreeting').innerHTML = `Olá, <strong>${window.usuarioLogado.nome}</strong>`;
+                }
+
+                await carregarTiposDropdown();
+
+                const resKpi = await fetch(`${API_BASE_URL}/kpis`, {credentials: 'include'});
+                if (!resKpi.ok) throw new Error("Erro ao coletar os contadores");
+                const kpis = await resKpi.json();
+                
+                let kpiHtml = '';
+                kpis.status_dinamicos.forEach(s => {
+                    let corClass = 'border-dark'; let textClass = '';
+                    const nomeLower = s.nome.toLowerCase();
+                    if (nomeLower.includes('aberto') || nomeLower.includes('novo')) { corClass = 'border-orange'; textClass = 'text-orange'; }
+                    else if (nomeLower.includes('andamento')) { corClass = 'border-blue'; textClass = 'text-blue'; }
+                    else if (nomeLower.includes('concluido') || nomeLower.includes('resolvido')) { corClass = 'border-green'; textClass = 'text-green'; }
+                    else if (nomeLower.includes('cancelado')) { corClass = 'border-red'; textClass = 'text-red'; }
+                    
+                    const ativo = filtroAtivo && filtroAtivo.tipo === 'status' && filtroAtivo.id === s.id ? 'ativo' : '';
+                    kpiHtml += `
+                    <div class="kpi-card ${corClass} ${ativo}" id="card-status-${s.id}" onclick="aplicarFiltroKpi('status', ${s.id}, 'card-status-${s.id}')">
+                        <span class="kpi-title">${s.nome}</span>
+                        <span class="kpi-value ${textClass}">${s.qtd}</span>
+                    </div>`;
+                });
+
+                const sEst = filtroAtivo && filtroAtivo.tipo === 'estourado' ? 'ativo' : '';
+                const sAt = filtroAtivo && filtroAtivo.tipo === 'atencao' ? 'ativo' : '';
+                const sCr = filtroAtivo && filtroAtivo.tipo === 'criticos' ? 'ativo' : '';
+                
+                kpiHtml += `
+                <div class="kpi-card border-red ${sEst}" id="card-estourado" onclick="aplicarFiltroKpi('estourado', null, 'card-estourado')">
+                    <span class="kpi-title">SLA Estourado</span>
+                    <span class="kpi-value text-red">${kpis.sla_estourado}</span>
+                </div>
+                <div class="kpi-card border-orange ${sAt}" id="card-atencao" onclick="aplicarFiltroKpi('atencao', null, 'card-atencao')">
+                    <span class="kpi-title">SLA Atenção</span>
+                    <span class="kpi-value text-orange">${kpis.sla_atencao}</span>
+                </div>
+                <div class="kpi-card border-red ${sCr}" id="card-criticos" onclick="aplicarFiltroKpi('criticos', null, 'card-criticos')">
+                    <span class="kpi-title">Críticos</span>
+                    <span class="kpi-value text-red">${kpis.criticos}</span>
+                </div>`;
+                
+                document.getElementById('kpiContainer').innerHTML = kpiHtml;
+
+                const perfil = window.usuarioLogado ? window.usuarioLogado.perfil : null;
+                const endpoint = ['Admin', 'Gestor', 'Tecnico'].includes(perfil) ? 'tarefas' : 'meus-chamados';
+                document.getElementById('tituloFila').innerText = ['Admin', 'Gestor', 'Tecnico'].includes(perfil) ? 'Fila de Atendimento Geral' : 'Meus Chamados Abertos';
+
+                const dataInicio = document.getElementById('txtDataInicio').value;
+                const dataFim = document.getElementById('txtDataFim').value;
+                const filtroTipoId = document.getElementById('txtFiltroTipo').value;
+                
+                let url = `${API_BASE_URL}/${endpoint}?page=${paginaAtual}&limit=20`;
+                if (dataInicio) url += `&data_inicio=${dataInicio}`;
+                if (dataFim) url += `&data_fim=${dataFim}`;
+                if (filtroTipoId) url += `&tipo_id=${filtroTipoId}`; // 🌟 INJETA O TIPO SELECIONADO NA URL DA API
+                
+                if (filtroAtivo) {
+                    if (filtroAtivo.tipo === 'status') url += `&status_id=${filtroAtivo.id}`;
+                    if (filtroAtivo.tipo === 'criticos') url += `&prioridade_id=1`;
+                    if (filtroAtivo.tipo === 'estourado') url += `&sla_filtro=estourado`;
+                    if (filtroAtivo.tipo === 'atencao') url += `&sla_filtro=atencao`;
+                }
+
+                const resTarefas = await fetch(url, {credentials: 'include'});
+                if (!resTarefas.ok) throw new Error("Erro ao coletar chamados paginados");
+                
+                const respostaPaginada = await resTarefas.json();
+                chamadosGlobais = respostaPaginada.dados;
+                totalPaginas = respostaPaginada.paginas || 1;
+
+                document.getElementById('lblPagInfo').innerText = `Página ${paginaAtual} de ${totalPaginas}`;
+                document.getElementById('btnPagAnt').disabled = (paginaAtual <= 1);
+                document.getElementById('btnPagProx').disabled = (paginaAtual >= totalPaginas);
+
+                renderizarTabela();
+            } catch (error) {
+                console.error(error);
+                document.getElementById('listaCorpo').innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--saavedra-red); padding:30px;">Falha estrutural: ${error.message}</td></tr>`;
+            }
+        }
+
+        function mudarPagina(direcao) {
+            const novaPag = paginaAtual + direcao;
+            if (novaPag >= 1 && novaPag <= totalPaginas) {
+                carregarDashboard(novaPag);
+            }
+        }
+
+        function renderizarTabela() {
+            const tbody = document.getElementById('listaCorpo');
+            const inputPesquisa = document.getElementById("inputPesquisa").value.toLowerCase();
+            const agora = new Date();
+            
+            let tarefasFiltradas = chamadosGlobais.filter(t => {
+                return `${t.id} ${t.titulo} ${t.tecnico || ''} ${t.solicitante || ''} ${t.status || ''}`.toLowerCase().includes(inputPesquisa);
+            });
+
+            if (tarefasFiltradas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 30px; color:#666;">Nenhum chamado encontrado para esta página.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = tarefasFiltradas.map(t => {
+                let idDisplay = `<strong>#${t.id}</strong>`;
+                if(t.prioridade_id === 1) idDisplay += ` <br><span class="badge badge-prioridade-alta" style="margin-top:4px;">Crítico</span>`;
+
+                let slaHtml = '<span class="badge badge-status">Sem SLA</span>';
+                if (t.data_limite_sla) {
+                    const dataSla = new Date(t.data_limite_sla);
+                    const horasRestantes = (dataSla - agora) / (1000 * 60 * 60);
+                    const formatada = dataSla.toLocaleString('pt-BR', {day: '2-digit', month: '2-digit', hour: '2-digit', minute:'2-digit'});
+                    
+                    if (horasRestantes < 0) slaHtml = `<span class="badge badge-sla-danger">Vencido: ${formatada}</span>`;
+                    else if (horasRestantes <= 2) slaHtml = `<span class="badge badge-sla-warn">Atenção: ${formatada}</span>`;
+                    else slaHtml = `<span class="badge badge-sla-ok">No prazo: ${formatada}</span>`;
+                }
+                return `<tr><td>${idDisplay}</td><td style="font-weight: 500;">${t.titulo}</td><td style="font-size: 13px;">${t.solicitante || 'N/A'}</td><td style="font-size: 13px; color: var(--saavedra-orange); font-weight: bold;">${t.tecnico || 'Aguardando triagem...'}</td><td><span class="badge badge-status">${t.status}</span></td><td>${slaHtml}</td><td style="text-align: center;"><a href="detalhe_chamado.html?id=${t.id}" class="btn-view">Abrir</a></td></tr>`;
+            }).join('');
+        }
+
+        function aplicarFiltroKpi(tipo, id, cardId) {
+            const jaAtivo = filtroAtivo && filtroAtivo.tipo === tipo && filtroAtivo.id === id;
+            if (jaAtivo) { filtroAtivo = null; } else { filtroAtivo = { tipo, id }; }
+            carregarDashboard(1);
+        }
+
+        function verificarParametroUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const ticketCriado = urlParams.get('criado');
+            if (ticketCriado) {
+                document.getElementById('toastMessage').innerText = `Chamado #${ticketCriado} foi registrado e notificado com sucesso!`;
+                const toast = document.getElementById('toastNotification');
+                toast.classList.add('show');
+                setTimeout(() => { toast.classList.remove('show'); }, 5000);
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        }
+
+        function abrirModalSenha() {
+            document.getElementById('txtSenhaAtual').value = '';
+            document.getElementById('txtNovaSenha').value = '';
+            document.getElementById('txtConfirmaNovaSenha').value = '';
+            document.getElementById('msgModalSenha').style.display = 'none';
+            document.getElementById('modalSenha').style.display = 'flex';
+        }
+        function fecharModalSenha() { document.getElementById('modalSenha').style.display = 'none'; }
+
+        async function salvarNovaSenha() {
+            const senhaAtual = document.getElementById('txtSenhaAtual').value.trim();
+            const novaSenha = document.getElementById('txtNovaSenha').value.trim();
+            const confirmaSenha = document.getElementById('txtConfirmaNovaSenha').value.trim();
+            const msg = document.getElementById('msgModalSenha');
+
+            if (!senhaAtual || !novaSenha || !confirmaSenha) {
+                msg.style.color = 'var(--saavedra-red)'; msg.innerText = 'Preencha todos os campos.'; msg.style.display = 'block'; return;
+            }
+            if (novaSenha !== confirmaSenha) {
+                msg.style.color = 'var(--saavedra-red)'; msg.innerText = 'As senhas não conferem.'; msg.style.display = 'block'; return;
+            }
+            try {
+                const res = await fetch(`${API_BASE_URL}/auth/alterar-senha`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ senha_atual: senhaAtual, nova_senha: novaSenha }),
+                    credentials: 'include'
+                });
+                if (res.ok) {
+                    msg.style.color = 'var(--saavedra-green)'; msg.innerText = 'Senha alterada!'; msg.style.display = 'block';
+                    setTimeout(fecharModalSenha, 1500);
+                } else {
+                    const err = await res.json();
+                    msg.style.color = 'var(--saavedra-red)'; msg.innerText = err.detail || 'Erro.'; msg.style.display = 'block';
+                }
+            } catch (e) { msg.style.color = 'var(--saavedra-red)'; msg.innerText = 'Erro.'; msg.style.display = 'block'; }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                carregarDashboard(1);
+                verificarParametroUrl();
+            }, 250); 
+            setInterval(() => carregarDashboard(paginaAtual), 60000); 
+        });
+    </script>
+</body>
+</html>

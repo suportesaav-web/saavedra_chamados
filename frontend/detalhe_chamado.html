@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Chamado | Saavedra</title>
+    <script src="auth.js"></script>
+    <style>
+        :root {
+            --saavedra-black: #25282a;
+            --saavedra-orange: #dc4405;
+            --saavedra-red: #da291c;
+            --bg-color: #f8f9fa;
+        }
+        body { font-family: 'Presidencia Base CC', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: var(--bg-color); color: var(--saavedra-black); }
+        
+        .navbar { background: var(--saavedra-black); color: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .navbar-brand { font-family: 'Presidencia Fina CC', 'Segoe UI', sans-serif; font-size: 22px; margin: 0; font-weight: normal; }
+        .navbar-brand span { color: var(--saavedra-orange); font-weight: bold; }
+        .nav-actions { display: flex; gap: 10px; align-items: center; }
+        .nav-actions a, .nav-actions button { text-decoration: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; font-size: 14px; transition: 0.3s; cursor: pointer; border: 1px solid transparent; font-family: inherit;}
+        
+        .btn-outline { border-color: var(--saavedra-orange); color: var(--saavedra-orange); background: transparent; }
+        .btn-outline:hover { background: var(--saavedra-orange); color: white; }
+        .btn-danger { border-color: var(--saavedra-red); color: var(--saavedra-red); background: transparent;}
+        .btn-danger:hover { background: var(--saavedra-red); color: white; }
+
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        
+        .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .card h3 { margin-top: 0; border-bottom: 1px solid #eaeaea; padding-bottom: 10px; color: var(--saavedra-orange); }
+        
+        .chamado-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;}
+        .chamado-title { font-size: 22px; font-weight: bold; margin: 0; }
+        .chamado-id { color: #888; font-size: 14px; margin-bottom: 10px; display: block; }
+        
+        .badge { padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: bold; display: inline-block; }
+        .badge-status { background: #eaeaea; color: #555; }
+        
+        .desc-box { background: #f9f9f9; padding: 15px; border-left: 4px solid var(--saavedra-orange); border-radius: 4px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; margin-bottom: 20px; }
+        
+        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
+        .form-group label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #555; }
+        .form-group select, .form-group textarea { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 13px; outline: none; }
+        .form-group select:focus, .form-group textarea:focus { border-color: var(--saavedra-orange); }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        
+        .btn-submit { background: var(--saavedra-orange); color: white; padding: 12px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; font-family: inherit;}
+        .btn-submit:hover { background: #b83804; }
+
+        .timeline { list-style: none; padding: 0; margin: 0; }
+        .timeline-item { position: relative; padding-left: 20px; margin-bottom: 20px; border-left: 2px solid #eaeaea; }
+        .timeline-item::before { content: ''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px; background: var(--saavedra-orange); border-radius: 50%; }
+        .timeline-date { font-size: 12px; color: #888; margin-bottom: 5px; display: block; }
+        .timeline-user { font-weight: bold; font-size: 13px; color: var(--saavedra-black); margin-bottom: 5px;}
+        .timeline-content { font-size: 14px; color: #444; line-height: 1.5; white-space: pre-wrap; background: #fff; padding: 10px; border: 1px solid #eaeaea; border-radius: 4px; margin-top: 5px;}
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <h1 class="navbar-brand">Saavedra <span>Chamados</span></h1>
+        <div class="nav-actions">
+            <a href="index.html" class="btn-outline">&larr; Voltar à Fila</a>
+            <button onclick="fazerLogout()" class="btn-danger">Sair</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="main-column">
+            <!-- Dados do Chamado Base -->
+            <div class="card">
+                <span class="chamado-id" id="lblId">Carregando...</span>
+                <div class="chamado-header">
+                    <h2 class="chamado-title" id="lblTitulo">...</h2>
+                    <span class="badge badge-status" id="lblStatus">...</span>
+                </div>
+                <div class="desc-box" id="lblDescricao">Aguarde o carregamento do conteúdo original...</div>
+                
+                <div style="display: flex; gap: 20px; margin-top: 15px; font-size: 13px; color: #666;">
+                    <div><strong>Solicitante:</strong> <span id="lblSolicitante"></span></div>
+                    <div><strong>Abertura:</strong> <span id="lblData"></span></div>
+                    <div><strong>SLA Limite:</strong> <span id="lblSla"></span></div>
+                </div>
+
+                <div id="lblAnexosContainer" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
+                    <strong style="font-size: 13px; color: #555; display: block; margin-bottom: 8px;">📎 Ficheiros Anexados:</strong>
+                    <div id="lblAnexos" style="display: flex; flex-direction: column; gap: 5px;"></div>
+                </div>
+            </div>
+
+            <!-- Histórico de Respostas (Work Notes) -->
+            <div class="card">
+                <h3>Histórico de Ações (Work Notes)</h3>
+                <ul class="timeline" id="timelineList">
+                    <li class="timeline-item"><div class="timeline-content">Carregando linha do tempo...</div></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="side-column">
+            <!-- Interação Técnica -->
+            <div class="card">
+                <h3>Ações do Técnico</h3>
+                <div class="form-group">
+                    <label>Técnico Responsável</label>
+                    <select id="updTecnico"><option value="">Aguardando triagem...</option></select>
+                </div>
+                <div class="form-group">
+                    <label>Tipo de Chamado</label>
+                    <select id="updTipo"></select>
+                </div>
+                <div class="form-group">
+                    <label>Novo Status</label>
+                    <select id="updStatus"></select>
+                </div>
+                <div class="form-group" id="boxCausaRaiz" style="display: none;">
+                    <label>Causa Raiz (Obrigatório para Fechar)</label>
+                    <select id="updCausaRaiz"></select>
+                </div>
+                <div class="form-group">
+                    <label>Anotação / Work Note (Visível ao Solicitante)</label>
+                    <textarea id="updNotas" placeholder="Descreva o que foi feito nesta atualização..."></textarea>
+                </div>
+
+                <!-- Checkbox de Sigilo para Comunicação Interna (Protegido pelo data-admin-only no auth.js) -->
+                <div class="form-group" style="flex-direction: row; align-items: center; gap: 8px; background: #fff3cd; padding: 10px; border-radius: 4px; border: 1px solid #ffeeba;" data-admin-only>
+                    <input type="checkbox" id="updNotaInterna" style="width: auto;">
+                    <label for="updNotaInterna" style="margin: 0; color: #856404; cursor: pointer;">🔒 Marcar como Nota Interna (Ocultar do utilizador e não enviar e-mail)</label>
+                </div>
+
+                <div class="form-group">
+                    <label>Anexar Ficheiro à Atualização (Opcional)</label>
+                    <input type="file" id="updAnexo" style="font-size: 12px; padding: 5px 0;">
+                </div>
+
+                <button class="btn-submit" onclick="atualizarChamado()">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Declaração inicial obrigatória dos parâmetros da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const tarefaId = urlParams.get('id');
+
+        // 2. Processamento da Pesquisa de Satisfação (CSAT) caso venha do e-mail
+        const notaAvaliacao = urlParams.get('avaliar');
+        if (notaAvaliacao && tarefaId) {
+            fetch(`${API_BASE_URL}/tarefas/${tarefaId}/avaliar?nota=${notaAvaliacao}`, {
+                method: 'POST',
+                credentials: 'include'
+            }).then(res => {
+                if(res.ok) {
+                    alert("Obrigado! A sua avaliação foi registada com sucesso.");
+                    window.location.href = `detalhe_chamado.html?id=${tarefaId}`;
+                }
+            }).catch(err => console.error("Erro ao avaliar:", err));
+        }
+
+        async function carregarDropdowns() {
+            try {
+                const reqs = [
+                    fetch(`${API_BASE_URL}/usuarios`, { credentials: 'include' }),
+                    fetch(`${API_BASE_URL}/cadastros/tipo`, { credentials: 'include' }),
+                    fetch(`${API_BASE_URL}/cadastros/status`, { credentials: 'include' }),
+                    fetch(`${API_BASE_URL}/cadastros/causa_raiz`, { credentials: 'include' })
+                ];
+                
+                const res = await Promise.all(reqs);
+                const [usuarios, tipos, status, causas] = await Promise.all(res.map(r => r.json()));
+
+                const pop = (id, data, defaultTxt) => {
+                    const el = document.getElementById(id);
+                    el.innerHTML = (defaultTxt ? `<option value="">${defaultTxt}</option>` : '') + data.map(i => `<option value="${i.id}">${i.nome}</option>`).join('');
+                };
+
+                pop('updTecnico', usuarios, 'Deixar sem técnico');
+                pop('updTipo', tipos);
+                pop('updStatus', status);
+                pop('updCausaRaiz', causas, 'Selecione uma causa...');
+
+                document.getElementById('updStatus').addEventListener('change', (e) => {
+                    const s = parseInt(e.target.value);
+                    document.getElementById('boxCausaRaiz').style.display = (s === 4 || s === 6) ? 'flex' : 'none';
+                });
+
+            } catch (e) { console.error(e); }
+        }
+
+        async function carregarDados() {
+            if (!tarefaId) { alert("ID do chamado inválido."); return window.location.href = 'index.html'; }
+            
+            try {
+                const res = await fetch(`${API_BASE_URL}/tarefas/${tarefaId}`, { credentials: 'include' });
+                if (!res.ok) throw new Error('Falha ao carregar detalhes');
+                const t = await res.json();
+
+                document.getElementById('lblId').innerText = `CHAMADO #${t.id}`;
+                document.getElementById('lblTitulo').innerText = t.titulo;
+                document.getElementById('lblStatus').innerText = t.status_nome;
+                document.getElementById('lblDescricao').innerText = t.descricao;
+                document.getElementById('lblSolicitante').innerText = t.solicitante_nome || 'N/A';
+                document.getElementById('lblData').innerText = new Date(t.data_hora).toLocaleString('pt-BR');
+                document.getElementById('lblSla').innerText = t.data_limite_sla ? new Date(t.data_limite_sla).toLocaleString('pt-BR') : 'N/A';
+
+                if(t.tecnico_id) document.getElementById('updTecnico').value = t.tecnico_id;
+                if(t.tipo_id) document.getElementById('updTipo').value = t.tipo_id;
+                if(t.status_id) {
+                    document.getElementById('updStatus').value = t.status_id;
+                    document.getElementById('boxCausaRaiz').style.display = (t.status_id === 4 || t.status_id === 6) ? 'flex' : 'none';
+                }
+                if(t.causa_raiz_id) document.getElementById('updCausaRaiz').value = t.causa_raiz_id;
+
+                const anexosBox = document.getElementById('lblAnexosContainer');
+                const anexosDiv = document.getElementById('lblAnexos');
+                if (t.anexos && t.anexos.length > 0) {
+                    anexosBox.style.display = 'block';
+                    anexosDiv.innerHTML = t.anexos.map(a => `
+                        <div style="font-size: 13px;">
+                            <a href="/uploads/${a.nome_salvo}" target="_blank" style="color: var(--saavedra-orange); text-decoration: none; font-weight: bold;">
+                            📄 ${a.nome_original}
+                            </a>
+                        </div>
+                    `).join('');
+                } else { anexosBox.style.display = 'none'; }
+
+                const resHist = await fetch(`${API_BASE_URL}/tarefas/${tarefaId}/historico`, { credentials: 'include' });
+                if (resHist.ok) {
+                    const hist = await resHist.json();
+                    document.getElementById('timelineList').innerHTML = hist.map(h => {
+                        let anexoHtml = '';
+                        if (h.anexo_nome && h.anexo_salvo) {
+                            anexoHtml = `
+                                <div style="margin-top: 8px; font-size: 13px; background: #fffdf9; padding: 6px 10px; border: 1px dashed var(--saavedra-orange); border-radius: 4px; display: inline-block;">
+                                    📎 <strong>Ficheiro Anexado:</strong> 
+                                    <a href="/uploads/${h.anexo_salvo}" target="_blank" style="color: var(--saavedra-orange); text-decoration: none; font-weight: bold;">
+                                    ${h.anexo_nome}
+                                    </a>
+                                </div>
+                            `;
+                        }
+                        
+                        let bgCor = h.nota_interna ? '#fff3cd' : '#fff';
+                        let bordaCor = h.nota_interna ? '#ffeeba' : '#eaeaea';
+                        let iconeSigilo = h.nota_interna ? '<span style="float: right; font-size: 11px; background: #ffc107; color: #856404; padding: 2px 6px; border-radius: 4px;">🔒 Nota Interna</span>' : '';
+
+                        return `
+                            <li class="timeline-item">
+                                <span class="timeline-date">${new Date(h.data_hora).toLocaleString('pt-BR')}</span>
+                                <div class="timeline-user">${h.usuario_nome} <span style="color:#888; font-weight:normal;">alterou para</span> ${h.status_nome}</div>
+                                <div class="timeline-content" style="background: ${bgCor}; border: 1px solid ${bordaCor};">
+                                    ${iconeSigilo}
+                                    <div>${h.comentario || 'Nenhuma nota adicional.'}</div>
+                                    ${anexoHtml}
+                                </div>
+                            </li>
+                        `;
+                    }).join('');
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert("Erro ao carregar o chamado.");
+            }
+        }
+
+        async function atualizarChamado() {
+            const status = document.getElementById('updStatus').value;
+            const causa = document.getElementById('updCausaRaiz').value;
+            const nota = document.getElementById('updNotas').value.trim();
+
+            if (!nota) return alert('Por favor, informe as ações tomadas no Work Notes antes de salvar.');
+            if ((status == 4 || status == 6) && !causa) { return alert('Para concluir ou cancelar o chamado é obrigatório informar a Causa Raiz.'); }
+
+            const checkboxInterna = document.getElementById('updNotaInterna');
+            const ehNotaInterna = checkboxInterna ? checkboxInterna.checked : false;
+
+            const payload = {
+                novo_status_id: parseInt(status),
+                novo_tipo_id: parseInt(document.getElementById('updTipo').value),
+                novo_tecnico_id: parseInt(document.getElementById('updTecnico').value) || null,
+                causa_raiz_id: causa ? parseInt(causa) : null,
+                comentario: nota,
+                nota_interna: ehNotaInterna
+            };
+
+            const res = await fetch(`${API_BASE_URL}/tarefas/${tarefaId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+                credentials: 'include'
+            });
+
+            if (res.ok) {
+                const putData = await res.json();
+                const historicoId = putData.historico_id;
+
+                const fileInput = document.getElementById('updAnexo');
+                if (fileInput.files.length > 0 && historicoId) {
+                    const formData = new FormData();
+                    formData.append('file', fileInput.files[0]);
+                    formData.append('historico_id', historicoId);
+
+                    const uploadRes = await fetch(`${API_BASE_URL}/tarefas/${tarefaId}/anexar`, {
+                        method: 'POST',
+                        body: formData,
+                        credentials: 'include'
+                    });
+
+                    if (!uploadRes.ok) { console.error("Erro ao fazer upload do anexo do histórico."); }
+                }
+
+                window.location.href = `index.html?atualizado=${tarefaId}`;
+                
+            } else {
+                alert('Erro ao atualizar o chamado.');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            await carregarDropdowns();
+            await carregarDados();
+        });
+    </script>
+</body>
+</html>
