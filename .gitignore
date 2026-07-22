@@ -211,6 +211,15 @@ tempCodeRunnerFile.py
 
 # Marimo
 marimo/_static/
+
+# Ficheiros sensíveis e scripts internos da Saavedra
+frontend/auth.js
+migracao.py
+api/migrasenha.py
+api/testar_email.py
+bk/
+uploads/
+.env
 marimo/_lsp/
 __marimo__/
 
