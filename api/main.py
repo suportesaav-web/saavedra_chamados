@@ -275,6 +275,38 @@ def update_sla_matrix(sla_id: int, data: SlaConfigRequest, usuario: dict = Depen
     with engine.begin() as conn: conn.execute(text("UPDATE tbSLA_CONFIG SET TEMPO_HORAS = :horas WHERE SLA_ID = :id"), {"horas": data.tempo_horas, "id": sla_id})
     return {"status": "sucesso"}
 
+@app.get("/api/meus-chamados")
+async def listar_meus_chamados(
+    request: Request,
+    page: int = 1,
+    limit: int = 20,
+    status_id: int = None,
+    tipo_id: int = None,
+    busca: str = None
+):
+    usuario = request.session.get("user")
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+    
+    # 🌟 CORREÇÃO: Busca o ID usando 'id' (padrão gravado no login) com fallback para 'usuario_id'
+    usuario_id = usuario.get("id") or usuario.get("usuario_id")
+    
+    base = "SELECT T.TAREFA_ID, T.TITULO, S.STATUS_NOME, U.NOME, TEC.NOME, T.DATA_LIMITE_SLA, T.STATUS_ID, T.PRIORIDADE_ID FROM tbTAREFAS T LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbUSUARIO TEC ON T.TECNICO_ID = TEC.USUARIO_ID"
+    
+    return processar_fila_com_filtros(
+        base, 
+        "SELECT COUNT(*) FROM tbTAREFAS T", 
+        {"offset": (page - 1) * limit, "limit": limit}, 
+        status_id=status_id, 
+        prioridade_id=None, 
+        tipo_id=tipo_id, 
+        sla_filtro=None, 
+        data_inicio=None, 
+        data_fim=None, 
+        user_id_filtro=usuario_id,  # Filtra restrito aos chamados abertos pelo solicitante logado
+        tecnico_id_filtro=None, 
+        sem_tecnico=False
+    )
 # ==========================================
 # 6. KPIS E DASHBOARDS ANALYTICS
 # ==========================================

@@ -1,31 +1,38 @@
-# Sistema de Gestão de Chamados - Saavedra Tecnologia em Saúde
+# 🚀 Plano de Estudos: Automação e DevOps (30 Dias)
 
-Sistema interno de suporte técnico desenvolvido com base nas melhores práticas do **ITIL 4**, estruturado para garantir alta disponibilidade, governança, rastreabilidade e métricas analíticas.
-
----
-
-## 🛠️ Stack Tecnológica
-* **Backend:** FastAPI (Python) com suporte a sessões assíncronas e SQLAlchemy.
-* **Banco de Dados:** Microsoft SQL Server (Conexão via `pyodbc`).
-* **Frontend:** HTML5, CSS3 Nativo (Design System corporativo Saavedra) e JavaScript Vanilla.
-* **Servidor Web / Proxy:** Nginx (Direcionamento de portas e arquivos estáticos).
+> **Objetivo:** Construir uma base sólida em programação Python, versionamento de código com Git/GitHub, manipulação de dados, criação de APIs REST e automação de rotinas de infraestrutura moderna.
 
 ---
 
-## 📂 Estrutura de Diretórios
-* `main.py` — API principal (Endpoints, regras de negócio, envio de e-mails via SMTP e motor de SLA/CSAT).
-* `auth.js` — Script centralizado de autenticação, controle de sessão baseada em cookies e RBAC (controle de acesso por perfil).
-* `index.html` — Dashboard principal, KPIs dinâmicos, alternância de visão (Fila Pessoal vs. Visão da Equipe) e exportação para Excel.
-* `detalhe_chamado.html` — Tela de acompanhamento, linha do tempo (Work Notes), gestão de anexos e notas internas com sigilo ITIL.
-* `novo_chamado.html` — Formulário de abertura de tickets.
-* `admin.html` — Painel de cadastros globais (Status, Prioridades, Tipos, Causas Raiz, Setores, Usuários e Matriz de SLA).
-* `relatorios.html` — Painel analítico de governança (Gráficos de setores, técnicos, causas, top solicitantes e CSAT).
-* `uploads/` — Pasta de armazenamento físico de anexos (gerenciada por UUID para evitar colisões).
+## 📌 Visão Geral do Plano
+
+Este plano foi desenvolvido para guiar um aprendizado prático e estruturado ao longo de 4 semanas. A metodologia é focada em **laboratórios práticos (hands-on)**, resolução de problemas reais de produção e uso estratégico de IA como assistente de aprendizado.
+
+| Semana | Foco Central | Atividades Principais | Entregável / Meta |
+|---|---|---|---|
+| **Semana 1** | Fundamentos de Python & Git | Sintaxe básica, estruturas de dados, funções, setup do VS Code e comandos Git. | Repositório no GitHub com scripts e exercícios. |
+| **Semana 2** | Integração de Dados & Redes | SQL (CRUD), Métodos HTTP (GET, POST, PUT, DELETE), JSON e testes com Postman/curl. | Scripts de integração SQL e requisições HTTP testadas. |
+| **Semana 3** | Framework Web & APIs | FastAPI/Flask, criação de endpoints, validação de dados, Swagger UI e conexão com DB. | API REST funcional conectada ao banco de dados. |
+| **Semana 4** | Automação & Consolidação | Script de automação real (backup, monitoramento, parsing de logs), refatoração e boas práticas. | Projeto final documentado e versionado no GitHub. |
 
 ---
 
-## 🚀 Como Iniciar o Ambiente de Desenvolvimento
+## 📂 Estrutura do Repositório
 
-1. **Ativar o Ambiente Python e Instalar Dependências:**
-   ```bash
-   pip install fastapi uvicorn sqlalchemy pyodbc python-dotenv bcrypt
+```text
+.
+├── README.md             # Visão geral do plano de estudos (este arquivo)
+├── cronograma.md         # Roteiro detalhado semana a semana (dias 1 a 30)
+├── recursos.md           # Links, documentações e referências por semana
+└── anotacoes/            # Suas anotações de estudo semanais
+    └── semana-01.md      # Modelo base para registro de progresso e laboratórios
+```
+
+---
+
+## 💡 Metodologia & Boas Práticas
+
+- **Laboratórios Densos e Práticos:** Foque na escrita de código e resolução de problemas reais, seguindo a abordagem de treinamento prático (estilo 4Linux).
+- **Assistência com IA:** Utilize assistentes de IA para sanar dúvidas imediatas de sintaxe, debugar erros de execução e discutir arquitetura de código.
+- **Registro Contínuo:** Utilize a pasta `anotacoes/` duplicando o arquivo `semana-01.md` para registrar seus aprendizados (`semana-02.md`, `semana-03.md`, etc.).
+- **Versionamento:** Faça commits diários ou a cada laboratório concluído para criar um histórico sólido no seu GitHub.
