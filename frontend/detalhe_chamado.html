@@ -99,7 +99,7 @@
 
         <div class="side-column">
             <!-- Interação Técnica -->
-            <div class="card">
+            <div class="card" id="cardAcoesTecnico" data-admin-only>
                 <h3>Ações do Técnico</h3>
                 <div class="form-group">
                     <label>Técnico Responsável</label>
@@ -122,15 +122,15 @@
                     <textarea id="updNotas" placeholder="Descreva o que foi feito nesta atualização..."></textarea>
                 </div>
 
-                <!-- Checkbox de Sigilo para Comunicação Interna (Protegido pelo data-admin-only no auth.js) -->
                 <div class="form-group" style="flex-direction: row; align-items: center; gap: 8px; background: #fff3cd; padding: 10px; border-radius: 4px; border: 1px solid #ffeeba;" data-admin-only>
                     <input type="checkbox" id="updNotaInterna" style="width: auto;">
-                    <label for="updNotaInterna" style="margin: 0; color: #856404; cursor: pointer;">🔒 Marcar como Nota Interna (Ocultar do utilizador e não enviar e-mail)</label>
+                    <label for="updNotaInterna" style="margin: 0; color: #856404; cursor: pointer;">🔒 Marcar como Nota Interna</label>
                 </div>
 
+                <!-- 🌟 SUPORTE AO UPLOAD MÚLTIPLO -->
                 <div class="form-group">
-                    <label>Anexar Ficheiro à Atualização (Opcional)</label>
-                    <input type="file" id="updAnexo" style="font-size: 12px; padding: 5px 0;">
+                    <label>Anexar Ficheiros à Atualização (Opcional - Selecione Vários)</label>
+                    <input type="file" id="updAnexo" multiple style="font-size: 12px; padding: 5px 0;">
                 </div>
 
                 <button class="btn-submit" onclick="atualizarChamado()">Salvar Alterações</button>
@@ -139,23 +139,8 @@
     </div>
 
     <script>
-        // 1. Declaração inicial obrigatória dos parâmetros da URL
         const urlParams = new URLSearchParams(window.location.search);
         const tarefaId = urlParams.get('id');
-
-        // 2. Processamento da Pesquisa de Satisfação (CSAT) caso venha do e-mail
-        const notaAvaliacao = urlParams.get('avaliar');
-        if (notaAvaliacao && tarefaId) {
-            fetch(`${API_BASE_URL}/tarefas/${tarefaId}/avaliar?nota=${notaAvaliacao}`, {
-                method: 'POST',
-                credentials: 'include'
-            }).then(res => {
-                if(res.ok) {
-                    alert("Obrigado! A sua avaliação foi registada com sucesso.");
-                    window.location.href = `detalhe_chamado.html?id=${tarefaId}`;
-                }
-            }).catch(err => console.error("Erro ao avaliar:", err));
-        }
 
         async function carregarDropdowns() {
             try {
@@ -256,17 +241,20 @@
                             </li>
                         `;
                     }).join('');
+                } else {
+                    document.getElementById('timelineList').innerHTML = '<li class="timeline-item"><div class="timeline-content" style="color:red;">Falha ao carregar o histórico.</div></li>';
                 }
 
             } catch (error) {
                 console.error(error);
-                alert("Erro ao carregar o chamado.");
+                document.getElementById('timelineList').innerHTML = '<li class="timeline-item"><div class="timeline-content" style="color:red;">Não foi possível carregar a linha do tempo. Verifique a conexão com o servidor.</div></li>';
             }
         }
 
         async function atualizarChamado() {
             const status = document.getElementById('updStatus').value;
-            const causa = document.getElementById('updCausaRaiz').value;
+            const causaValue = document.getElementById('updCausaRaiz').value;
+            const causa = (causaValue === "" || isNaN(parseInt(causaValue))) ? null : parseInt(causaValue);
             const nota = document.getElementById('updNotas').value.trim();
 
             if (!nota) return alert('Por favor, informe as ações tomadas no Work Notes antes de salvar.');
@@ -279,7 +267,7 @@
                 novo_status_id: parseInt(status),
                 novo_tipo_id: parseInt(document.getElementById('updTipo').value),
                 novo_tecnico_id: parseInt(document.getElementById('updTecnico').value) || null,
-                causa_raiz_id: causa ? parseInt(causa) : null,
+                causa_raiz_id: causa,
                 comentario: nota,
                 nota_interna: ehNotaInterna
             };
@@ -298,8 +286,12 @@
                 const fileInput = document.getElementById('updAnexo');
                 if (fileInput.files.length > 0 && historicoId) {
                     const formData = new FormData();
-                    formData.append('file', fileInput.files[0]);
                     formData.append('historico_id', historicoId);
+                    
+                    // Lógica para enviar vários arquivos para o FastAPI simultaneamente
+                    for (let i = 0; i < fileInput.files.length; i++) {
+                        formData.append('files', fileInput.files[i]);
+                    }
 
                     const uploadRes = await fetch(`${API_BASE_URL}/tarefas/${tarefaId}/anexar`, {
                         method: 'POST',
@@ -307,13 +299,14 @@
                         credentials: 'include'
                     });
 
-                    if (!uploadRes.ok) { console.error("Erro ao fazer upload do anexo do histórico."); }
+                    if (!uploadRes.ok) { console.error("Erro ao fazer upload dos anexos."); }
                 }
 
                 window.location.href = `index.html?atualizado=${tarefaId}`;
                 
             } else {
-                alert('Erro ao atualizar o chamado.');
+                const erro = await res.json();
+                alert(`Erro ao atualizar o chamado: ${erro.detail || 'Falha no servidor'}`);
             }
         }
 
