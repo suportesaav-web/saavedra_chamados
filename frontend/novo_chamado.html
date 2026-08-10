@@ -80,21 +80,21 @@
                     </select>
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group" id="fgTecnico" data-admin-only>
                     <label for="tecnico_id">Atribuir Técnico (Opcional)</label>
                     <select id="tecnico_id">
                         <option value="">Deixar na fila de triagem</option>
                     </select>
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group" id="fgTipo" data-admin-only>
                     <label for="tipo_id">Tipo *</label>
-                    <select id="tipo_id" required></select>
+                    <select id="tipo_id"></select>
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group" id="fgPrioridade" data-admin-only>
                     <label for="prioridade_id">Prioridade *</label>
-                    <select id="prioridade_id" required></select>
+                    <select id="prioridade_id"></select>
                 </div>
                 
                 <div class="form-group" style="display: none;">
@@ -137,10 +137,21 @@
             carregarOpcoes('cadastros/prioridade', 'prioridade_id')
         ]);
         setTimeout(() => {
-            if (window.usuarioLogado && window.usuarioLogado.id) {
-                document.getElementById('solicitante_id').value = window.usuarioLogado.id;
-                if (window.usuarioLogado.perfil === 'Comum') {
-                    document.getElementById('solicitante_id').disabled = true;
+            if (window.usuarioLogado) {
+                const isComum = window.usuarioLogado.perfil === 'Comum';
+                if (window.usuarioLogado.id) {
+                    document.getElementById('solicitante_id').value = window.usuarioLogado.id;
+                    if (isComum) {
+                        document.getElementById('solicitante_id').disabled = true;
+                    }
+                }
+                if (isComum) {
+                    // Oculta os campos técnicos para perfil Comum
+                    document.querySelectorAll('[data-admin-only]').forEach(el => el.style.display = 'none');
+                } else {
+                    // Exige seleção para perfil administrativo
+                    document.getElementById('tipo_id').setAttribute('required', 'required');
+                    document.getElementById('prioridade_id').setAttribute('required', 'required');
                 }
             }
         }, 500);
@@ -151,15 +162,22 @@
         const btnSalvar = document.getElementById('btnSalvar');
         btnSalvar.disabled = true; btnSalvar.innerText = "Processando...";
 
-        const solicitanteId = parseInt(document.getElementById('solicitante_id').value);
+        const isComum = window.usuarioLogado && window.usuarioLogado.perfil === 'Comum';
+        const solicitanteId = window.usuarioLogado ? window.usuarioLogado.id : parseInt(document.getElementById('solicitante_id').value);
+        
+        // Se for perfil Comum, define defaults automáticos (Tipo 1 = Atendimento Geral, Prioridade 3 = Normal/Média, Técnico = null para triagem)
+        const tipoId = (!isComum && document.getElementById('tipo_id').value) ? parseInt(document.getElementById('tipo_id').value) : (document.getElementById('tipo_id').value ? parseInt(document.getElementById('tipo_id').value) : 1);
+        const prioridadeId = (!isComum && document.getElementById('prioridade_id').value) ? parseInt(document.getElementById('prioridade_id').value) : (document.getElementById('prioridade_id').value ? parseInt(document.getElementById('prioridade_id').value) : 3);
+        const tecnicoId = (!isComum && document.getElementById('tecnico_id').value) ? parseInt(document.getElementById('tecnico_id').value) : null;
+
         const payload = {
             titulo: document.getElementById('titulo').value,
             descricao: document.getElementById('descricao').value,
             solicitante_id: solicitanteId,
-            tipo_id: parseInt(document.getElementById('tipo_id').value),
-            prioridade_id: parseInt(document.getElementById('prioridade_id').value),
+            tipo_id: tipoId,
+            prioridade_id: prioridadeId,
             status_id: 1,
-            tecnico_id: document.getElementById('tecnico_id').value ? parseInt(document.getElementById('tecnico_id').value) : null
+            tecnico_id: tecnicoId
         };
 
         try {

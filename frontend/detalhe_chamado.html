@@ -40,9 +40,9 @@
         
         .form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
         .form-group label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #555; }
-        .form-group select, .form-group textarea { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 13px; outline: none; }
+        .form-group select, .form-group textarea { padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 14px; outline: none; }
         .form-group select:focus, .form-group textarea:focus { border-color: var(--saavedra-orange); }
-        .form-group textarea { resize: vertical; min-height: 80px; }
+        .form-group textarea { resize: vertical; min-height: 130px; }
         
         .btn-submit { background: var(--saavedra-orange); color: white; padding: 12px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; font-family: inherit;}
         .btn-submit:hover { background: #b83804; }
@@ -67,6 +67,17 @@
 
     <div class="container">
         <div class="main-column">
+            <!-- 🌟 ALERTA DE ENCERRAMENTO AUTOMÁTICO (POLÍTICA ITIL) -->
+            <div id="bannerAlertaItil" style="display: none; background: #fff3cd; border: 1px solid #ffeeba; border-left: 5px solid var(--saavedra-orange); color: #856404; padding: 16px 20px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                <div style="display: flex; align-items: flex-start; gap: 14px;">
+                    <span style="font-size: 26px; line-height: 1;">⚠️</span>
+                    <div>
+                        <strong style="font-size: 15px; color: #856404; display: block; margin-bottom: 4px;">Aviso de Governança ITIL: Pendente de Resposta</strong>
+                        <span>Este chamado encontra-se com o status <strong id="lblStatusAlertaItil">Aguardando Validação</strong>. Conforme as diretrizes da Política ITIL de Atendimento, o ticket será <strong>encerrado automaticamente</strong> caso não haja interação ou validação do solicitante no prazo estipulado.</span>
+                    </div>
+                </div>
+            </div>
+
             <!-- Dados do Chamado Base -->
             <div class="card">
                 <span class="chamado-id" id="lblId">Carregando...</span>
@@ -98,8 +109,8 @@
         </div>
 
         <div class="side-column">
-            <!-- Interação Técnica -->
-            <div class="card">
+            <!-- Interação Técnica (Protegida para Admins / Técnicos) -->
+            <div class="card" id="cardAcoesTecnico" data-admin-only>
                 <h3>Ações do Técnico</h3>
                 <div class="form-group">
                     <label>Técnico Responsável</label>
@@ -119,7 +130,7 @@
                 </div>
                 <div class="form-group">
                     <label>Anotação / Work Note (Visível ao Solicitante)</label>
-                    <textarea id="updNotas" placeholder="Descreva o que foi feito nesta atualização..."></textarea>
+                    <textarea id="updNotas" style="min-height: 130px;" placeholder="Descreva o que foi feito nesta atualização..."></textarea>
                 </div>
 
                 <!-- Checkbox de Sigilo para Comunicação Interna (Protegido pelo data-admin-only no auth.js) -->
@@ -134,6 +145,16 @@
                 </div>
 
                 <button class="btn-submit" onclick="atualizarChamado()">Salvar Alterações</button>
+            </div>
+
+            <!-- Card de Resposta do Solicitante / Usuário Comum -->
+            <div class="card" id="cardRespostaSolicitante" style="display: none;">
+                <h3>Responder ao Chamado</h3>
+                <div class="form-group">
+                    <label style="font-weight: bold; margin-bottom: 8px;">Sua Resposta / Informações Solicitadas *</label>
+                    <textarea id="txtRespostaSolicitante" style="min-height: 130px;" placeholder="Digite aqui sua resposta ou esclarecimentos para a equipe técnica..."></textarea>
+                </div>
+                <button class="btn-submit" id="btnEnviarRespostaSolicitante" onclick="enviarRespostaSolicitante()">Enviar Resposta</button>
             </div>
         </div>
     </div>
@@ -203,6 +224,25 @@
                 document.getElementById('lblData').innerText = new Date(t.data_hora).toLocaleString('pt-BR');
                 document.getElementById('lblSla').innerText = t.data_limite_sla ? new Date(t.data_limite_sla).toLocaleString('pt-BR') : 'N/A';
 
+                // 🌟 REGRA 6: Alerta de Encerramento Automático (Política ITIL)
+                const statusLower = (t.status_nome || '').toLowerCase();
+                if (statusLower.includes('aguardando') || statusLower.includes('terceiro') || statusLower.includes('valida') || statusLower.includes('pendente')) {
+                    document.getElementById('lblStatusAlertaItil').innerText = t.status_nome;
+                    document.getElementById('bannerAlertaItil').style.display = 'block';
+                } else {
+                    document.getElementById('bannerAlertaItil').style.display = 'none';
+                }
+
+                // 🌟 REGRA 4 & 5: Restrição no painel técnico e área de resposta do solicitante
+                const isAdmin = window.usuarioLogado && ['Admin', 'Gestor', 'Tecnico'].includes(window.usuarioLogado.perfil);
+                if (!isAdmin) {
+                    document.getElementById('cardAcoesTecnico').style.display = 'none';
+                    document.getElementById('cardRespostaSolicitante').style.display = 'block';
+                } else {
+                    document.getElementById('cardAcoesTecnico').style.display = 'block';
+                    document.getElementById('cardRespostaSolicitante').style.display = 'none';
+                }
+
                 if(t.tecnico_id) document.getElementById('updTecnico').value = t.tecnico_id;
                 if(t.tipo_id) document.getElementById('updTipo').value = t.tipo_id;
                 if(t.status_id) {
@@ -261,6 +301,36 @@
             } catch (error) {
                 console.error(error);
                 alert("Erro ao carregar o chamado.");
+            }
+        }
+
+        async function enviarRespostaSolicitante() {
+            const comentario = document.getElementById('txtRespostaSolicitante').value.trim();
+            if (!comentario) return alert("Por favor, informe sua resposta antes de enviar.");
+            
+            const btn = document.getElementById('btnEnviarRespostaSolicitante');
+            btn.disabled = true; btn.innerText = "Processando...";
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/tarefas/${tarefaId}/responder`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ comentario }),
+                    credentials: 'include'
+                });
+
+                if (res.ok) {
+                    alert("Sua resposta foi registada com sucesso!");
+                    window.location.reload();
+                } else {
+                    const err = await res.json();
+                    alert(err.detail || "Erro ao enviar resposta.");
+                    btn.disabled = false; btn.innerText = "Enviar Resposta";
+                }
+            } catch(e) {
+                console.error(e);
+                alert("Falha ao comunicar com o servidor.");
+                btn.disabled = false; btn.innerText = "Enviar Resposta";
             }
         }
 

@@ -121,11 +121,12 @@
     </nav>
 
     <div class="container">
-        <!-- Alternador de Visões: Foco do Técnico vs. Equipe Inteira -->
+        <!-- Alternador de Visões: Foco do Técnico vs. Equipe Inteira vs. Meus Pessoais -->
         <div class="toggle-visao" id="boxVisao" style="display: none;">
             <div style="font-size: 14px; font-weight: bold; color: #666; display: flex; align-items: center; margin-right: 10px;">Modo de Visualização:</div>
-            <button id="btnMinhaFila" class="btn-solid" onclick="setVisao(false)">👤 Minha Fila</button>
-            <button id="btnVisaoEquipe" class="btn-outline" onclick="setVisao(true)">🌐 Visão da Equipe</button>
+            <button id="btnVisaoEquipe" class="btn-outline" onclick="setModoVisao('equipe')">🌐 Visão da Equipe</button>
+            <button id="btnMinhaFila" class="btn-solid" onclick="setModoVisao('tecnica')">🛠️ Fila Técnica</button>
+            <button id="btnMeusPessoais" class="btn-outline" onclick="setModoVisao('pessoais')">👤 Meus Chamados Pessoais</button>
         </div>
 
         <div class="kpi-section" id="kpiContainer"></div>
@@ -215,13 +216,14 @@
         let totalPaginas = 1;
         let tiposCarregados = false;
         
-        // Controle de Visão (Por padrão inicia na fila do próprio técnico para manter o foco)
-        let visaoEquipe = false;
+        // Controle de Visão (Por padrão inicia na fila técnica)
+        let modoVisao = 'tecnica';
 
-        function setVisao(isEquipe) {
-            visaoEquipe = isEquipe;
-            document.getElementById('btnMinhaFila').className = isEquipe ? 'btn-outline' : 'btn-solid';
-            document.getElementById('btnVisaoEquipe').className = isEquipe ? 'btn-solid' : 'btn-outline';
+        function setModoVisao(modo) {
+            modoVisao = modo;
+            document.getElementById('btnVisaoEquipe').className = (modo === 'equipe') ? 'btn-solid' : 'btn-outline';
+            document.getElementById('btnMinhaFila').className = (modo === 'tecnica') ? 'btn-solid' : 'btn-outline';
+            document.getElementById('btnMeusPessoais').className = (modo === 'pessoais') ? 'btn-solid' : 'btn-outline';
             filtroAtivo = null; // Limpa os KPIs selecionados ao mudar de tela
             carregarDashboard(1);
         }
@@ -253,7 +255,9 @@
                 const isAdmin = window.usuarioLogado && ['Admin', 'Gestor', 'Tecnico'].includes(window.usuarioLogado.perfil);
                 if (isAdmin) {
                     document.getElementById('boxVisao').style.display = 'flex';
-                    document.getElementById('tituloFila').innerText = visaoEquipe ? 'Fila de Atendimento da Equipe (Geral)' : 'Meus Atendimentos Pendentes';
+                    if (modoVisao === 'equipe') document.getElementById('tituloFila').innerText = 'Fila de Atendimento da Equipe (Geral)';
+                    else if (modoVisao === 'tecnica') document.getElementById('tituloFila').innerText = 'Meus Atendimentos Pendentes (Como Técnico)';
+                    else if (modoVisao === 'pessoais') document.getElementById('tituloFila').innerText = 'Meus Chamados Pessoais (Abertos por Mim)';
                 } else {
                     document.getElementById('tituloFila').innerText = 'Meus Chamados Abertos';
                 }
@@ -261,14 +265,15 @@
                 await carregarTiposDropdown();
 
                 // Busca KPIs na API já aplicando o contexto de Visão da Equipe
-                const resKpi = await fetch(`${API_BASE_URL}/kpis?visao_equipe=${visaoEquipe}`, {credentials: 'include'});
+                const isEquipeFlag = (modoVisao === 'equipe');
+                const resKpi = await fetch(`${API_BASE_URL}/kpis?visao_equipe=${isEquipeFlag}`, {credentials: 'include'});
                 if (!resKpi.ok) throw new Error("Erro ao coletar os contadores");
                 const kpis = await resKpi.json();
                 
                 let kpiHtml = '';
                 
-                // Exibe "Aguardando Triagem" só se for TI e estiver a olhar o panorama geral
-                if (isAdmin && visaoEquipe && kpis.aguardando_triagem !== undefined) {
+                // Exibe "Aguardando Triagem" só se for TI e estiver na visão da equipe
+                if (isAdmin && isEquipeFlag && kpis.aguardando_triagem !== undefined) {
                     const sTri = filtroAtivo && filtroAtivo.tipo === 'triagem' ? 'ativo' : '';
                     kpiHtml += `
                     <div class="kpi-card border-dark ${sTri}" id="card-triagem" onclick="aplicarFiltroKpi('triagem', null, 'card-triagem')">
@@ -294,30 +299,37 @@
                     </div>`;
                 });
 
-                const sEst = filtroAtivo && filtroAtivo.tipo === 'estourado' ? 'ativo' : '';
-                const sAt = filtroAtivo && filtroAtivo.tipo === 'atencao' ? 'ativo' : '';
-                const sCr = filtroAtivo && filtroAtivo.tipo === 'criticos' ? 'ativo' : '';
-                
-                kpiHtml += `
-                <div class="kpi-card border-red ${sEst}" id="card-estourado" onclick="aplicarFiltroKpi('estourado', null, 'card-estourado')">
-                    <span class="kpi-title">SLA Estourado</span>
-                    <span class="kpi-value text-red">${kpis.sla_estourado}</span>
-                </div>
-                <div class="kpi-card border-orange ${sAt}" id="card-atencao" onclick="aplicarFiltroKpi('atencao', null, 'card-atencao')">
-                    <span class="kpi-title">SLA Atenção</span>
-                    <span class="kpi-value text-orange">${kpis.sla_atencao}</span>
-                </div>
-                <div class="kpi-card border-red ${sCr}" id="card-criticos" onclick="aplicarFiltroKpi('criticos', null, 'card-criticos')">
-                    <span class="kpi-title">Críticos</span>
-                    <span class="kpi-value text-red">${kpis.criticos}</span>
-                </div>`;
+                // 🌟 REGRA 2: Oculta KPIs de SLA para usuários de perfil "Comum"
+                if (isAdmin) {
+                    const sEst = filtroAtivo && filtroAtivo.tipo === 'estourado' ? 'ativo' : '';
+                    const sAt = filtroAtivo && filtroAtivo.tipo === 'atencao' ? 'ativo' : '';
+                    const sCr = filtroAtivo && filtroAtivo.tipo === 'criticos' ? 'ativo' : '';
+                    
+                    kpiHtml += `
+                    <div class="kpi-card border-red ${sEst}" id="card-estourado" onclick="aplicarFiltroKpi('estourado', null, 'card-estourado')">
+                        <span class="kpi-title">SLA Estourado</span>
+                        <span class="kpi-value text-red">${kpis.sla_estourado}</span>
+                    </div>
+                    <div class="kpi-card border-orange ${sAt}" id="card-atencao" onclick="aplicarFiltroKpi('atencao', null, 'card-atencao')">
+                        <span class="kpi-title">SLA Atenção</span>
+                        <span class="kpi-value text-orange">${kpis.sla_atencao}</span>
+                    </div>
+                    <div class="kpi-card border-red ${sCr}" id="card-criticos" onclick="aplicarFiltroKpi('criticos', null, 'card-criticos')">
+                        <span class="kpi-title">Críticos</span>
+                        <span class="kpi-value text-red">${kpis.criticos}</span>
+                    </div>`;
+                }
                 
                 document.getElementById('kpiContainer').innerHTML = kpiHtml;
 
                 // Montagem da URL com Filtros Dinâmicos
                 const endpoint = isAdmin ? 'tarefas' : 'meus-chamados';
                 let url = `${API_BASE_URL}/${endpoint}?page=${paginaAtual}&limit=20`;
-                if (isAdmin) url += `&visao_equipe=${visaoEquipe}`;
+                if (isAdmin) {
+                    if (modoVisao === 'equipe') url += '&visao_equipe=true';
+                    else if (modoVisao === 'tecnica') url += '&visao_equipe=false';
+                    else if (modoVisao === 'pessoais') url += '&meus_pessoais=true';
+                }
 
                 const dataInicio = document.getElementById('txtDataInicio').value;
                 const dataFim = document.getElementById('txtDataFim').value;
