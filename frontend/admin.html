@@ -10,64 +10,65 @@
     <style>
         body { display: flex; height: 100vh; overflow: hidden; }
         
-        .sidebar { width: 260px; background: var(--saavedra-black); color: white; padding-top: 20px; box-shadow: 2px 0 10px rgba(0,0,0,0.15); display: flex; flex-direction: column; overflow-y: auto; z-index: 10;}
-        .sidebar h2 { text-align: center; font-weight: normal; margin-bottom: 25px; font-size: 24px; display: flex; flex-direction: column; align-items: center; gap: 5px;}
-        .sidebar h2 span { color: var(--saavedra-orange); font-weight: bold; }
+        .sidebar { width: 270px; background: var(--saavedra-black); color: white; padding-top: 25px; box-shadow: 4px 0 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; overflow-y: auto; z-index: 10; flex-shrink: 0;}
+        .sidebar h2 { text-align: center; font-weight: normal; margin-bottom: 25px; font-size: 22px; display: flex; flex-direction: column; align-items: center; gap: 6px;}
+        .sidebar h2 span { color: var(--saavedra-orange); font-weight: 700; }
         
-        .sidebar-actions { padding: 0 20px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;}
-        .btn-sidebar { display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center; padding: 10px; margin-bottom: 10px; border-radius: 6px; transition: 0.2s; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; border: 1px solid transparent; width: 100%; box-sizing: border-box; font-family: inherit;}
+        .sidebar-actions { padding: 0 20px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px;}
         
-        .menu-item { padding: 14px 25px; cursor: pointer; transition: 0.2s; border-left: 4px solid transparent; display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500;}
-        .menu-item:hover, .menu-item.active { background: rgba(255, 255, 255, 0.08); border-left: 4px solid var(--saavedra-orange); color: var(--saavedra-orange);}
+        .menu-item { padding: 14px 25px; cursor: pointer; transition: var(--transition-fast); border-left: 4px solid transparent; display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500; color: #d1d5db;}
+        .menu-item:hover, .menu-item.active { background: rgba(255, 255, 255, 0.06); border-left: 4px solid var(--saavedra-orange); color: white;}
         
         .main-content { flex: 1; padding: 40px; overflow-y: auto; background: var(--bg-color); }
-        .card { background: white; padding: 30px; border-radius: var(--border-radius); box-shadow: var(--card-shadow); }
+        
         .header-content { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f3f4f6; padding-bottom: 15px; margin-bottom: 25px; }
         .header-content h2 { margin: 0; font-size: 22px; display: flex; align-items: center; gap: 8px; color: #1f2937;}
         
-        .form-container { display: none; background: #f9fafb; padding: 25px; border-radius: var(--border-radius); border-left: 4px solid var(--saavedra-orange); margin-bottom: 25px; }
-        .form-container.active { display: block; animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .form-container { display: none; background: #f9fafb; padding: 25px; border-radius: var(--border-radius); border-left: 4px solid var(--saavedra-orange); margin-bottom: 25px; border: 1px solid #e5e7eb; border-left-width: 5px; }
+        .form-container.active { display: block; animation: fadeIn 0.25s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
         
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
-        .form-group label { font-size: 13px; color: #4b5563; margin-bottom: 6px; font-weight: 600; display: flex; align-items: center; gap: 5px;}
-        .form-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .form-group label { font-size: 13px; color: #374151; margin-bottom: 6px; font-weight: 600; display: flex; align-items: center; gap: 5px;}
+        .form-actions { display: flex; gap: 12px; margin-top: 20px; }
     </style>
 </head>
 <body>
     <aside class="sidebar">
         <h2>
-            <span class="material-symbols-outlined" style="font-size: 36px; color: white;">admin_panel_settings</span>
+            <span class="material-symbols-outlined" style="font-size: 38px; color: var(--saavedra-orange);">admin_panel_settings</span>
             Saavedra<br><span>Admin</span>
         </h2>
         
         <div class="sidebar-actions">
-            <a href="index.html" class="btn-sidebar btn-outline" style="color: white; border-color: rgba(255,255,255,0.5);">
+            <a href="index.html" class="btn btn-outline" style="color: white; border-color: rgba(255,255,255,0.3); justify-content: center;">
                 <span class="material-symbols-outlined" style="font-size: 18px;">arrow_back</span> Voltar
             </a>
-            <button onclick="fazerLogout()" class="btn-sidebar btn-danger" style="margin-bottom: 0;">
+            <button onclick="fazerLogout()" class="btn btn-danger" style="justify-content: center;">
                 <span class="material-symbols-outlined" style="font-size: 18px;">logout</span> Sair
             </button>
         </div>
 
-        <div class="menu-item" onclick="carregar('status', 'Status')"><span class="material-symbols-outlined">check_circle</span> Status</div>
-        <div class="menu-item" onclick="carregar('prioridade', 'Prioridades')"><span class="material-symbols-outlined">priority_high</span> Prioridades</div>
-        <div class="menu-item" onclick="carregar('tipo', 'Tipos')"><span class="material-symbols-outlined">category</span> Tipos</div>
-        <div class="menu-item" onclick="carregar('causa_raiz', 'Causas Raiz')"><span class="material-symbols-outlined">psychology</span> Causas Raiz</div>
-        <div class="menu-item" onclick="carregar('setor', 'Setores')"><span class="material-symbols-outlined">domain</span> Setores</div>
-        <div class="menu-item" onclick="carregar('usuario', 'Usuários')"><span class="material-symbols-outlined">manage_accounts</span> Usuários</div>
-        <div class="menu-item" onclick="carregarSlaMatrix()"><span class="material-symbols-outlined">timer</span> Configuração de SLA</div>
+        <nav>
+            <div class="menu-item" onclick="carregar('status', 'Status')"><span class="material-symbols-outlined">check_circle</span> Status</div>
+            <div class="menu-item" onclick="carregar('prioridade', 'Prioridades')"><span class="material-symbols-outlined">priority_high</span> Prioridades</div>
+            <div class="menu-item" onclick="carregar('tipo', 'Tipos')"><span class="material-symbols-outlined">category</span> Tipos</div>
+            <div class="menu-item" onclick="carregar('causa_raiz', 'Causas Raiz')"><span class="material-symbols-outlined">psychology</span> Causas Raiz</div>
+            <div class="menu-item" onclick="carregar('setor', 'Setores')"><span class="material-symbols-outlined">domain</span> Setores</div>
+            <div class="menu-item" onclick="carregar('usuario', 'Usuários')"><span class="material-symbols-outlined">manage_accounts</span> Usuários</div>
+            <div class="menu-item" onclick="carregarSlaMatrix()"><span class="material-symbols-outlined">timer</span> Configuração de SLA</div>
+        </nav>
     </aside>
     
     <main class="main-content">
-        <div class="card">
-            <div class="header-content">
+        <section class="card">
+            <header class="header-content">
                 <h2 id="tituloTela"><span class="material-symbols-outlined">touch_app</span> Selecione uma opção ao lado</h2>
                 <button class="btn btn-solid" onclick="abrirForm()" id="btnNovo" style="display: none;">
                     <span class="material-symbols-outlined">add</span> Novo Registro
                 </button>
-            </div>
+            </header>
 
             <div id="formGenerico" class="form-container">
                 <h3 id="fgTitle" style="margin-top: 0; display: flex; align-items: center; gap: 8px; color: #1f2937;"><span class="material-symbols-outlined">edit_document</span> Novo Registro</h3>
@@ -120,7 +121,7 @@
                 <input type="hidden" id="fsId">
                 <input type="hidden" id="fsPrioridadeId">
                 <input type="hidden" id="fsTipoId">
-                <div class="form-group" style="max-width: 200px;">
+                <div class="form-group" style="max-width: 220px;">
                     <label>Tempo Limite (Horas Corridas)</label>
                     <input type="number" id="fsHoras" class="form-input" min="1" required>
                 </div>
@@ -136,138 +137,141 @@
                     <tr><td colspan="5" style="text-align:center; color: #9ca3af; padding: 40px;"><span class="material-symbols-outlined" style="font-size: 32px; display: block; margin-bottom: 10px;">arrow_circle_left</span> Selecione um menu na barra lateral para gerenciar as definições.</td></tr>
                 </tbody>
             </table>
-        </div>
+        </section>
     </main>
 
     <script>
-        let epAtual = '';
-        let modoAtual = 'generico';
+    let epAtual = '';
+    let modoAtual = 'generico';
 
-        function destacarMenu(titulo) {
-            document.querySelectorAll('.menu-item').forEach(el => {
-                el.classList.remove('active');
-                if (el.innerText.includes(titulo)) el.classList.add('active');
-            });
-        }
+    function destacarMenu(titulo) {
+        document.querySelectorAll('.menu-item').forEach(el => {
+            el.classList.remove('active');
+            if (el.innerText.includes(titulo)) el.classList.add('active');
+        });
+    }
 
-        async function carregarDropdownSetores() {
-            try {
-                const res = await fetch(`${API_BASE_URL}/cadastros/setor`, {credentials: 'include'});
-                const data = await res.json();
-                document.getElementById('fuSetor').innerHTML = `<option value="">Selecione...</option>` + data.map(s => `<option value="${s.id}">${s.nome}</option>`).join('');
-            } catch (e) { console.error(e); }
-        }
+    async function carregarDropdownSetores() {
+        try {
+            const res = await fetch(`${API_BASE_URL}/cadastros/setor`, {credentials: 'include'});
+            const data = await res.json();
+            document.getElementById('fuSetor').innerHTML = `<option value="">Selecione...</option>` + data.map(s => `<option value="${s.id}">${s.nome}</option>`).join('');
+        } catch (e) { console.error(e); }
+    }
 
-        async function carregar(ep, titulo) {
-            epAtual = ep; modoAtual = 'generico';
-            if (ep === 'usuario') modoAtual = 'usuario';
-            
-            document.getElementById('tituloTela').innerHTML = `<span class="material-symbols-outlined">list_alt</span> ${titulo}`;
-            document.getElementById('btnNovo').style.display = 'inline-flex';
-            fecharForms(); destacarMenu(titulo);
-
-            try {
-                if (modoAtual === 'usuario') {
-                    await carregarDropdownSetores();
-                    const res = await fetch(`${API_BASE_URL}/usuarios`, {credentials: 'include'});
-                    const data = await res.json();
-                    document.getElementById('tableHead').innerHTML = `<tr><th>ID</th><th>Nome</th><th>Setor</th><th>Perfil</th><th style="text-align: center;">Ações</th></tr>`;
-                    document.getElementById('tableBody').innerHTML = data.map(u => `<tr><td><strong>#${u.id}</strong></td><td><div style="font-weight: 500; color:#1f2937;">${u.nome}</div><div style="color:#6b7280; font-size: 12px;">${u.email}</div></td><td>${u.setor || 'N/A'}</td><td><span class="badge badge-status">${u.perfil}</span></td><td style="text-align: center; white-space: nowrap;"><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;" onclick="abrirFormUsuario(${u.id}, '${u.nome}', '${u.email}', '${u.ad_login}', ${u.setor_id || 'null'}, '${u.perfil}', ${u.nivel_acesso})"><span class="material-symbols-outlined" style="font-size: 16px;">edit</span></button> <button class="btn btn-danger" style="padding: 4px 10px; font-size: 12px;" onclick="excluirUsuario(${u.id})"><span class="material-symbols-outlined" style="font-size: 16px;">delete</span></button></td></tr>`).join('');
-                } else {
-                    const res = await fetch(`${API_BASE_URL}/cadastros/${ep}`, {credentials: 'include'});
-                    const data = await res.json();
-                    document.getElementById('tableHead').innerHTML = `<tr><th>ID</th><th>Nome da Definição</th><th style="text-align: center;">Ações</th></tr>`;
-                    document.getElementById('tableBody').innerHTML = data.map(i => `<tr><td><strong>#${i.id}</strong></td><td style="font-weight: 500; color:#1f2937;">${i.nome}</td><td style="text-align: center; white-space: nowrap;"><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;" onclick="abrirFormGenerico(${i.id}, '${i.nome.replace(/'/g, "\\'")}')"><span class="material-symbols-outlined" style="font-size: 16px;">edit</span></button> <button class="btn btn-danger" style="padding: 4px 10px; font-size: 12px;" onclick="excluirGenerico(${i.id})"><span class="material-symbols-outlined" style="font-size: 16px;">delete</span></button></td></tr>`).join('');
-                }
-            } catch (e) { alert("Erro ao carregar dados."); }
-        }
-
-        async function carregarSlaMatrix() {
-            epAtual = 'sla'; modoAtual = 'sla';
-            document.getElementById('tituloTela').innerHTML = '<span class="material-symbols-outlined">timer</span> Matriz de Acordo de SLA (ITIL)';
-            document.getElementById('btnNovo').style.display = 'none';
-            fecharForms(); destacarMenu('Configuração de SLA');
-
-            try {
-                const res = await fetch(`${API_BASE_URL}/admin/sla-matrix`, {credentials: 'include'});
-                const data = await res.json();
-                
-                document.getElementById('tableHead').innerHTML = `<tr><th>Classificação (Tipo)</th><th>Prioridade do Ticket</th><th>Tempo Acordado</th><th style="text-align: center; width: 120px;">Ação</th></tr>`;
-                document.getElementById('tableBody').innerHTML = data.map(s => `<tr><td style="font-weight: 600; color: var(--saavedra-orange);">${s.tipo}</td><td><span class="badge badge-status">${s.prioridade}</span></td><td><strong>${s.tempo_horas} horas</strong> correntes</td><td style="text-align:center;"><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;" onclick="abrirFormSla(${s.id}, '${s.tipo}', '${s.prioridade}', ${s.tempo_horas}, ${s.prioridade_id}, ${s.tipo_id})"><span class="material-symbols-outlined" style="font-size: 16px;">edit</span> Ajustar</button></td></tr>`).join('');
-            } catch(e) { alert("Erro ao carregar a matriz."); }
-        }
-
-        function fecharForms() {
-            document.getElementById('formGenerico').classList.remove('active');
-            document.getElementById('formUsuario').classList.remove('active');
-            document.getElementById('formSla').classList.remove('active');
-        }
-
-        function abrirForm() {
-            fecharForms();
-            if (modoAtual === 'usuario') {
-                document.getElementById('fuId').value = ''; document.getElementById('fuNome').value = ''; 
-                document.getElementById('fuEmail').value = ''; document.getElementById('fuAdLogin').value = ''; 
-                document.getElementById('fuSetor').value = ''; document.getElementById('fuTitle').innerHTML = '<span class="material-symbols-outlined">person_add</span> Cadastrar Novo Usuário';
-                document.getElementById('formUsuario').classList.add('active');
-            } else if (modoAtual === 'generico') {
-                document.getElementById('fgId').value = ''; document.getElementById('fgDesc').value = '';
-                document.getElementById('fgTitle').innerHTML = '<span class="material-symbols-outlined">note_add</span> Adicionar Nova Definição';
-                document.getElementById('formGenerico').classList.add('active');
-            }
-        }
-
-        function abrirFormGenerico(id, nome) { abrirForm(); document.getElementById('fgId').value = id; document.getElementById('fgDesc').value = nome; document.getElementById('fgTitle').innerHTML = `<span class="material-symbols-outlined">edit_document</span> Editar Registro #${id}`; }
-        function abrirFormUsuario(id, nome, email, ad_login, setor_id, perfil, nivel) { abrirForm(); document.getElementById('fuId').value = id; document.getElementById('fuNome').value = nome; document.getElementById('fuEmail').value = email; document.getElementById('fuAdLogin').value = ad_login; document.getElementById('fuSetor').value = (setor_id && setor_id !== 'null') ? setor_id : ''; document.getElementById('fuPerfil').value = perfil; document.getElementById('fuNivel').value = nivel; document.getElementById('fuTitle').innerHTML = `<span class="material-symbols-outlined">manage_accounts</span> Modificar Usuário #${id}`; }
+    async function carregar(ep, titulo) {
+        epAtual = ep; modoAtual = 'generico';
+        if (ep === 'usuario') modoAtual = 'usuario';
         
-        function abrirFormSla(id, tipo, prioridade, horas, p_id, t_id) {
-            fecharForms();
-            document.getElementById('fsId').value = id;
-            document.getElementById('fsPrioridadeId').value = p_id;
-            document.getElementById('fsTipoId').value = t_id;
-            document.getElementById('fsHoras').value = horas;
-            document.getElementById('fsTitle').innerHTML = `<span class="material-symbols-outlined">update</span> Ajustar SLA: ${tipo} (${prioridade})`;
-            document.getElementById('formSla').classList.add('active');
-        }
+        document.getElementById('tituloTela').innerHTML = `<span class="material-symbols-outlined">list_alt</span> ${titulo}`;
+        document.getElementById('btnNovo').style.display = 'inline-flex';
+        fecharForms(); destacarMenu(titulo);
 
-        async function salvarGenerico() {
-            const id = document.getElementById('fgId').value;
-            const desc = document.getElementById('fgDesc').value.trim();
-            if (!desc) return alert("Preencha a descrição.");
-            const res = await fetch(id ? `${API_BASE_URL}/cadastros/${epAtual}/${id}` : `${API_BASE_URL}/cadastros/${epAtual}`, { method: id ? 'PUT' : 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({descricao: desc}), credentials: 'include' });
-            if (res.ok) { fecharForms(); carregar(epAtual, document.getElementById('tituloTela').innerText.trim()); }
-        }
+        try {
+            if (modoAtual === 'usuario') {
+                await carregarDropdownSetores();
+                const res = await fetch(`${API_BASE_URL}/usuarios`, {credentials: 'include'});
+                const data = await res.json();
+                document.getElementById('tableHead').innerHTML = `<tr><th>ID</th><th>Nome</th><th>Setor</th><th>Perfil</th><th style="text-align: center;">Ações</th></tr>`;
+                document.getElementById('tableBody').innerHTML = data.map(u => `<tr><td><strong>#${u.id}</strong></td><td><div style="font-weight: 500; color:#1f2937;">${u.nome}</div><div style="color:#6b7280; font-size: 12px;">${u.email}</div></td><td>${u.setor || 'N/A'}</td><td><span class="badge badge-status">${u.perfil}</span></td><td style="text-align: center; white-space: nowrap;"><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;" onclick="abrirFormUsuario(${u.id}, '${u.nome.replace(/'/g, "\\'")}', '${u.email}', '${u.ad_login}', ${u.setor_id || 'null'}, '${u.perfil}', ${u.nivel_acesso})"><span class="material-symbols-outlined" style="font-size: 16px;">edit</span></button> <button class="btn btn-danger" style="padding: 4px 10px; font-size: 12px;" onclick="excluirUsuario(${u.id})"><span class="material-symbols-outlined" style="font-size: 16px;">delete</span></button></td></tr>`).join('');
+            } else {
+                const res = await fetch(`${API_BASE_URL}/cadastros/${ep}`, {credentials: 'include'});
+                const data = await res.json();
+                document.getElementById('tableHead').innerHTML = `<tr><th>ID</th><th>Nome da Definição</th><th style="text-align: center;">Ações</th></tr>`;
+                document.getElementById('tableBody').innerHTML = data.map(i => `<tr><td><strong>#${i.id}</strong></td><td style="font-weight: 500; color:#1f2937;">${i.nome}</td><td style="text-align: center; white-space: nowrap;"><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;" onclick="abrirFormGenerico(${i.id}, '${i.nome.replace(/'/g, "\\'")}')"><span class="material-symbols-outlined" style="font-size: 16px;">edit</span></button> <button class="btn btn-danger" style="padding: 4px 10px; font-size: 12px;" onclick="excluirGenerico(${i.id})"><span class="material-symbols-outlined" style="font-size: 16px;">delete</span></button></td></tr>`).join('');
+            }
+        } catch (e) { alert("Erro ao carregar dados."); }
+    }
 
-        async function salvarUsuario() {
-            const id = document.getElementById('fuId').value;
-            const sVal = parseInt(document.getElementById('fuSetor').value);
-            const payload = { nome: document.getElementById('fuNome').value.trim(), email: document.getElementById('fuEmail').value.trim(), ad_login: document.getElementById('fuAdLogin').value.trim(), setor_id: !isNaN(sVal) ? sVal : null, perfil: document.getElementById('fuPerfil').value, nivel_acesso: parseInt(document.getElementById('fuNivel').value) || 1 };
-            const res = await fetch(id ? `${API_BASE_URL}/usuarios/${id}` : `${API_BASE_URL}/usuarios`, { method: id ? 'PUT' : 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload), credentials: 'include' });
-            if (res.ok) { fecharForms(); carregar(epAtual, document.getElementById('tituloTela').innerText.trim()); }
-        }
+    async function carregarSlaMatrix() {
+        epAtual = 'sla'; modoAtual = 'sla';
+        document.getElementById('tituloTela').innerHTML = '<span class="material-symbols-outlined">timer</span> Matriz de Acordo de SLA (ITIL)';
+        document.getElementById('btnNovo').style.display = 'none';
+        fecharForms(); destacarMenu('Configuração de SLA');
 
-        async function salvarSlaCell() {
-            const id = document.getElementById('fsId').value;
-            const horas = parseInt(document.getElementById('fsHoras').value);
-            if(isNaN(horas) || horas < 1) return alert("Insira um valor numérico válido.");
+        try {
+            const res = await fetch(`${API_BASE_URL}/admin/sla-matrix`, {credentials: 'include'});
+            const data = await res.json();
             
-            const payload = { prioridade_id: parseInt(document.getElementById('fsPrioridadeId').value), tipo_id: parseInt(document.getElementById('fsTipoId').value), tempo_horas: horas };
-            const res = await fetch(`${API_BASE_URL}/admin/sla-matrix/${id}`, { method: 'PUT', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload), credentials: 'include' });
-            if(res.ok) { fecharForms(); carregarSlaMatrix(); } else { alert("Erro ao atualizar."); }
-        }
+            document.getElementById('tableHead').innerHTML = `<tr><th>Classificação (Tipo)</th><th>Prioridade do Ticket</th><th>Tempo Acordado</th><th style="text-align: center; width: 120px;">Ação</th></tr>`;
+            document.getElementById('tableBody').innerHTML = data.map(s => `<tr><td style="font-weight: 600; color: var(--saavedra-orange);">${s.tipo}</td><td><span class="badge badge-status">${s.prioridade}</span></td><td><strong>${s.tempo_horas} horas</strong> correntes</td><td style="text-align:center;"><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;" onclick="abrirFormSla(${s.id}, '${s.tipo}', '${s.prioridade}', ${s.tempo_horas}, ${s.prioridade_id}, ${s.tipo_id})"><span class="material-symbols-outlined" style="font-size: 16px;">edit</span> Ajustar</button></td></tr>`).join('');
+        } catch(e) { alert("Erro ao carregar a matriz."); }
+    }
 
-        async function excluirGenerico(id) {
-            if(confirm('Tem certeza que deseja inativar esta definição?')) {
-                const res = await fetch(`${API_BASE_URL}/cadastros/${epAtual}/${id}`, { method: 'DELETE', credentials: 'include' });
-                if (res.ok) carregar(epAtual, document.getElementById('tituloTela').innerText.trim());
-            }
+    function fecharForms() {
+        document.getElementById('formGenerico').classList.remove('active');
+        document.getElementById('formUsuario').classList.remove('active');
+        document.getElementById('formSla').classList.remove('active');
+    }
+
+    function abrirForm() {
+        fecharForms();
+        if (modoAtual === 'usuario') {
+            document.getElementById('fuId').value = ''; document.getElementById('fuNome').value = ''; 
+            document.getElementById('fuEmail').value = ''; document.getElementById('fuAdLogin').value = ''; 
+            document.getElementById('fuSetor').value = ''; document.getElementById('fuTitle').innerHTML = '<span class="material-symbols-outlined">person_add</span> Cadastrar Novo Usuário';
+            document.getElementById('formUsuario').classList.add('active');
+        } else if (modoAtual === 'generico') {
+            document.getElementById('fgId').value = ''; document.getElementById('fgDesc').value = '';
+            document.getElementById('fgTitle').innerHTML = '<span class="material-symbols-outlined">note_add</span> Adicionar Nova Definição';
+            document.getElementById('formGenerico').classList.add('active');
         }
-        async function excluirUsuario(id) {
-            if(confirm('Tem certeza que deseja desativar este utilizador?')) {
-                const res = await fetch(`${API_BASE_URL}/usuarios/${id}`, { method: 'DELETE', credentials: 'include' });
-                if (res.ok) carregar(epAtual, document.getElementById('tituloTela').innerText.trim());
-            }
+    }
+
+    function abrirFormGenerico(id, nome) { abrirForm(); document.getElementById('fgId').value = id; document.getElementById('fgDesc').value = nome; document.getElementById('fgTitle').innerHTML = `<span class="material-symbols-outlined">edit_document</span> Editar Registro #${id}`; }
+    function abrirFormUsuario(id, nome, email, ad_login, setor_id, perfil, nivel) { abrirForm(); document.getElementById('fuId').value = id; document.getElementById('fuNome').value = nome; document.getElementById('fuEmail').value = email; document.getElementById('fuAdLogin').value = ad_login; document.getElementById('fuSetor').value = (setor_id && setor_id !== 'null') ? setor_id : ''; document.getElementById('fuPerfil').value = perfil; document.getElementById('fuNivel').value = nivel; document.getElementById('fuTitle').innerHTML = `<span class="material-symbols-outlined">manage_accounts</span> Modificar Usuário #${id}`; }
+    
+    function abrirFormSla(id, tipo, prioridade, horas, p_id, t_id) {
+        fecharForms();
+        document.getElementById('fsId').value = id;
+        document.getElementById('fsPrioridadeId').value = p_id;
+        document.getElementById('fsTipoId').value = t_id;
+        document.getElementById('fsHoras').value = horas;
+        document.getElementById('fsTitle').innerHTML = `<span class="material-symbols-outlined">update</span> Ajustar SLA: ${tipo} (${prioridade})`;
+        document.getElementById('formSla').classList.add('active');
+    }
+
+    async function salvarGenerico() {
+        const id = document.getElementById('fgId').value;
+        const desc = document.getElementById('fgDesc').value.trim();
+        if (!desc) return alert("Preencha a descrição.");
+        const res = await fetch(id ? `${API_BASE_URL}/cadastros/${epAtual}/${id}` : `${API_BASE_URL}/cadastros/${epAtual}`, { method: id ? 'PUT' : 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({descricao: desc}), credentials: 'include' });
+        if (res.ok) { fecharForms(); carregar(epAtual, document.getElementById('tituloTela').innerText.trim()); }
+    }
+
+    async function salvarUsuario() {
+        const id = document.getElementById('fuId').value;
+        const sVal = parseInt(document.getElementById('fuSetor').value);
+        const payload = { nome: document.getElementById('fuNome').value.trim(), email: document.getElementById('fuEmail').value.trim(), ad_login: document.getElementById('fuAdLogin').value.trim(), setor_id: !isNaN(sVal) ? sVal : null, perfil: document.getElementById('fuPerfil').value, nivel_acesso: parseInt(document.getElementById('fuNivel').value) || 1 };
+        const res = await fetch(id ? `${API_BASE_URL}/usuarios/${id}` : `${API_BASE_URL}/usuarios`, { method: id ? 'PUT' : 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload), credentials: 'include' });
+        if (res.ok) { fecharForms(); carregar(epAtual, document.getElementById('tituloTela').innerText.trim()); }
+    }
+
+    async function salvarSlaCell() {
+        const id = document.getElementById('fsId').value;
+        const horas = parseInt(document.getElementById('fsHoras').value);
+        if(isNaN(horas) || horas < 1) return alert("Insira um valor numérico válido.");
+        
+        const payload = { prioridade_id: parseInt(document.getElementById('fsPrioridadeId').value), tipo_id: parseInt(document.getElementById('fsTipoId').value), tempo_horas: horas };
+        const res = await fetch(`${API_BASE_URL}/admin/sla-matrix/${id}`, { method: 'PUT', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload), credentials: 'include' });
+        if(res.ok) { fecharForms(); carregarSlaMatrix(); } else { alert("Erro ao atualizar."); }
+    }
+
+    async function excluirGenerico(id) {
+        if(confirm('Tem certeza que deseja inativar esta definição?')) {
+            const res = await fetch(`${API_BASE_URL}/cadastros/${epAtual}/${id}`, { method: 'DELETE', credentials: 'include' });
+            if (res.ok) carregar(epAtual, document.getElementById('tituloTela').innerText.trim());
         }
-    </script>
+    }
+
+    async function excluirUsuario(id) {
+        if(confirm('Tem certeza que deseja desativar este utilizador?')) {
+            const res = await fetch(`${API_BASE_URL}/usuarios/${id}`, { method: 'DELETE', credentials: 'include' });
+            if (res.ok) carregar(epAtual, document.getElementById('tituloTela').innerText.trim());
+        }
+    }
+</script>
+
+
 </body>
 </html>
