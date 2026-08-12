@@ -238,6 +238,7 @@ class TarefaUpdate(BaseModel):
     comentario: str
     nota_interna: bool = False
 
+class RespostaSolicitanteRequest(BaseModel): comentario: str
 class UsuarioCreate(BaseModel): nome: str; email: str; ad_login: str; setor_id: Optional[int] = None; perfil: str; nivel_acesso: int; senha: Optional[str] = "saavedra123"
 class UsuarioUpdate(BaseModel): nome: str; email: str; ad_login: str; setor_id: Optional[int] = None; perfil: str; nivel_acesso: int
 
@@ -260,7 +261,7 @@ def exigir_admin(usuario: dict = Depends(get_usuario_sessao)) -> dict:
 def login_local(request: Request, login_data: LoginRequest):
     email_limpo = login_data.email.strip().lower()
     with engine.connect() as conn:
-        user = conn.execute(text("SELECT USUARIO_ID, NOME, EMAIL, PERFIL, SENHA_HASH FROM tbUSUARIO WHERE LOWER(EMAIL) = :email"), {"email": email_limpo}).fetchone()
+        user = conn.execute(text("SELECT USUARIO_ID, NOME, EMAIL, PERFIL, SENHA_HASH FROM tbUSUARIO WHERE LOWER(EMAIL) = :email AND (ATIVO = 1 OR ATIVO IS NULL)"), {"email": email_limpo}).fetchone()
     if user and verificar_senha(login_data.senha.strip(), user.SENHA_HASH):
         request.session['user'] = {"id": user.USUARIO_ID, "nome": user.NOME, "email": user.EMAIL, "perfil": user.PERFIL}
         logger.info(f"🔑 [LOGIN SUCESSO] Usuário '{email_limpo}' autenticado com êxito (ID #{user.USUARIO_ID}).")
@@ -284,19 +285,70 @@ def alterar_senha(request: Request, data: AlterarSenhaRequest, usuario: dict = D
 
 @app.get("/api/cadastros/{tipo_cadastro}")
 def get_cadastros(tipo_cadastro: str, usuario: dict = Depends(get_usuario_sessao)):
+    if tipo_cadastro not in TABELAS_PERMITIDAS: raise HTTPException(404)
     cfg = TABELAS_PERMITIDAS[tipo_cadastro]
-    with engine.connect() as conn: return [{"id": r[0], "nome": r[1]} for r in conn.execute(text(f"SELECT {cfg['id']}, {cfg['nome']} FROM {cfg['tabela']}"))]
+    with engine.connect() as conn: 
+        return [{"id": r[0], "nome": r[1]} for r in conn.execute(text(f"SELECT {cfg['id']}, {cfg['nome']} FROM {cfg['tabela']} WHERE (ATIVO = 1 OR ATIVO IS NULL)"))]
 
 @app.post("/api/cadastros/{tipo_cadastro}")
 def create_cadastro(tipo_cadastro: str, item: ItemCadastro, usuario: dict = Depends(exigir_admin)):
+    if tipo_cadastro not in TABELAS_PERMITIDAS: raise HTTPException(404)
     cfg = TABELAS_PERMITIDAS[tipo_cadastro]
     with engine.begin() as conn: conn.execute(text(f"INSERT INTO {cfg['tabela']} ({cfg['nome']}) VALUES (:nome)"), {"nome": item.descricao})
     return {"message": "Criado"}
 
+@app.put("/api/cadastros/{tipo_cadastro}/{id_registro}")
+def update_cadastro(tipo_cadastro: str, id_registro: int, item: ItemCadastro, usuario: dict = Depends(exigir_admin)):
+    if tipo_cadastro not in TABELAS_PERMITIDAS: raise HTTPException(404)
+    cfg = TABELAS_PERMITIDAS[tipo_cadastro]
+    with engine.begin() as conn: 
+        conn.execute(text(f"UPDATE {cfg['tabela']} SET {cfg['nome']} = :nome WHERE {cfg['id']} = :id"), {"nome": item.descricao, "id": id_registro})
+    return {"message": "Atualizado"}
+
+@app.delete("/api/cadastros/{tipo_cadastro}/{id_registro}")
+def delete_cadastro(tipo_cadastro: str, id_registro: int, usuario: dict = Depends(exigir_admin)):
+    if tipo_cadastro not in TABELAS_PERMITIDAS: raise HTTPException(404)
+    cfg = TABELAS_PERMITIDAS[tipo_cadastro]
+    with engine.begin() as conn: 
+        try:
+            conn.execute(text(f"UPDATE {cfg['tabela']} SET ATIVO = 0 WHERE {cfg['id']} = :id"), {"id": id_registro})
+        except Exception:
+            conn.execute(text(f"DELETE FROM {cfg['tabela']} WHERE {cfg['id']} = :id"), {"id": id_registro})
+    return {"message": "Inativado"}
+
+# 🌟 MELHORIA 3: Usuários em ORDEM ALFABÉTICA
 @app.get("/api/usuarios")
 def get_usuarios(usuario: dict = Depends(get_usuario_sessao)):
     with engine.connect() as conn:
-        return [{"id": r[0], "nome": r[1], "email": r[2], "ad_login": r[3], "perfil": r[4], "setor": r[5]} for r in conn.execute(text("SELECT U.USUARIO_ID, U.NOME, U.EMAIL, U.AD_LOGIN, U.PERFIL, S.SETOR_NOME FROM tbUSUARIO U LEFT JOIN tbSETOR S ON U.SETOR_ID = S.SETOR_ID"))]
+        return [{"id": r[0], "nome": r[1], "email": r[2], "ad_login": r[3], "perfil": r[4], "setor": r[5], "setor_id": r[6], "nivel_acesso": r[7]} for r in conn.execute(text("SELECT U.USUARIO_ID, U.NOME, U.EMAIL, U.AD_LOGIN, U.PERFIL, S.SETOR_NOME, U.SETOR_ID, U.NIVEL_ACESSO FROM tbUSUARIO U LEFT JOIN tbSETOR S ON U.SETOR_ID = S.SETOR_ID WHERE (U.ATIVO = 1 OR U.ATIVO IS NULL) ORDER BY U.NOME ASC")).fetchall()]
+
+# 🌟 MELHORIA 4: Apenas Usuários da Área Técnica
+@app.get("/api/usuarios/tecnicos")
+def get_usuarios_tecnicos(usuario: dict = Depends(get_usuario_sessao)):
+    with engine.connect() as conn:
+        return [{"id": r[0], "nome": r[1]} for r in conn.execute(text("SELECT USUARIO_ID, NOME FROM tbUSUARIO WHERE PERFIL IN ('Admin', 'Gestor', 'Tecnico') AND (ATIVO = 1 OR ATIVO IS NULL) ORDER BY NOME ASC")).fetchall()]
+
+# 🌟 MELHORIA 1: Modificar e Excluir Usuário no Backend
+@app.post("/api/usuarios")
+def create_usuario(u: UsuarioCreate, usuario: dict = Depends(exigir_admin)):
+    with engine.begin() as conn: 
+        conn.execute(text("INSERT INTO tbUSUARIO (NOME, EMAIL, AD_LOGIN, SETOR_ID, PERFIL, NIVEL_ACESSO, SENHA_HASH, ATIVO) VALUES (:n, :e, :a, :s, :p, :na, :senha, 1)"), {"n": u.nome, "e": u.email, "a": u.ad_login, "s": u.setor_id, "p": u.perfil, "na": u.nivel_acesso, "senha": hash_senha(u.senha if u.senha else "saavedra123")})
+    return {"message": "Criado"}
+
+@app.put("/api/usuarios/{id_usuario}")
+def update_usuario(id_usuario: int, u: UsuarioUpdate, usuario: dict = Depends(exigir_admin)):
+    with engine.begin() as conn: 
+        conn.execute(text("UPDATE tbUSUARIO SET NOME = :n, EMAIL = :e, AD_LOGIN = :a, SETOR_ID = :s, PERFIL = :p, NIVEL_ACESSO = :na WHERE USUARIO_ID = :id"), {"n": u.nome, "e": u.email, "a": u.ad_login, "s": u.setor_id, "p": u.perfil, "na": u.nivel_acesso, "id": id_usuario})
+    return {"message": "Atualizado"}
+
+@app.delete("/api/usuarios/{id_usuario}")
+def delete_usuario(id_usuario: int, usuario: dict = Depends(exigir_admin)):
+    with engine.begin() as conn: 
+        try:
+            conn.execute(text("UPDATE tbUSUARIO SET ATIVO = 0 WHERE USUARIO_ID = :id"), {"id": id_usuario})
+        except Exception:
+            conn.execute(text("DELETE FROM tbUSUARIO WHERE USUARIO_ID = :id"), {"id": id_usuario})
+    return {"message": "Inativado"}
 
 @app.get("/api/admin/sla-matrix")
 def get_sla_matrix(usuario: dict = Depends(exigir_admin)):
@@ -306,68 +358,6 @@ def get_sla_matrix(usuario: dict = Depends(exigir_admin)):
 def update_sla_matrix(sla_id: int, data: SlaConfigRequest, usuario: dict = Depends(exigir_admin)):
     with engine.begin() as conn: conn.execute(text("UPDATE tbSLA_CONFIG SET TEMPO_HORAS = :horas WHERE SLA_ID = :id"), {"horas": data.tempo_horas, "id": sla_id})
     return {"status": "sucesso"}
-
-@app.get("/api/meus-chamados")
-async def listar_meus_chamados(
-    request: Request,
-    page: int = 1,
-    limit: int = 20,
-    status_id: int = None,
-    tipo_id: int = None,
-    busca: str = None
-):
-    usuario = request.session.get("user")
-    if not usuario:
-        raise HTTPException(status_code=401, detail="Não autorizado")
-    
-    # 🌟 CORREÇÃO: Busca o ID usando 'id' (padrão gravado no login) com fallback para 'usuario_id'
-    usuario_id = usuario.get("id") or usuario.get("usuario_id")
-    
-    base = "SELECT T.TAREFA_ID, T.TITULO, S.STATUS_NOME, U.NOME, TEC.NOME, T.DATA_LIMITE_SLA, T.STATUS_ID, T.PRIORIDADE_ID FROM tbTAREFAS T LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbUSUARIO TEC ON T.TECNICO_ID = TEC.USUARIO_ID"
-    
-    return processar_fila_com_filtros(
-        base, 
-        "SELECT COUNT(*) FROM tbTAREFAS T", 
-        {"offset": (page - 1) * limit, "limit": limit}, 
-        status_id=status_id, 
-        prioridade_id=None, 
-        tipo_id=tipo_id, 
-        sla_filtro=None, 
-        data_inicio=None, 
-        data_fim=None, 
-        user_id_filtro=usuario_id,  # Filtra restrito aos chamados abertos pelo solicitante logado
-        tecnico_id_filtro=None, 
-        sem_tecnico=False
-    )
-# ==========================================
-# 6. KPIS E DASHBOARDS ANALYTICS
-# ==========================================
-@app.get("/api/kpis")
-def get_kpis(visao_equipe: bool = False, usuario: dict = Depends(get_usuario_sessao)):
-    where_clause = ""
-    join_cond = ""
-    params = {}
-    is_admin = usuario.get("perfil") in PERFIS_ADMIN
-
-    if not is_admin:
-        where_clause = "WHERE T.SOLICITANTE_ID = :user_id"
-        join_cond = "AND T.SOLICITANTE_ID = :user_id"
-        params = {"user_id": usuario["id"]}
-    else:
-        if not visao_equipe:
-            where_clause = "WHERE T.TECNICO_ID = :user_id"
-            join_cond = "AND T.TECNICO_ID = :user_id"
-            params = {"user_id": usuario["id"]}
-
-    with engine.connect() as conn:
-        res_esp = conn.execute(text(f"SELECT SUM(CASE WHEN T.STATUS_ID NOT IN (4,6) AND TRY_CAST(T.DATA_LIMITE_SLA AS DATETIME) < GETDATE() THEN 1 ELSE 0 END), SUM(CASE WHEN T.STATUS_ID NOT IN (4,6) AND TRY_CAST(T.DATA_LIMITE_SLA AS DATETIME) >= GETDATE() AND DATEDIFF(MINUTE, GETDATE(), TRY_CAST(T.DATA_LIMITE_SLA AS DATETIME)) <= 120 THEN 1 ELSE 0 END), SUM(CASE WHEN T.STATUS_ID NOT IN (4,6) AND T.PRIORIDADE_ID = 1 THEN 1 ELSE 0 END) FROM tbTAREFAS T {where_clause}"), params).fetchone() 
-        res_status = conn.execute(text(f"SELECT S.STATUS_ID, S.STATUS_NOME, COUNT(T.TAREFA_ID) FROM tbSTATUS S LEFT JOIN tbTAREFAS T ON S.STATUS_ID = T.STATUS_ID {join_cond} WHERE S.ATIVO = 1 GROUP BY S.STATUS_ID, S.STATUS_NOME ORDER BY S.STATUS_ID ASC"), params).fetchall()
-        
-        triagem = 0
-        if is_admin and visao_equipe:
-            triagem = conn.execute(text("SELECT COUNT(TAREFA_ID) FROM tbTAREFAS WHERE STATUS_ID NOT IN (4,6) AND TECNICO_ID IS NULL")).scalar() or 0
-
-    return {"sla_estourado": res_esp[0] or 0, "sla_atencao": res_esp[1] or 0, "criticos": res_esp[2] or 0, "aguardando_triagem": triagem, "status_dinamicos": [{"id": r[0], "nome": r[1], "qtd": r[2]} for r in res_status]}
 
 @app.get("/api/relatorios/gerais")
 def get_relatorios_gerais(usuario: dict = Depends(exigir_admin)):
@@ -382,7 +372,7 @@ def get_relatorios_gerais(usuario: dict = Depends(exigir_admin)):
         }
 
 # ==========================================
-# 7. MOTOR DE PROCESSAMENTO DE FILA E TAREFAS (COM FILTROS CORRIGIDOS)
+# 7. MOTOR DE PROCESSAMENTO DE FILA E TAREFAS
 # ==========================================
 @app.get("/api/kpis")
 def get_kpis(visao_equipe: bool = False, usuario: dict = Depends(get_usuario_sessao)):
@@ -397,7 +387,7 @@ def get_kpis(visao_equipe: bool = False, usuario: dict = Depends(get_usuario_ses
 
     with engine.connect() as conn:
         res_esp = [0, 0, 0] if perfil == "Comum" else conn.execute(text(f"SELECT SUM(CASE WHEN T.STATUS_ID NOT IN (4,6) AND TRY_CAST(T.DATA_LIMITE_SLA AS DATETIME) < GETDATE() THEN 1 ELSE 0 END), SUM(CASE WHEN T.STATUS_ID NOT IN (4,6) AND TRY_CAST(T.DATA_LIMITE_SLA AS DATETIME) >= GETDATE() AND DATEDIFF(MINUTE, GETDATE(), TRY_CAST(T.DATA_LIMITE_SLA AS DATETIME)) <= 120 THEN 1 ELSE 0 END), SUM(CASE WHEN T.STATUS_ID NOT IN (4,6) AND T.PRIORIDADE_ID = 1 THEN 1 ELSE 0 END) FROM tbTAREFAS T {where_clause}"), params).fetchone() 
-        res_status = conn.execute(text(f"SELECT S.STATUS_ID, S.STATUS_NOME, COUNT(T.TAREFA_ID) FROM tbSTATUS S LEFT JOIN tbTAREFAS T ON S.STATUS_ID = T.STATUS_ID {join_cond} GROUP BY S.STATUS_ID, S.STATUS_NOME ORDER BY S.STATUS_ID ASC"), params).fetchall()
+        res_status = conn.execute(text(f"SELECT S.STATUS_ID, S.STATUS_NOME, COUNT(T.TAREFA_ID) FROM tbSTATUS S LEFT JOIN tbTAREFAS T ON S.STATUS_ID = T.STATUS_ID {join_cond} WHERE (S.ATIVO = 1 OR S.ATIVO IS NULL) GROUP BY S.STATUS_ID, S.STATUS_NOME ORDER BY S.STATUS_ID ASC"), params).fetchall()
         triagem = conn.execute(text("SELECT COUNT(TAREFA_ID) FROM tbTAREFAS WHERE STATUS_ID NOT IN (4,6) AND TECNICO_ID IS NULL")).scalar() or 0 if (is_admin and visao_equipe) else 0
 
     return {"sla_estourado": res_esp[0] or 0, "sla_atencao": res_esp[1] or 0, "criticos": res_esp[2] or 0, "aguardando_triagem": triagem, "status_dinamicos": [{"id": r[0], "nome": r[1], "qtd": r[2]} for r in res_status]}
@@ -405,7 +395,6 @@ def get_kpis(visao_equipe: bool = False, usuario: dict = Depends(get_usuario_ses
 def processar_fila_com_filtros(base_query: str, count_query: str, params: dict, status_id: Optional[int], prioridade_id: Optional[int], tipo_id: Optional[int], sla_filtro: Optional[str], data_inicio: Optional[str], data_fim: Optional[str], user_id_filtro: Optional[int] = None, tecnico_id_filtro: Optional[int] = None, sem_tecnico: bool = False):
     where_conds = []
     
-    # Filtros de Identificação (Usuário/Técnico)
     if user_id_filtro is not None: 
         where_conds.append("T.SOLICITANTE_ID = :user_id_filtro")
         params["user_id_filtro"] = user_id_filtro
@@ -415,7 +404,6 @@ def processar_fila_com_filtros(base_query: str, count_query: str, params: dict, 
     if sem_tecnico: 
         where_conds.extend(["T.TECNICO_ID IS NULL", "T.STATUS_ID NOT IN (4,6)"])
         
-    # Filtros de Classificação e Categoria
     if status_id: 
         where_conds.append("T.STATUS_ID = :status_id")
         params["status_id"] = status_id
@@ -426,7 +414,6 @@ def processar_fila_com_filtros(base_query: str, count_query: str, params: dict, 
         where_conds.append("T.TIPO_ID = :tipo_id")
         params["tipo_id"] = tipo_id
 
-    # Tratamento de Datas
     if data_inicio:
         where_conds.append("CAST(T.DATA_HORA AS DATE) >= :data_inicio")
         params["data_inicio"] = data_inicio
@@ -434,7 +421,6 @@ def processar_fila_com_filtros(base_query: str, count_query: str, params: dict, 
         where_conds.append("CAST(T.DATA_HORA AS DATE) <= :data_fim")
         params["data_fim"] = data_fim
 
-    # Tratamento Dinâmico de SLA
     if sla_filtro == 'estourado':
         where_conds.extend(["T.STATUS_ID NOT IN (4,6)", "T.DATA_LIMITE_SLA < GETDATE()"])
     elif sla_filtro == 'atencao':
@@ -484,16 +470,12 @@ def get_tarefa_historico(tarefa_id: int, usuario: dict = Depends(get_usuario_ses
         rows = conn.execute(text(query), {"id": tarefa_id}).fetchall()
         return [{"id": r[0], "data_hora": formatar_data_segura(r[1]), "usuario_nome": r[2], "status_nome": r[3], "comentario": r[4], "anexo_nome": r[5], "anexo_salvo": r[6], "nota_interna": r[7]} for r in rows]
 
-# 🌟 CORREÇÃO CRÍTICA: Rota /api/tarefas configurada para exigir permissão de Administrador/Técnico e aceitar o método GET corretamente
-@app.get("/api/tarefas")
-def get_tarefas(page: int = 1, limit: int = 20, data_inicio: Optional[str] = None, data_fim: Optional[str] = None, status_id: Optional[int] = None, prioridade_id: Optional[int] = None, tipo_id: Optional[int] = None, sla_filtro: Optional[str] = None, visao_equipe: bool = False, sem_tecnico: bool = False, usuario: dict = Depends(exigir_admin)):
-    base = "SELECT T.TAREFA_ID, T.TITULO, S.STATUS_NOME, U.NOME, TEC.NOME, T.DATA_LIMITE_SLA, T.STATUS_ID, T.PRIORIDADE_ID FROM tbTAREFAS T LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbUSUARIO TEC ON T.TECNICO_ID = TEC.USUARIO_ID"
-    tecnico_filtro = None if (visao_equipe or sem_tecnico) else usuario["id"]
-    return processar_fila_com_filtros(base, "SELECT COUNT(*) FROM tbTAREFAS T", {"offset": (page - 1) * limit, "limit": limit}, status_id, prioridade_id, tipo_id, sla_filtro, data_inicio, data_fim, user_id_filtro=None, tecnico_id_filtro=tecnico_filtro, sem_tecnico=sem_tecnico)
-
 @app.post("/api/tarefas")
 def create_tarefa(tarefa: TarefaCreate, background_tasks: BackgroundTasks, usuario: dict = Depends(get_usuario_sessao)):
-    if usuario.get("perfil") not in PERFIS_ADMIN and tarefa.solicitante_id != usuario["id"]: raise HTTPException(status_code=403)
+    is_comum = usuario.get("perfil") not in PERFIS_ADMIN
+    if is_comum and tarefa.solicitante_id != usuario["id"]: raise HTTPException(status_code=403)
+    tecnico_id_final = None if is_comum else tarefa.tecnico_id
+
     with engine.connect() as conn:
         sla_row = conn.execute(text("SELECT TEMPO_HORAS FROM tbSLA_CONFIG WHERE PRIORIDADE_ID = :p AND TIPO_ID = :t"), {"p": tarefa.prioridade_id, "t": tarefa.tipo_id}).fetchone()
     tempo_sla_horas = sla_row[0] if sla_row else 24
