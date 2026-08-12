@@ -17,6 +17,11 @@
         .timeline-item::before { content: ''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px; background: var(--saavedra-orange); border-radius: 50%; }
         .timeline-content { font-size: 14px; color: #374151; line-height: 1.5; white-space: pre-wrap; background: #fff; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; margin-top: 6px; }
         .form-group-custom { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
+        
+        .csat-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .csat-stars { display: flex; justify-content: center; gap: 10px; margin-top: 12px; }
+        .btn-csat { background: white; border: 1px solid #86efac; color: #166534; padding: 8px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+        .btn-csat:hover { background: #16a34a; color: white; transform: translateY(-2px); }
     </style>
 </head>
 <body>
@@ -38,17 +43,31 @@
 
     <main class="container-detalhe">
         <section class="main-column">
-            <!-- Banner ITIL -->
+            <!-- Banner Alerta ITIL -->
             <div id="bannerAlertaItil" style="display: none; background: #fff8e6; border: 1px solid #feecdc; border-left: 5px solid var(--saavedra-orange); color: #856404; padding: 16px 20px; border-radius: 10px; margin-bottom: 20px; font-size: 14px;">
                 <div style="display: flex; align-items: flex-start; gap: 14px;">
                     <span class="material-symbols-outlined" style="font-size: 28px; color: var(--saavedra-orange);">warning</span>
                     <div>
                         <strong style="font-size: 15px; display: block; margin-bottom: 4px;">Aviso de Governança ITIL: Pendente de Resposta</strong>
-                        <span>Este chamado encontra-se com o status <strong id="lblStatusAlertaItil">Aguardando Validação</strong>. O ticket será <strong>encerrado automaticamente</strong> em 3 dias se não houver interação do solicitante.</span>
+                        <span>Este chamado encontra-se com o status <strong id="lblStatusAlertaItil">Aguardando Validação</strong>. O ticket será <strong>encerrado automaticamente</strong> em 3 dias se não houver interação.</span>
                     </div>
                 </div>
             </div>
 
+            <!-- Bloco de Avaliação CSAT -->
+            <div id="boxAvaliacaoCsat" class="csat-box" style="display: none;">
+                <strong style="font-size: 16px; color: #166534; display: block;">Como avalia a resolução deste chamado?</strong>
+                <p style="font-size: 13px; color: #15803d; margin: 4px 0 12px 0;">Sua opinião nos ajuda a aprimorar o atendimento da TI.</p>
+                <div class="csat-stars">
+                    <button class="btn-csat" onclick="enviarAvaliacao(1)">1 😞 Péssimo</button>
+                    <button class="btn-csat" onclick="enviarAvaliacao(2)">2 😕 Ruim</button>
+                    <button class="btn-csat" onclick="enviarAvaliacao(3)">3 😐 Regular</button>
+                    <button class="btn-csat" onclick="enviarAvaliacao(4)">4 😊 Bom</button>
+                    <button class="btn-csat" onclick="enviarAvaliacao(5)">5 🤩 Excelente</button>
+                </div>
+            </div>
+
+            <!-- Dados do Chamado -->
             <div class="card">
                 <span style="color: #6b7280; font-size: 13px; font-weight: 600;" id="lblId">Carregando...</span>
                 <div class="chamado-header">
@@ -69,6 +88,7 @@
                 </div>
             </div>
 
+            <!-- Histórico Work Notes -->
             <div class="card" style="margin-top: 20px;">
                 <h3 style="margin-top: 0; color: var(--saavedra-orange); border-bottom: 1px solid #f3f4f6; padding-bottom: 10px;">Histórico de Ações (Work Notes)</h3>
                 <ul class="timeline" id="timelineList">
@@ -78,25 +98,25 @@
         </section>
 
         <aside class="side-column">
-            <!-- Ações do Técnico -->
-            <div class="card" id="cardAcoesTecnico" data-admin-only>
+            <!-- Formulário Técnico -->
+            <div class="card" id="cardAcoesTecnico" style="display: none;">
                 <h3 style="margin-top: 0; color: var(--saavedra-orange); border-bottom: 1px solid #f3f4f6; padding-bottom: 10px;">Ações do Técnico</h3>
                 
                 <div class="form-group-custom">
                     <label style="font-size: 13px; font-weight: 600;">Técnico Responsável</label>
-                    <select id="updTecnico" class="form-input"><option value="">Aguardando triagem...</option></select>
+                    <select id="updTecnico" class="form-input"><option value="">Carregando...</option></select>
                 </div>
                 <div class="form-group-custom">
                     <label style="font-size: 13px; font-weight: 600;">Tipo de Chamado</label>
-                    <select id="updTipo" class="form-input"></select>
+                    <select id="updTipo" class="form-input"><option value="">Carregando...</option></select>
                 </div>
                 <div class="form-group-custom">
                     <label style="font-size: 13px; font-weight: 600;">Novo Status</label>
-                    <select id="updStatus" class="form-input"></select>
+                    <select id="updStatus" class="form-input"><option value="">Carregando...</option></select>
                 </div>
                 <div class="form-group-custom" id="boxCausaRaiz" style="display: none;">
                     <label style="font-size: 13px; font-weight: 600;">Causa Raiz (Obrigatório para Fechar)</label>
-                    <select id="updCausaRaiz" class="form-input"></select>
+                    <select id="updCausaRaiz" class="form-input"><option value="">Carregando...</option></select>
                 </div>
                 <div class="form-group-custom">
                     <label style="font-size: 13px; font-weight: 600;">Anotação / Work Note</label>
@@ -116,7 +136,7 @@
                 <button class="btn btn-solid" style="width: 100%; margin-top: 10px;" onclick="atualizarChamado()">Salvar Alterações</button>
             </div>
 
-            <!-- Resposta Solicitante -->
+            <!-- Resposta do Solicitante -->
             <div class="card" id="cardRespostaSolicitante" style="display: none;">
                 <h3 style="margin-top: 0; color: var(--saavedra-orange); border-bottom: 1px solid #f3f4f6; padding-bottom: 10px;">Responder ao Chamado</h3>
                 <div class="form-group-custom">
@@ -133,31 +153,40 @@
         const tarefaId = urlParams.get('id');
 
         async function carregarDropdowns() {
+            const isAdmin = window.usuarioLogado && ['Admin', 'Gestor', 'Tecnico'].includes(window.usuarioLogado.perfil);
+            if (!isAdmin) return; 
+
             try {
                 const reqs = [
-                    fetch(`${API_BASE_URL}/usuarios`, { credentials: 'include' }),
+                    fetch(`${API_BASE_URL}/usuarios/tecnicos`, { credentials: 'include' }), // 🌟 APENAS TÉCNICOS AGORA!
                     fetch(`${API_BASE_URL}/cadastros/tipo`, { credentials: 'include' }),
                     fetch(`${API_BASE_URL}/cadastros/status`, { credentials: 'include' }),
                     fetch(`${API_BASE_URL}/cadastros/causa_raiz`, { credentials: 'include' })
                 ];
                 
                 const res = await Promise.all(reqs);
-                const [usuarios, tipos, status, causas] = await Promise.all(res.map(r => r.json()));
+                const [tecnicos, tipos, status, causas] = await Promise.all(res.map(r => r.json()));
 
                 const pop = (id, data, defaultTxt) => {
                     const el = document.getElementById(id);
-                    el.innerHTML = (defaultTxt ? `<option value="">${defaultTxt}</option>` : '') + data.map(i => `<option value="${i.id}">${i.nome}</option>`).join('');
+                    if (el) {
+                        el.innerHTML = (defaultTxt ? `<option value="">${defaultTxt}</option>` : '') + data.map(i => `<option value="${i.id}">${i.nome}</option>`).join('');
+                    }
                 };
 
-                pop('updTecnico', usuarios, 'Deixar sem técnico');
-                pop('updTipo', tipos);
-                pop('updStatus', status);
+                pop('updTecnico', tecnicos, 'Deixar na fila de triagem');
+                pop('updTipo', tipos, 'Selecione um tipo...');
+                pop('updStatus', status, 'Selecione um status...');
                 pop('updCausaRaiz', causas, 'Selecione uma causa...');
 
-                document.getElementById('updStatus').addEventListener('change', (e) => {
-                    const s = parseInt(e.target.value);
-                    document.getElementById('boxCausaRaiz').style.display = (s === 4 || s === 6) ? 'flex' : 'none';
-                });
+                const updStatusEl = document.getElementById('updStatus');
+                if (updStatusEl) {
+                    updStatusEl.addEventListener('change', (e) => {
+                        const s = parseInt(e.target.value);
+                        const boxCR = document.getElementById('boxCausaRaiz');
+                        if (boxCR) boxCR.style.display = (s === 4 || s === 6) ? 'flex' : 'none';
+                    });
+                }
 
             } catch (e) { console.error(e); }
         }
@@ -179,42 +208,56 @@
                 document.getElementById('lblSla').innerText = t.data_limite_sla ? new Date(t.data_limite_sla).toLocaleString('pt-BR') : 'N/A';
 
                 const statusLower = (t.status_nome || '').toLowerCase();
+                const banner = document.getElementById('bannerAlertaItil');
                 if (statusLower.includes('aguardando') || statusLower.includes('terceiro') || statusLower.includes('valida') || statusLower.includes('pendente')) {
                     document.getElementById('lblStatusAlertaItil').innerText = t.status_nome;
-                    document.getElementById('bannerAlertaItil').style.display = 'block';
+                    if (banner) banner.style.display = 'block';
                 } else {
-                    document.getElementById('bannerAlertaItil').style.display = 'none';
+                    if (banner) banner.style.display = 'none';
                 }
 
                 const isAdmin = window.usuarioLogado && ['Admin', 'Gestor', 'Tecnico'].includes(window.usuarioLogado.perfil);
-                if (!isAdmin) {
-                    document.getElementById('cardAcoesTecnico').style.display = 'none';
-                    document.getElementById('cardRespostaSolicitante').style.display = 'block';
-                } else {
-                    document.getElementById('cardAcoesTecnico').style.display = 'block';
-                    document.getElementById('cardRespostaSolicitante').style.display = 'none';
-                }
+                const cardTec = document.getElementById('cardAcoesTecnico');
+                const cardSol = document.getElementById('cardRespostaSolicitante');
+                const csatBox = document.getElementById('boxAvaliacaoCsat');
 
-                if(t.tecnico_id) document.getElementById('updTecnico').value = t.tecnico_id;
-                if(t.tipo_id) document.getElementById('updTipo').value = t.tipo_id;
-                if(t.status_id) {
-                    document.getElementById('updStatus').value = t.status_id;
-                    document.getElementById('boxCausaRaiz').style.display = (t.status_id === 4 || t.status_id === 6) ? 'flex' : 'none';
+                if (!isAdmin) {
+                    if (cardTec) cardTec.style.display = 'none';
+                    if (cardSol) cardSol.style.display = 'block';
+                    if (csatBox && t.status_id === 4) {
+                        csatBox.style.display = 'block';
+                    } else if (csatBox) {
+                        csatBox.style.display = 'none';
+                    }
+                } else {
+                    if (cardTec) cardTec.style.display = 'block';
+                    if (cardSol) cardSol.style.display = 'none';
+                    if (csatBox) csatBox.style.display = 'none';
+                    
+                    if(t.tecnico_id && document.getElementById('updTecnico')) document.getElementById('updTecnico').value = t.tecnico_id;
+                    if(t.tipo_id && document.getElementById('updTipo')) document.getElementById('updTipo').value = t.tipo_id;
+                    if(t.status_id && document.getElementById('updStatus')) {
+                        document.getElementById('updStatus').value = t.status_id;
+                        const boxCR = document.getElementById('boxCausaRaiz');
+                        if (boxCR) boxCR.style.display = (t.status_id === 4 || t.status_id === 6) ? 'flex' : 'none';
+                    }
+                    if(t.causa_raiz_id && document.getElementById('updCausaRaiz')) document.getElementById('updCausaRaiz').value = t.causa_raiz_id;
                 }
-                if(t.causa_raiz_id) document.getElementById('updCausaRaiz').value = t.causa_raiz_id;
 
                 const anexosBox = document.getElementById('lblAnexosContainer');
                 const anexosDiv = document.getElementById('lblAnexos');
                 if (t.anexos && t.anexos.length > 0) {
-                    anexosBox.style.display = 'block';
-                    anexosDiv.innerHTML = t.anexos.map(a => `
-                        <div style="font-size: 13px;">
-                            <a href="/uploads/${a.nome_salvo}" target="_blank" style="color: var(--saavedra-orange); text-decoration: none; font-weight: bold;">
-                            📄 ${a.nome_original}
-                            </a>
-                        </div>
-                    `).join('');
-                } else { anexosBox.style.display = 'none'; }
+                    if (anexosBox) anexosBox.style.display = 'block';
+                    if (anexosDiv) {
+                        anexosDiv.innerHTML = t.anexos.map(a => `
+                            <div style="font-size: 13px;">
+                                <a href="/uploads/${a.nome_salvo}" target="_blank" style="color: var(--saavedra-orange); text-decoration: none; font-weight: bold;">
+                                📄 ${a.nome_original}
+                                </a>
+                            </div>
+                        `).join('');
+                    }
+                } else { if (anexosBox) anexosBox.style.display = 'none'; }
 
                 const resHist = await fetch(`${API_BASE_URL}/tarefas/${tarefaId}/historico`, { credentials: 'include' });
                 if (resHist.ok) {
@@ -252,7 +295,25 @@
 
             } catch (error) {
                 console.error(error);
-                alert("Erro ao carregar o chamado.");
+                alert("Erro ao carregar os detalhes do chamado.");
+            }
+        }
+
+        async function enviarAvaliacao(nota) {
+            try {
+                const res = await fetch(`${API_BASE_URL}/tarefas/${tarefaId}/avaliar?nota=${nota}`, {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                if (res.ok) {
+                    alert("Obrigado por avaliar este atendimento!");
+                    window.location.reload();
+                } else {
+                    alert("Falha ao registrar a avaliação.");
+                }
+            } catch (e) {
+                console.error(e);
+                alert("Erro de comunicação ao enviar avaliação.");
             }
         }
 
@@ -327,13 +388,11 @@
                         formData.append('files', fileInput.files[i]);
                     }
 
-                    const uploadRes = await fetch(`${API_BASE_URL}/tarefas/${tarefaId}/anexar`, {
+                    await fetch(`${API_BASE_URL}/tarefas/${tarefaId}/anexar`, {
                         method: 'POST',
                         body: formData,
                         credentials: 'include'
                     });
-
-                    if (!uploadRes.ok) { console.error("Erro ao fazer upload dos anexos."); }
                 }
 
                 window.location.href = `index.html?atualizado=${tarefaId}`;
@@ -344,9 +403,12 @@
             }
         }
 
-        window.addEventListener('DOMContentLoaded', async () => {
-            await carregarDropdowns();
-            await carregarDados();
+        // 🌟 CORREÇÃO FINAL: UTILIZANDO SETTIMEOUT PARA EVITAR RACE CONDITION NO JAVASCRIPT
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(async () => {
+                await carregarDropdowns();
+                await carregarDados();
+            }, 400);
         });
     </script>
 </body>

@@ -1,0 +1,30 @@
+[2026-08-10 11:51:54] [WARNING]: 🔒 [LOGIN FALHA] Tentativa de login inválida para o e-mail 'suporte.saav@saavedra.com.br'.
+[2026-08-10 11:51:54] [WARNING]: ⚠️ [HTTP 401] POST /api/auth/login | IP: 10.0.0.5 | Anônimo | Tempo: 0.42s
+[2026-08-10 11:51:59] [WARNING]: 🔒 [LOGIN FALHA] Tentativa de login inválida para o e-mail 'suporte.saav@saavedra.com.br'.
+[2026-08-10 11:51:59] [WARNING]: ⚠️ [HTTP 401] POST /api/auth/login | IP: 10.0.0.5 | Anônimo | Tempo: 0.39s
+[2026-08-10 12:59:48] [WARNING]: 🔒 [LOGIN FALHA] Tentativa de login inválida para o e-mail 'suporte.saav@saavedra.com.br'.
+[2026-08-10 12:59:48] [WARNING]: ⚠️ [HTTP 401] POST /api/auth/login | IP: 10.0.0.5 | Anônimo | Tempo: 0.39s
+[2026-08-10 13:04:27] [WARNING]: 🔒 [LOGIN FALHA] Tentativa de login inválida para o e-mail 'suporte.saav@saavedra.com.br'.
+[2026-08-10 13:04:27] [WARNING]: ⚠️ [HTTP 401] POST /api/auth/login | IP: 10.0.0.5 | Anônimo | Tempo: 0.41s
+[2026-08-10 13:04:52] [INFO]: 🛠️ [RESET FORÇADO] Senha do usuário 'suporte.saav@saavedra.com.br' redefinida para 'saavedra123'.
+[2026-08-10 13:05:10] [INFO]: 🔑 [LOGIN SUCESSO] Usuário 'suporte.saav@saavedra.com.br' autenticado com êxito (ID #1).
+[2026-08-10 13:06:47] [WARNING]: ⚠️ [HTTP 404] GET /api/tarefas/10157/historico | IP: 10.0.0.26 | Anônimo | Tempo: 0.00s
+[2026-08-10 13:07:13] [WARNING]: ⚠️ [HTTP 404] GET /api/tarefas/10154/historico | IP: 10.0.0.26 | Anônimo | Tempo: 0.00s
+[2026-08-10 13:08:00] [WARNING]: ⚠️ [HTTP 404] GET /api/tarefas/10154/historico | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-10 13:08:03] [WARNING]: ⚠️ [HTTP 404] GET /api/tarefas/10154/historico | IP: 10.0.0.26 | Anônimo | Tempo: 0.00s
+[2026-08-10 13:08:30] [WARNING]: ⚠️ [HTTP 405] PUT /api/tarefas/10154 | IP: 10.0.0.26 | Anônimo | Tempo: 0.00s
+[2026-08-10 13:08:34] [WARNING]: ⚠️ [HTTP 405] PUT /api/tarefas/10154 | IP: 10.0.0.26 | Anônimo | Tempo: 0.00s
+[2026-08-10 13:51:22] [INFO]: 🔑 [LOGIN SUCESSO] Usuário 'ti@saavedra.com.br' autenticado com êxito (ID #2).
+[2026-08-10 14:00:49] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-10 14:00:49] [INFO]: 🤖 [CRON JOB] Chamado #10 encerrado automaticamente por inatividade.
+[2026-08-10 14:00:49] [INFO]: 🤖 [CRON JOB] Chamado #22 encerrado automaticamente por inatividade.
+[2026-08-10 14:00:49] [INFO]: 🤖 [CRON JOB] Chamado #35 encerrado automaticamente por inatividade.
+[2026-08-10 14:00:49] [INFO]: 🤖 [CRON JOB] Chamado #64 encerrado automaticamente por inatividade.
+[2026-08-10 14:00:49] [INFO]: 🤖 [CRON JOB] Chamado #78 encerrado automaticamente por inatividade.
+[2026-08-10 14:00:49] [INFO]: 🤖 [CRON JOB] Chamado #81 encerrado automaticamente por inatividade.
+[2026-08-10 14:00:49] [INFO]: 🤖 [CRON JOB] Chamado #10148 encerrado automaticamente por inatividade.
+[2026-08-10 14:00:49] [INFO]: 🤖 [CRON JOB] Chamado #10152 encerrado automaticamente por inatividade.
+[2026-08-10 14:08:25] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-10 14:19:57] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-10 14:57:20] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-10 15:38:13] [WARNING]: ⚠️ [HTTP 422] POST /api/tarefas/10161/anexar | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s

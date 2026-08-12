@@ -96,89 +96,94 @@
         </form>
     </main>
 
-<script>
-    async function carregarOpcoes(endpoint, selectId) {
-        try {
-            const res = await fetch(`${API_BASE_URL}/${endpoint}`, { credentials: 'include' });
-            const data = await res.json();
-            const select = document.getElementById(selectId);
-            select.innerHTML = selectId === 'solicitante_id' ? '<option value="">Selecione...</option>' : (selectId === 'tecnico_id' ? '<option value="">Deixar na fila de triagem</option>' : '');
-            data.forEach(item => {
-                const option = document.createElement('option');
-                option.value = item.id; option.textContent = item.nome;
-                select.appendChild(option);
-            });
-        } catch (e) { console.error(e); }
-    }
+    <script>
+        async function carregarOpcoes(endpoint, selectId) {
+            try {
+                const res = await fetch(`${API_BASE_URL}/${endpoint}`, { credentials: 'include' });
+                const data = await res.json();
+                const select = document.getElementById(selectId);
+                select.innerHTML = selectId === 'solicitante_id' ? '<option value="">Selecione...</option>' : (selectId === 'tecnico_id' ? '<option value="">Deixar na fila de triagem</option>' : '');
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.id; 
+                    option.textContent = item.nome;
+                    select.appendChild(option);
+                });
 
-    window.addEventListener('DOMContentLoaded', async () => {
-        await Promise.all([
-            carregarOpcoes('usuarios', 'solicitante_id'),
-            carregarOpcoes('usuarios/tecnicos', 'tecnico_id'), // 🌟 USA ROTA RESTRITA A TÉCNICOS
-            carregarOpcoes('cadastros/tipo', 'tipo_id'),
-            carregarOpcoes('cadastros/prioridade', 'prioridade_id')
-        ]);
-        setTimeout(() => {
-            if (window.usuarioLogado && window.usuarioLogado.id) {
-                document.getElementById('solicitante_id').value = window.usuarioLogado.id;
-                if (window.usuarioLogado.perfil === 'Comum') {
-                    document.getElementById('solicitante_id').disabled = true;
-                }
-            }
-        }, 500);
-    });
-
-    document.getElementById('formNovoChamado').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btnSalvar = document.getElementById('btnSalvar');
-        btnSalvar.disabled = true; 
-        btnSalvar.innerHTML = `<span class="material-symbols-outlined">sync</span> Processando...`;
-
-        const solicitanteId = parseInt(document.getElementById('solicitante_id').value);
-        const payload = {
-            titulo: document.getElementById('titulo').value,
-            descricao: document.getElementById('descricao').value,
-            solicitante_id: solicitanteId,
-            tipo_id: parseInt(document.getElementById('tipo_id').value),
-            prioridade_id: parseInt(document.getElementById('prioridade_id').value),
-            status_id: 1,
-            tecnico_id: document.getElementById('tecnico_id').value ? parseInt(document.getElementById('tecnico_id').value) : null
-        };
-
-        try {
-            const res = await fetch(`${API_BASE_URL}/tarefas`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-                credentials: 'include'
-            });
-
-            if (res.ok) {
-                const ticketData = await res.json();
-                const ticketId = ticketData.id;
-                const fileInput = document.getElementById('anexo');
-                
-                if (fileInput.files.length > 0) {
-                    const formData = new FormData();
-                    for (let i = 0; i < fileInput.files.length; i++) {
-                        formData.append('files', fileInput.files[i]);
-                    }
-                    await fetch(`${API_BASE_URL}/tarefas/${ticketId}/anexar`, { 
-                        method: 'POST', body: formData, credentials: 'include' 
-                    });
+                // 🌟 DEFINIÇÃO DA PRIORIDADE PADRÃO "Sem Prioridade" (ID 1)
+                if (selectId === 'prioridade_id' && document.getElementById('prioridade_id').options.length > 0) {
+                    document.getElementById('prioridade_id').value = 1;
                 }
 
-                document.getElementById('alertSuccess').style.display = 'flex';
-                setTimeout(() => { window.location.href = `index.html?criado=${ticketId}`; }, 1000);
-            } else { throw new Error(); }
-        } catch (error) {
-            document.getElementById('alertError').style.display = 'flex';
-            btnSalvar.disabled = false; 
-            btnSalvar.innerHTML = `<span class="material-symbols-outlined">send</span> Abrir Chamado`;
+            } catch (e) { console.error(e); }
         }
-    });
-</script>
 
+        window.addEventListener('DOMContentLoaded', async () => {
+            await Promise.all([
+                carregarOpcoes('usuarios', 'solicitante_id'),
+                carregarOpcoes('usuarios/tecnicos', 'tecnico_id'),
+                carregarOpcoes('cadastros/tipo', 'tipo_id'),
+                carregarOpcoes('cadastros/prioridade', 'prioridade_id')
+            ]);
+            setTimeout(() => {
+                if (window.usuarioLogado && window.usuarioLogado.id) {
+                    document.getElementById('solicitante_id').value = window.usuarioLogado.id;
+                    if (window.usuarioLogado.perfil === 'Comum') {
+                        document.getElementById('solicitante_id').disabled = true;
+                    }
+                }
+            }, 500);
+        });
 
+        document.getElementById('formNovoChamado').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btnSalvar = document.getElementById('btnSalvar');
+            btnSalvar.disabled = true; 
+            btnSalvar.innerHTML = `<span class="material-symbols-outlined">sync</span> Processando...`;
+
+            const solicitanteId = parseInt(document.getElementById('solicitante_id').value);
+            const payload = {
+                titulo: document.getElementById('titulo').value,
+                descricao: document.getElementById('descricao').value,
+                solicitante_id: solicitanteId,
+                tipo_id: parseInt(document.getElementById('tipo_id').value),
+                prioridade_id: parseInt(document.getElementById('prioridade_id').value) || 1,
+                status_id: 1,
+                tecnico_id: document.getElementById('tecnico_id').value ? parseInt(document.getElementById('tecnico_id').value) : null
+            };
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/tarefas`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                    credentials: 'include'
+                });
+
+                if (res.ok) {
+                    const ticketData = await res.json();
+                    const ticketId = ticketData.id;
+                    const fileInput = document.getElementById('anexo');
+                    
+                    if (fileInput.files.length > 0) {
+                        const formData = new FormData();
+                        for (let i = 0; i < fileInput.files.length; i++) {
+                            formData.append('files', fileInput.files[i]);
+                        }
+                        await fetch(`${API_BASE_URL}/tarefas/${ticketId}/anexar`, { 
+                            method: 'POST', body: formData, credentials: 'include' 
+                        });
+                    }
+
+                    document.getElementById('alertSuccess').style.display = 'flex';
+                    setTimeout(() => { window.location.href = `index.html?criado=${ticketId}`; }, 1000);
+                } else { throw new Error(); }
+            } catch (error) {
+                document.getElementById('alertError').style.display = 'flex';
+                btnSalvar.disabled = false; 
+                btnSalvar.innerHTML = `<span class="material-symbols-outlined">send</span> Abrir Chamado`;
+            }
+        });
+    </script>
 </body>
 </html>

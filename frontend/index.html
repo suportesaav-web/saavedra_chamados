@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard de Chamados | Saavedra</title>
-    <!-- Importação do CSS Global Separado -->
     <link rel="stylesheet" href="style.css">
-    <!-- Importação do Google Material Symbols (Ícones) -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <script src="auth.js"></script>
 </head>
@@ -22,14 +20,23 @@
             <button onclick="document.getElementById('modalSenha').showModal()" class="btn btn-outline">
                 <span class="material-symbols-outlined">lock_reset</span> Alterar Senha
             </button>
-            <a href="relatorios.html" class="btn btn-outline" data-admin-only>
-                <span class="material-symbols-outlined">analytics</span> Relatórios
+            
+            <!-- 🌟 MENU INTELIGENTE DE RELATÓRIOS -->
+            <a href="relatorios_comum.html" class="btn btn-outline" id="menuRelatorioComum" style="display: none;">
+                <span class="material-symbols-outlined">query_stats</span> Meu Painel
             </a>
+            <a href="relatorios.html" class="btn btn-outline" id="menuRelatorioAdmin" style="display: none;">
+                <span class="material-symbols-outlined">analytics</span> Relatórios Gerenciais
+            </a>
+
             <a href="novo_chamado.html" class="btn btn-solid">
                 <span class="material-symbols-outlined">add_task</span> Novo Chamado
             </a>
             <a href="admin.html" class="btn btn-outline" data-admin-only>
                 <span class="material-symbols-outlined">admin_panel_settings</span> Painel Admin
+            </a>
+            <a href="bi.html" class="btn btn-outline" data-admin-only>
+                <span class="material-symbols-outlined">dashboard</span> Painel BI
             </a>
             <button onclick="fazerLogout()" class="btn btn-danger">
                 <span class="material-symbols-outlined">logout</span> Sair
@@ -38,7 +45,6 @@
     </header>
 
     <main class="container">
-        <!-- Alternador de Visões: Foco do Técnico vs. Equipe Inteira -->
         <section class="toggle-visao" id="boxVisao" style="display: none;">
             <div style="font-size: 14px; font-weight: bold; color: #4b5563; display: flex; align-items: center; margin-right: 10px;">
                 <span class="material-symbols-outlined" style="margin-right: 5px;">visibility</span> Modo de Visualização:
@@ -51,7 +57,6 @@
             </button>
         </section>
 
-        <!-- Container de KPIs (Carregado via JS) -->
         <section class="kpi-section" id="kpiContainer"></section>
 
         <section class="fila-container">
@@ -91,7 +96,7 @@
                             <th>Técnico</th>
                             <th>Status</th>
                             <th>Prazo SLA</th>
-                            <th style="text-align: center; width: 100px;">Ação</th>
+                            <th style="text-align: center; width: 130px;">Ação</th>
                         </tr>
                     </thead>
                     <tbody id="listaCorpo">
@@ -112,7 +117,6 @@
         </section>
     </main>
 
-    <!-- HTML5 Native Dialog para Alteração de Senha -->
     <dialog id="modalSenha">
         <div class="modal-content">
             <h3><span class="material-symbols-outlined">password</span> Alterar Minha Senha</h3>
@@ -136,7 +140,6 @@
         </div>
     </dialog>
 
-    <!-- Toast de Notificação -->
     <aside id="toastNotification" class="toast-notification">
         <span class="material-symbols-outlined" style="color: var(--saavedra-green); font-size: 32px;">check_circle</span>
         <div>
@@ -186,10 +189,14 @@
                 }
 
                 const isAdmin = window.usuarioLogado && ['Admin', 'Gestor', 'Tecnico'].includes(window.usuarioLogado.perfil);
+                
+                // 🌟 EXIBE O BOTÃO CERTO DE RELATÓRIO
                 if (isAdmin) {
                     document.getElementById('boxVisao').style.display = 'flex';
+                    document.getElementById('menuRelatorioAdmin').style.display = 'inline-flex';
                     document.getElementById('tituloFila').innerHTML = visaoEquipe ? '<span class="material-symbols-outlined">view_list</span> Fila de Atendimento da Equipe (Geral)' : '<span class="material-symbols-outlined">playlist_play</span> Meus Atendimentos Pendentes';
                 } else {
+                    document.getElementById('menuRelatorioComum').style.display = 'inline-flex';
                     document.getElementById('tituloFila').innerHTML = '<span class="material-symbols-outlined">list</span> Meus Chamados Abertos';
                 }
 
@@ -201,48 +208,74 @@
                 
                 let kpiHtml = '';
                 
-                if (isAdmin && visaoEquipe && kpis.aguardando_triagem !== undefined) {
-                    const sTri = filtroAtivo && filtroAtivo.tipo === 'triagem' ? 'ativo' : '';
+                if (!isAdmin) {
+                    const sPend = filtroAtivo && filtroAtivo.tipo === 'pendente_csat' ? 'ativo' : '';
                     kpiHtml += `
-                    <div class="kpi-card border-dark ${sTri}" id="card-triagem" onclick="aplicarFiltroKpi('triagem', null, 'card-triagem')">
-                        <span class="kpi-title">Aguardando Triagem</span>
-                        <span class="kpi-value text-orange">${kpis.aguardando_triagem}</span>
+                    <div class="kpi-card border-orange ${sPend}" id="card-pendente-csat" onclick="aplicarFiltroKpi('pendente_csat', null, 'card-pendente-csat')">
+                        <span class="kpi-title">Concluídos Pendentes de Avaliação</span>
+                        <span class="kpi-value text-orange">${kpis.concluidos_sem_avaliacao || 0}</span>
+                    </div>`;
+
+                    kpis.status_dinamicos.forEach(s => {
+                        let corClass = 'border-dark'; let textClass = '';
+                        const nomeLower = s.nome.toLowerCase();
+                        if (nomeLower.includes('aberto') || nomeLower.includes('novo')) { corClass = 'border-orange'; textClass = 'text-orange'; }
+                        else if (nomeLower.includes('andamento')) { corClass = 'border-blue'; textClass = 'text-blue'; }
+                        else if (nomeLower.includes('concluido') || nomeLower.includes('resolvido')) { corClass = 'border-green'; textClass = 'text-green'; }
+                        else if (nomeLower.includes('cancelado')) { corClass = 'border-red'; textClass = 'text-red'; }
+                        
+                        const ativo = filtroAtivo && filtroAtivo.tipo === 'status' && filtroAtivo.id === s.id ? 'ativo' : '';
+                        kpiHtml += `
+                        <div class="kpi-card ${corClass} ${ativo}" id="card-status-${s.id}" onclick="aplicarFiltroKpi('status', ${s.id}, 'card-status-${s.id}')">
+                            <span class="kpi-title">${s.nome}</span>
+                            <span class="kpi-value ${textClass}">${s.qtd}</span>
+                        </div>`;
+                    });
+
+                } else {
+                    if (visaoEquipe && kpis.aguardando_triagem !== undefined) {
+                        const sTri = filtroAtivo && filtroAtivo.tipo === 'triagem' ? 'ativo' : '';
+                        kpiHtml += `
+                        <div class="kpi-card border-dark ${sTri}" id="card-triagem" onclick="aplicarFiltroKpi('triagem', null, 'card-triagem')">
+                            <span class="kpi-title">Aguardando Triagem</span>
+                            <span class="kpi-value text-orange">${kpis.aguardando_triagem}</span>
+                        </div>`;
+                    }
+
+                    kpis.status_dinamicos.forEach(s => {
+                        let corClass = 'border-dark'; let textClass = '';
+                        const nomeLower = s.nome.toLowerCase();
+                        if (nomeLower.includes('aberto') || nomeLower.includes('novo')) { corClass = 'border-orange'; textClass = 'text-orange'; }
+                        else if (nomeLower.includes('andamento')) { corClass = 'border-blue'; textClass = 'text-blue'; }
+                        else if (nomeLower.includes('concluido') || nomeLower.includes('resolvido')) { corClass = 'border-green'; textClass = 'text-green'; }
+                        else if (nomeLower.includes('cancelado')) { corClass = 'border-red'; textClass = 'text-red'; }
+                        
+                        const ativo = filtroAtivo && filtroAtivo.tipo === 'status' && filtroAtivo.id === s.id ? 'ativo' : '';
+                        kpiHtml += `
+                        <div class="kpi-card ${corClass} ${ativo}" id="card-status-${s.id}" onclick="aplicarFiltroKpi('status', ${s.id}, 'card-status-${s.id}')">
+                            <span class="kpi-title">${s.nome}</span>
+                            <span class="kpi-value ${textClass}">${s.qtd}</span>
+                        </div>`;
+                    });
+
+                    const sEst = filtroAtivo && filtroAtivo.tipo === 'estourado' ? 'ativo' : '';
+                    const sAt = filtroAtivo && filtroAtivo.tipo === 'atencao' ? 'ativo' : '';
+                    const sCr = filtroAtivo && filtroAtivo.tipo === 'criticos' ? 'ativo' : '';
+                    
+                    kpiHtml += `
+                    <div class="kpi-card border-red ${sEst}" id="card-estourado" onclick="aplicarFiltroKpi('estourado', null, 'card-estourado')">
+                        <span class="kpi-title">SLA Estourado</span>
+                        <span class="kpi-value text-red">${kpis.sla_estourado}</span>
+                    </div>
+                    <div class="kpi-card border-orange ${sAt}" id="card-atencao" onclick="aplicarFiltroKpi('atencao', null, 'card-atencao')">
+                        <span class="kpi-title">SLA Atenção</span>
+                        <span class="kpi-value text-orange">${kpis.sla_atencao}</span>
+                    </div>
+                    <div class="kpi-card border-red ${sCr}" id="card-criticos" onclick="aplicarFiltroKpi('criticos', null, 'card-criticos')">
+                        <span class="kpi-title">Críticos</span>
+                        <span class="kpi-value text-red">${kpis.criticos}</span>
                     </div>`;
                 }
-
-                kpis.status_dinamicos.forEach(s => {
-                    let corClass = 'border-dark'; let textClass = '';
-                    const nomeLower = s.nome.toLowerCase();
-                    if (nomeLower.includes('aberto') || nomeLower.includes('novo')) { corClass = 'border-orange'; textClass = 'text-orange'; }
-                    else if (nomeLower.includes('andamento')) { corClass = 'border-blue'; textClass = 'text-blue'; }
-                    else if (nomeLower.includes('concluido') || nomeLower.includes('resolvido')) { corClass = 'border-green'; textClass = 'text-green'; }
-                    else if (nomeLower.includes('cancelado')) { corClass = 'border-red'; textClass = 'text-red'; }
-                    
-                    const ativo = filtroAtivo && filtroAtivo.tipo === 'status' && filtroAtivo.id === s.id ? 'ativo' : '';
-                    kpiHtml += `
-                    <div class="kpi-card ${corClass} ${ativo}" id="card-status-${s.id}" onclick="aplicarFiltroKpi('status', ${s.id}, 'card-status-${s.id}')">
-                        <span class="kpi-title">${s.nome}</span>
-                        <span class="kpi-value ${textClass}">${s.qtd}</span>
-                    </div>`;
-                });
-
-                const sEst = filtroAtivo && filtroAtivo.tipo === 'estourado' ? 'ativo' : '';
-                const sAt = filtroAtivo && filtroAtivo.tipo === 'atencao' ? 'ativo' : '';
-                const sCr = filtroAtivo && filtroAtivo.tipo === 'criticos' ? 'ativo' : '';
-                
-                kpiHtml += `
-                <div class="kpi-card border-red ${sEst}" id="card-estourado" onclick="aplicarFiltroKpi('estourado', null, 'card-estourado')">
-                    <span class="kpi-title">SLA Estourado</span>
-                    <span class="kpi-value text-red">${kpis.sla_estourado}</span>
-                </div>
-                <div class="kpi-card border-orange ${sAt}" id="card-atencao" onclick="aplicarFiltroKpi('atencao', null, 'card-atencao')">
-                    <span class="kpi-title">SLA Atenção</span>
-                    <span class="kpi-value text-orange">${kpis.sla_atencao}</span>
-                </div>
-                <div class="kpi-card border-red ${sCr}" id="card-criticos" onclick="aplicarFiltroKpi('criticos', null, 'card-criticos')">
-                    <span class="kpi-title">Críticos</span>
-                    <span class="kpi-value text-red">${kpis.criticos}</span>
-                </div>`;
                 
                 document.getElementById('kpiContainer').innerHTML = kpiHtml;
 
@@ -264,6 +297,7 @@
                     if (filtroAtivo.tipo === 'estourado') url += `&sla_filtro=estourado`;
                     if (filtroAtivo.tipo === 'atencao') url += `&sla_filtro=atencao`;
                     if (filtroAtivo.tipo === 'triagem') url += `&sem_tecnico=true`;
+                    if (filtroAtivo.tipo === 'pendente_csat') url += `&pendente_csat=true`;
                 }
 
                 const resTarefas = await fetch(url, {credentials: 'include'});
@@ -299,7 +333,7 @@
             });
 
             if (tarefasFiltradas.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 40px; color:#6b7280;">Nenhum chamado corresponde aos filtros atuais.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 40px; color:#6b7280;">Nenhum chamado atende aos filtros atuais.</td></tr>';
                 return;
             }
 
@@ -317,6 +351,7 @@
                     else if (horasRestantes <= 2) slaHtml = `<span class="badge badge-sla-warn"><span class="material-symbols-outlined" style="font-size:14px;">schedule</span> Atenção: ${formatada}</span>`;
                     else slaHtml = `<span class="badge badge-sla-ok"><span class="material-symbols-outlined" style="font-size:14px;">check_circle</span> No prazo: ${formatada}</span>`;
                 }
+                
                 return `<tr>
                     <td>${idDisplay}</td>
                     <td style="font-weight: 500; color:#1f2937;">${t.titulo}</td>
@@ -324,7 +359,7 @@
                     <td style="font-size: 13px; color: var(--saavedra-orange); font-weight: bold;">${t.tecnico || 'Aguardando triagem...'}</td>
                     <td><span class="badge badge-status">${t.status}</span></td>
                     <td>${slaHtml}</td>
-                    <td style="text-align: center;"><a href="detalhe_chamado.html?id=${t.id}" class="btn btn-view">Abrir</a></td>
+                    <td style="text-align: center;"><a href="detalhe_chamado.html?id=${t.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">Ver Chamado</a></td>
                 </tr>`;
             }).join('');
         }
@@ -356,8 +391,8 @@
             const ticketAtualizado = urlParams.get('atualizado');
             
             let mensagem = "";
-            if (ticketCriado) mensagem = `Chamado #${ticketCriado} foi registado com sucesso!`;
-            if (ticketAtualizado) mensagem = `Chamado #${ticketAtualizado} foi atualizado com sucesso!`;
+            if (ticketCriado) mensagem = `Chamado #${ticketCriado} registrado com sucesso!`;
+            if (ticketAtualizado) mensagem = `Chamado #${ticketAtualizado} atualizado com sucesso!`;
 
             if (mensagem !== "") {
                 document.getElementById('toastMessage').innerText = mensagem;
@@ -398,7 +433,7 @@
                 carregarDashboard(1);
                 verificarParametroUrl();
             }, 250); 
-            setInterval(() => carregarDashboard(paginaAtual), 60000); // Polling de 60s
+            setInterval(() => carregarDashboard(paginaAtual), 60000);
         });
     </script>
 </body>

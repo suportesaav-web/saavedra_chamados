@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Módulo de Relatórios Analytics | Saavedra</title>
+    <title>Meu Painel de Chamados | Saavedra</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <script src="auth.js"></script>
@@ -22,23 +22,19 @@
 
     <header class="navbar">
         <h1 class="navbar-brand">
-            <span class="material-symbols-outlined" style="font-size: 30px;">analytics</span>
-            Saavedra <span>Analytics</span>
+            <span class="material-symbols-outlined" style="font-size: 30px;">query_stats</span>
+            Meu <span>Painel</span>
         </h1>
         <nav class="nav-actions">
             <a href="index.html" class="btn btn-outline">
-                <span class="material-symbols-outlined">arrow_back</span> Voltar ao Início
-            </a>
-            <!-- Adicione isto junto aos outros botões no topo -->
-            <a href="bi.html" class="btn btn-outline" data-admin-only>
-                <span class="material-symbols-outlined">dashboard</span > Painel BI
+                <span class="material-symbols-outlined">arrow_back</span> Voltar à Fila
             </a>
         </nav>
     </header>
 
     <main class="container">
-        <h2>Painel Analítico de Governança ITIL</h2>
-        <p style="color: #6b7280; font-size: 14px; margin-top: -5px;">Indicadores de desempenho, volumetria acumulada e satisfação da infraestrutura de TI.</p>
+        <h2>Acompanhamento das Suas Solicitações</h2>
+        <p style="color: #6b7280; font-size: 14px; margin-top: -5px;">Métricas do seu histórico de solicitações e avaliações registradas.</p>
         
         <section class="grid-charts" id="containerGridRelatorios">
             <div style="text-align: center; padding: 40px; color: #888;">Carregando indicadores...</div>
@@ -71,28 +67,16 @@
 
                 grid.innerHTML = `
                     <div class="chart-card">
-                        <h3><span class="material-symbols-outlined">domain</span> Volume por Setor Solicitante</h3>
-                        <div>${construirGrafico(r.setores, false)}</div>
+                        <h3><span class="material-symbols-outlined">category</span> Suas Demandas por Classificação</h3>
+                        <div>${construirGrafico(r.tipos, false)}</div>
                     </div>
                     <div class="chart-card">
-                        <h3><span class="material-symbols-outlined">category</span> Distribuição por Classificação</h3>
-                        <div>${construirGrafico(r.tipos, true)}</div>
-                    </div>
-                    <div class="chart-card">
-                        <h3><span class="material-symbols-outlined">psychology</span> Incidentes por Causa Raiz</h3>
-                        <div>${construirGrafico(r.causas, false)}</div>
-                    </div>
-                    <div class="chart-card">
-                        <h3><span class="material-symbols-outlined">manage_accounts</span> Demandas por Técnico</h3>
-                        <div>${construirGrafico(r.tecnicos, true)}</div>
-                    </div>
-                    <div class="chart-card">
-                        <h3><span class="material-symbols-outlined">leaderboard</span> Top Solicitantes</h3>
-                        <div>${construirGrafico(r.usuarios_ranking, false)}</div>
+                        <h3><span class="material-symbols-outlined">donut_large</span> Estado Atual dos Seus Chamados</h3>
+                        <div>${construirGrafico(r.status, true)}</div>
                     </div>
                     <div class="chart-card" style="border-top-color: var(--saavedra-green);">
-                        <h3><span class="material-symbols-outlined" style="color: var(--saavedra-green);">sentiment_very_satisfied</span> Pesquisa de Satisfação (CSAT)</h3>
-                        <div>${construirGrafico(r.csats, true)}</div>
+                        <h3><span class="material-symbols-outlined" style="color: var(--saavedra-green);">star</span> Suas Avaliações (CSAT)</h3>
+                        <div>${construirGrafico(r.csats, false)}</div>
                     </div>
                 `;
 
@@ -103,15 +87,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                const isAdmin = window.usuarioLogado && ['Admin', 'Gestor', 'Tecnico'].includes(window.usuarioLogado.perfil);
-                if(!isAdmin) {
-                    alert("Acesso restrito a gestores.");
-                    window.location.href = 'index.html';
-                    return;
-                }
-                renderizarPainel();
-            }, 300);
+            setTimeout(renderizarPainel, 250);
         });
     </script>
 </body>

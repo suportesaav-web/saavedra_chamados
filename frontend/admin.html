@@ -240,12 +240,43 @@
     }
 
     async function salvarUsuario() {
-        const id = document.getElementById('fuId').value;
-        const sVal = parseInt(document.getElementById('fuSetor').value);
-        const payload = { nome: document.getElementById('fuNome').value.trim(), email: document.getElementById('fuEmail').value.trim(), ad_login: document.getElementById('fuAdLogin').value.trim(), setor_id: !isNaN(sVal) ? sVal : null, perfil: document.getElementById('fuPerfil').value, nivel_acesso: parseInt(document.getElementById('fuNivel').value) || 1 };
-        const res = await fetch(id ? `${API_BASE_URL}/usuarios/${id}` : `${API_BASE_URL}/usuarios`, { method: id ? 'PUT' : 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload), credentials: 'include' });
-        if (res.ok) { fecharForms(); carregar(epAtual, document.getElementById('tituloTela').innerText.trim()); }
+    const id = document.getElementById('fuId').value;
+    const nome = document.getElementById('fuNome').value.trim();
+    const email = document.getElementById('fuEmail').value.trim();
+    const ad_login = document.getElementById('fuAdLogin').value.trim();
+    const setorVal = parseInt(document.getElementById('fuSetor').value);
+    const setor_id = !isNaN(setorVal) ? setorVal : null;
+    const perfil = document.getElementById('fuPerfil').value;
+    const nivel_acesso = parseInt(document.getElementById('fuNivel').value) || 1;
+
+    if (!nome || !email) {
+        return alert("Preencha ao menos Nome e E-mail.");
     }
+
+    const payload = { nome, email, ad_login, setor_id, perfil, nivel_acesso };
+    const url = id ? `${API_BASE_URL}/usuarios/${id}` : `${API_BASE_URL}/usuarios`;
+    const method = id ? 'PUT' : 'POST';
+
+    try {
+        const res = await fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            credentials: 'include'
+        });
+
+        if (res.ok) {
+            fecharForms();
+            carregar('usuario', 'Usuários');
+        } else {
+            const erro = await res.json();
+            alert(`Erro ao salvar usuário: ${erro.detail || 'Falha na requisição.'}`);
+        }
+    } catch (e) {
+        console.error("Erro no salvarUsuario:", e);
+        alert("Falha de comunicação com o servidor.");
+    }
+}
 
     async function salvarSlaCell() {
         const id = document.getElementById('fsId').value;
