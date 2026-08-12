@@ -2,141 +2,131 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalhes do Chamado | Saavedra</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <script src="auth.js"></script>
     <style>
-        :root {
-            --saavedra-black: #25282a;
-            --saavedra-orange: #dc4405;
-            --saavedra-red: #da291c;
-            --bg-color: #f8f9fa;
-        }
-        body { font-family: 'Presidencia Base CC', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: var(--bg-color); color: var(--saavedra-black); }
-        
-        .navbar { background: var(--saavedra-black); color: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .navbar-brand { font-family: 'Presidencia Fina CC', 'Segoe UI', sans-serif; font-size: 22px; margin: 0; font-weight: normal; }
-        .navbar-brand span { color: var(--saavedra-orange); font-weight: bold; }
-        .nav-actions { display: flex; gap: 10px; align-items: center; }
-        .nav-actions a, .nav-actions button { text-decoration: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; font-size: 14px; transition: 0.3s; cursor: pointer; border: 1px solid transparent; font-family: inherit;}
-        
-        .btn-outline { border-color: var(--saavedra-orange); color: var(--saavedra-orange); background: transparent; }
-        .btn-outline:hover { background: var(--saavedra-orange); color: white; }
-        .btn-danger { border-color: var(--saavedra-red); color: var(--saavedra-red); background: transparent;}
-        .btn-danger:hover { background: var(--saavedra-red); color: white; }
-
-        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-        
-        .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .card h3 { margin-top: 0; border-bottom: 1px solid #eaeaea; padding-bottom: 10px; color: var(--saavedra-orange); }
-        
-        .chamado-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;}
-        .chamado-title { font-size: 22px; font-weight: bold; margin: 0; }
-        .chamado-id { color: #888; font-size: 14px; margin-bottom: 10px; display: block; }
-        
-        .badge { padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: bold; display: inline-block; }
-        .badge-status { background: #eaeaea; color: #555; }
-        
-        .desc-box { background: #f9f9f9; padding: 15px; border-left: 4px solid var(--saavedra-orange); border-radius: 4px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; margin-bottom: 20px; }
-        
-        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
-        .form-group label { font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #555; }
-        .form-group select, .form-group textarea { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 13px; outline: none; }
-        .form-group select:focus, .form-group textarea:focus { border-color: var(--saavedra-orange); }
-        .form-group textarea { resize: vertical; min-height: 80px; }
-        
-        .btn-submit { background: var(--saavedra-orange); color: white; padding: 12px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: 0.2s; width: 100%; font-family: inherit;}
-        .btn-submit:hover { background: #b83804; }
-
+        .container-detalhe { max-width: 1100px; margin: 35px auto; padding: 0 20px; display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
+        .chamado-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .chamado-title { font-size: 22px; font-weight: 700; margin: 0; color: var(--saavedra-black); }
+        .desc-box { background: #f9fafb; padding: 18px; border-left: 4px solid var(--saavedra-orange); border-radius: 8px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; margin-bottom: 20px; border: 1px solid #f3f4f6; }
         .timeline { list-style: none; padding: 0; margin: 0; }
-        .timeline-item { position: relative; padding-left: 20px; margin-bottom: 20px; border-left: 2px solid #eaeaea; }
+        .timeline-item { position: relative; padding-left: 20px; margin-bottom: 20px; border-left: 2px solid #e5e7eb; }
         .timeline-item::before { content: ''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px; background: var(--saavedra-orange); border-radius: 50%; }
-        .timeline-date { font-size: 12px; color: #888; margin-bottom: 5px; display: block; }
-        .timeline-user { font-weight: bold; font-size: 13px; color: var(--saavedra-black); margin-bottom: 5px;}
-        .timeline-content { font-size: 14px; color: #444; line-height: 1.5; white-space: pre-wrap; background: #fff; padding: 10px; border: 1px solid #eaeaea; border-radius: 4px; margin-top: 5px;}
+        .timeline-content { font-size: 14px; color: #374151; line-height: 1.5; white-space: pre-wrap; background: #fff; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; margin-top: 6px; }
+        .form-group-custom { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <h1 class="navbar-brand">Saavedra <span>Chamados</span></h1>
-        <div class="nav-actions">
-            <a href="index.html" class="btn-outline">&larr; Voltar à Fila</a>
-            <button onclick="fazerLogout()" class="btn-danger">Sair</button>
-        </div>
-    </nav>
+    <header class="navbar">
+        <h1 class="navbar-brand">
+            <span class="material-symbols-outlined" style="font-size: 30px;">support_agent</span>
+            Saavedra <span>Chamados</span>
+        </h1>
+        <nav class="nav-actions">
+            <a href="index.html" class="btn btn-outline">
+                <span class="material-symbols-outlined">arrow_back</span> Voltar à Fila
+            </a>
+            <button onclick="fazerLogout()" class="btn btn-danger">
+                <span class="material-symbols-outlined">logout</span> Sair
+            </button>
+        </nav>
+    </header>
 
-    <div class="container">
-        <div class="main-column">
-            <!-- Dados do Chamado Base -->
+    <main class="container-detalhe">
+        <section class="main-column">
+            <!-- Banner ITIL -->
+            <div id="bannerAlertaItil" style="display: none; background: #fff8e6; border: 1px solid #feecdc; border-left: 5px solid var(--saavedra-orange); color: #856404; padding: 16px 20px; border-radius: 10px; margin-bottom: 20px; font-size: 14px;">
+                <div style="display: flex; align-items: flex-start; gap: 14px;">
+                    <span class="material-symbols-outlined" style="font-size: 28px; color: var(--saavedra-orange);">warning</span>
+                    <div>
+                        <strong style="font-size: 15px; display: block; margin-bottom: 4px;">Aviso de Governança ITIL: Pendente de Resposta</strong>
+                        <span>Este chamado encontra-se com o status <strong id="lblStatusAlertaItil">Aguardando Validação</strong>. O ticket será <strong>encerrado automaticamente</strong> em 3 dias se não houver interação do solicitante.</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="card">
-                <span class="chamado-id" id="lblId">Carregando...</span>
+                <span style="color: #6b7280; font-size: 13px; font-weight: 600;" id="lblId">Carregando...</span>
                 <div class="chamado-header">
                     <h2 class="chamado-title" id="lblTitulo">...</h2>
                     <span class="badge badge-status" id="lblStatus">...</span>
                 </div>
                 <div class="desc-box" id="lblDescricao">Aguarde o carregamento do conteúdo original...</div>
                 
-                <div style="display: flex; gap: 20px; margin-top: 15px; font-size: 13px; color: #666;">
+                <div style="display: flex; gap: 20px; font-size: 13px; color: #4b5563;">
                     <div><strong>Solicitante:</strong> <span id="lblSolicitante"></span></div>
                     <div><strong>Abertura:</strong> <span id="lblData"></span></div>
                     <div><strong>SLA Limite:</strong> <span id="lblSla"></span></div>
                 </div>
 
-                <div id="lblAnexosContainer" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: none;">
-                    <strong style="font-size: 13px; color: #555; display: block; margin-bottom: 8px;">📎 Ficheiros Anexados:</strong>
-                    <div id="lblAnexos" style="display: flex; flex-direction: column; gap: 5px;"></div>
+                <div id="lblAnexosContainer" style="margin-top: 20px; border-top: 1px solid #f3f4f6; padding-top: 15px; display: none;">
+                    <strong style="font-size: 13px; color: #374151; display: block; margin-bottom: 8px;">📎 Ficheiros Anexados:</strong>
+                    <div id="lblAnexos" style="display: flex; flex-direction: column; gap: 6px;"></div>
                 </div>
             </div>
 
-            <!-- Histórico de Respostas (Work Notes) -->
-            <div class="card">
-                <h3>Histórico de Ações (Work Notes)</h3>
+            <div class="card" style="margin-top: 20px;">
+                <h3 style="margin-top: 0; color: var(--saavedra-orange); border-bottom: 1px solid #f3f4f6; padding-bottom: 10px;">Histórico de Ações (Work Notes)</h3>
                 <ul class="timeline" id="timelineList">
                     <li class="timeline-item"><div class="timeline-content">Carregando linha do tempo...</div></li>
                 </ul>
             </div>
-        </div>
+        </section>
 
-        <div class="side-column">
-            <!-- Interação Técnica -->
+        <aside class="side-column">
+            <!-- Ações do Técnico -->
             <div class="card" id="cardAcoesTecnico" data-admin-only>
-                <h3>Ações do Técnico</h3>
-                <div class="form-group">
-                    <label>Técnico Responsável</label>
-                    <select id="updTecnico"><option value="">Aguardando triagem...</option></select>
+                <h3 style="margin-top: 0; color: var(--saavedra-orange); border-bottom: 1px solid #f3f4f6; padding-bottom: 10px;">Ações do Técnico</h3>
+                
+                <div class="form-group-custom">
+                    <label style="font-size: 13px; font-weight: 600;">Técnico Responsável</label>
+                    <select id="updTecnico" class="form-input"><option value="">Aguardando triagem...</option></select>
                 </div>
-                <div class="form-group">
-                    <label>Tipo de Chamado</label>
-                    <select id="updTipo"></select>
+                <div class="form-group-custom">
+                    <label style="font-size: 13px; font-weight: 600;">Tipo de Chamado</label>
+                    <select id="updTipo" class="form-input"></select>
                 </div>
-                <div class="form-group">
-                    <label>Novo Status</label>
-                    <select id="updStatus"></select>
+                <div class="form-group-custom">
+                    <label style="font-size: 13px; font-weight: 600;">Novo Status</label>
+                    <select id="updStatus" class="form-input"></select>
                 </div>
-                <div class="form-group" id="boxCausaRaiz" style="display: none;">
-                    <label>Causa Raiz (Obrigatório para Fechar)</label>
-                    <select id="updCausaRaiz"></select>
+                <div class="form-group-custom" id="boxCausaRaiz" style="display: none;">
+                    <label style="font-size: 13px; font-weight: 600;">Causa Raiz (Obrigatório para Fechar)</label>
+                    <select id="updCausaRaiz" class="form-input"></select>
                 </div>
-                <div class="form-group">
-                    <label>Anotação / Work Note (Visível ao Solicitante)</label>
-                    <textarea id="updNotas" placeholder="Descreva o que foi feito nesta atualização..."></textarea>
+                <div class="form-group-custom">
+                    <label style="font-size: 13px; font-weight: 600;">Anotação / Work Note</label>
+                    <textarea id="updNotas" class="form-input" style="min-height: 120px;" placeholder="Descreva as ações técnicas..."></textarea>
                 </div>
 
-                <div class="form-group" style="flex-direction: row; align-items: center; gap: 8px; background: #fff3cd; padding: 10px; border-radius: 4px; border: 1px solid #ffeeba;" data-admin-only>
+                <div class="form-group-custom" style="flex-direction: row; align-items: center; gap: 8px; background: #fff8e6; padding: 10px; border-radius: 6px; border: 1px solid #feecdc;">
                     <input type="checkbox" id="updNotaInterna" style="width: auto;">
-                    <label for="updNotaInterna" style="margin: 0; color: #856404; cursor: pointer;">🔒 Marcar como Nota Interna</label>
+                    <label for="updNotaInterna" style="margin: 0; color: #856404; cursor: pointer; font-size: 12px;">🔒 Marcar como Nota Interna</label>
                 </div>
 
-                <!-- 🌟 SUPORTE AO UPLOAD MÚLTIPLO -->
-                <div class="form-group">
-                    <label>Anexar Ficheiros à Atualização (Opcional - Selecione Vários)</label>
-                    <input type="file" id="updAnexo" multiple style="font-size: 12px; padding: 5px 0;">
+                <div class="form-group-custom">
+                    <label style="font-size: 13px; font-weight: 600;">Anexar Ficheiros</label>
+                    <input type="file" id="updAnexo" multiple style="font-size: 12px;">
                 </div>
 
-                <button class="btn-submit" onclick="atualizarChamado()">Salvar Alterações</button>
+                <button class="btn btn-solid" style="width: 100%; margin-top: 10px;" onclick="atualizarChamado()">Salvar Alterações</button>
             </div>
-        </div>
-    </div>
+
+            <!-- Resposta Solicitante -->
+            <div class="card" id="cardRespostaSolicitante" style="display: none;">
+                <h3 style="margin-top: 0; color: var(--saavedra-orange); border-bottom: 1px solid #f3f4f6; padding-bottom: 10px;">Responder ao Chamado</h3>
+                <div class="form-group-custom">
+                    <label style="font-size: 13px; font-weight: 600;">Sua Resposta *</label>
+                    <textarea id="txtRespostaSolicitante" class="form-input" style="min-height: 120px;" placeholder="Digite esclarecimentos para a equipe técnica..."></textarea>
+                </div>
+                <button class="btn btn-solid" id="btnEnviarRespostaSolicitante" style="width: 100%; margin-top: 10px;" onclick="enviarRespostaSolicitante()">Enviar Resposta</button>
+            </div>
+        </aside>
+    </main>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
@@ -188,6 +178,23 @@
                 document.getElementById('lblData').innerText = new Date(t.data_hora).toLocaleString('pt-BR');
                 document.getElementById('lblSla').innerText = t.data_limite_sla ? new Date(t.data_limite_sla).toLocaleString('pt-BR') : 'N/A';
 
+                const statusLower = (t.status_nome || '').toLowerCase();
+                if (statusLower.includes('aguardando') || statusLower.includes('terceiro') || statusLower.includes('valida') || statusLower.includes('pendente')) {
+                    document.getElementById('lblStatusAlertaItil').innerText = t.status_nome;
+                    document.getElementById('bannerAlertaItil').style.display = 'block';
+                } else {
+                    document.getElementById('bannerAlertaItil').style.display = 'none';
+                }
+
+                const isAdmin = window.usuarioLogado && ['Admin', 'Gestor', 'Tecnico'].includes(window.usuarioLogado.perfil);
+                if (!isAdmin) {
+                    document.getElementById('cardAcoesTecnico').style.display = 'none';
+                    document.getElementById('cardRespostaSolicitante').style.display = 'block';
+                } else {
+                    document.getElementById('cardAcoesTecnico').style.display = 'block';
+                    document.getElementById('cardRespostaSolicitante').style.display = 'none';
+                }
+
                 if(t.tecnico_id) document.getElementById('updTecnico').value = t.tecnico_id;
                 if(t.tipo_id) document.getElementById('updTipo').value = t.tipo_id;
                 if(t.status_id) {
@@ -225,14 +232,14 @@
                             `;
                         }
                         
-                        let bgCor = h.nota_interna ? '#fff3cd' : '#fff';
-                        let bordaCor = h.nota_interna ? '#ffeeba' : '#eaeaea';
+                        let bgCor = h.nota_interna ? '#fff8e6' : '#fff';
+                        let bordaCor = h.nota_interna ? '#feecdc' : '#e5e7eb';
                         let iconeSigilo = h.nota_interna ? '<span style="float: right; font-size: 11px; background: #ffc107; color: #856404; padding: 2px 6px; border-radius: 4px;">🔒 Nota Interna</span>' : '';
 
                         return `
                             <li class="timeline-item">
-                                <span class="timeline-date">${new Date(h.data_hora).toLocaleString('pt-BR')}</span>
-                                <div class="timeline-user">${h.usuario_nome} <span style="color:#888; font-weight:normal;">alterou para</span> ${h.status_nome}</div>
+                                <span style="font-size: 12px; color: #6b7280; margin-bottom: 4px; display: block;">${new Date(h.data_hora).toLocaleString('pt-BR')}</span>
+                                <div style="font-weight: 600; font-size: 13px; color: var(--saavedra-black);">${h.usuario_nome} <span style="color:#6b7280; font-weight:normal;">alterou para</span> ${h.status_nome}</div>
                                 <div class="timeline-content" style="background: ${bgCor}; border: 1px solid ${bordaCor};">
                                     ${iconeSigilo}
                                     <div>${h.comentario || 'Nenhuma nota adicional.'}</div>
@@ -241,13 +248,41 @@
                             </li>
                         `;
                     }).join('');
-                } else {
-                    document.getElementById('timelineList').innerHTML = '<li class="timeline-item"><div class="timeline-content" style="color:red;">Falha ao carregar o histórico.</div></li>';
                 }
 
             } catch (error) {
                 console.error(error);
-                document.getElementById('timelineList').innerHTML = '<li class="timeline-item"><div class="timeline-content" style="color:red;">Não foi possível carregar a linha do tempo. Verifique a conexão com o servidor.</div></li>';
+                alert("Erro ao carregar o chamado.");
+            }
+        }
+
+        async function enviarRespostaSolicitante() {
+            const comentario = document.getElementById('txtRespostaSolicitante').value.trim();
+            if (!comentario) return alert("Por favor, informe sua resposta antes de enviar.");
+            
+            const btn = document.getElementById('btnEnviarRespostaSolicitante');
+            btn.disabled = true; btn.innerText = "Processando...";
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/tarefas/${tarefaId}/responder`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ comentario }),
+                    credentials: 'include'
+                });
+
+                if (res.ok) {
+                    alert("Sua resposta foi registrada com sucesso!");
+                    window.location.reload();
+                } else {
+                    const err = await res.json();
+                    alert(err.detail || "Erro ao enviar resposta.");
+                    btn.disabled = false; btn.innerText = "Enviar Resposta";
+                }
+            } catch(e) {
+                console.error(e);
+                alert("Falha ao comunicar com o servidor.");
+                btn.disabled = false; btn.innerText = "Enviar Resposta";
             }
         }
 
@@ -288,7 +323,6 @@
                     const formData = new FormData();
                     formData.append('historico_id', historicoId);
                     
-                    // Lógica para enviar vários arquivos para o FastAPI simultaneamente
                     for (let i = 0; i < fileInput.files.length; i++) {
                         formData.append('files', fileInput.files[i]);
                     }
