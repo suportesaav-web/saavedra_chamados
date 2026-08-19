@@ -220,19 +220,14 @@
                 const cardTec = document.getElementById('cardAcoesTecnico');
                 const cardSol = document.getElementById('cardRespostaSolicitante');
                 const csatBox = document.getElementById('boxAvaliacaoCsat');
+                const avaliarNotaParam = parseInt(urlParams.get('avaliar'));
 
                 if (!isAdmin) {
                     if (cardTec) cardTec.style.display = 'none';
                     if (cardSol) cardSol.style.display = 'block';
-                    if (csatBox && t.status_id === 4) {
-                        csatBox.style.display = 'block';
-                    } else if (csatBox) {
-                        csatBox.style.display = 'none';
-                    }
                 } else {
                     if (cardTec) cardTec.style.display = 'block';
                     if (cardSol) cardSol.style.display = 'none';
-                    if (csatBox) csatBox.style.display = 'none';
                     
                     if(t.tecnico_id && document.getElementById('updTecnico')) document.getElementById('updTecnico').value = t.tecnico_id;
                     if(t.tipo_id && document.getElementById('updTipo')) document.getElementById('updTipo').value = t.tipo_id;
@@ -244,14 +239,39 @@
                     if(t.causa_raiz_id && document.getElementById('updCausaRaiz')) document.getElementById('updCausaRaiz').value = t.causa_raiz_id;
                 }
 
+                // 🌟 LÓGICA INTELIGENTE DE EXIBIÇÃO E AUTO-DISPARO DO CSAT
+                if (csatBox) {
+                    if (t.status_id === 4) {
+                        csatBox.style.display = 'block';
+                        if (t.nota_csat && t.nota_csat > 0) {
+                            const descNotas = { 1: "1/5 😞 Péssimo", 2: "2/5 😕 Ruim", 3: "3/5 😐 Regular", 4: "4/5 😊 Bom", 5: "5/5 🤩 Excelente" };
+                            csatBox.style.background = '#f0fdf4';
+                            csatBox.style.borderColor = '#bbf7d0';
+                            csatBox.innerHTML = `
+                                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; color: #166534; font-weight: bold; font-size: 15px;">
+                                    <span class="material-symbols-outlined" style="color: #16a34a; font-size: 24px;">verified</span>
+                                    Atendimento Avaliado: <span style="background: #16a34a; color: white; padding: 4px 10px; border-radius: 12px; font-size: 13px;">${descNotas[t.nota_csat] || t.nota_csat + '/5 ⭐️'}</span>
+                                </div>
+                            `;
+                        } else if (!isNaN(avaliarNotaParam) && avaliarNotaParam >= 1 && avaliarNotaParam <= 5) {
+                            // Se veio com a nota no link do e-mail, envia a nota automaticamente!
+                            await enviarAvaliacao(avaliarNotaParam, true);
+                            return;
+                        }
+                    } else {
+                        csatBox.style.display = 'none';
+                    }
+                }
+
                 const anexosBox = document.getElementById('lblAnexosContainer');
                 const anexosDiv = document.getElementById('lblAnexos');
+                const baseUrlUploads = API_BASE_URL.replace(/\/api\/?$/, '');
                 if (t.anexos && t.anexos.length > 0) {
                     if (anexosBox) anexosBox.style.display = 'block';
                     if (anexosDiv) {
                         anexosDiv.innerHTML = t.anexos.map(a => `
                             <div style="font-size: 13px;">
-                                <a href="/uploads/${a.nome_salvo}" target="_blank" style="color: var(--saavedra-orange); text-decoration: none; font-weight: bold;">
+                                <a href="${baseUrlUploads}/uploads/${a.nome_salvo}" target="_blank" style="color: var(--saavedra-orange); text-decoration: none; font-weight: bold;">
                                 📄 ${a.nome_original}
                                 </a>
                             </div>
@@ -268,7 +288,7 @@
                             anexoHtml = `
                                 <div style="margin-top: 8px; font-size: 13px; background: #fffdf9; padding: 6px 10px; border: 1px dashed var(--saavedra-orange); border-radius: 4px; display: inline-block;">
                                     📎 <strong>Ficheiro Anexado:</strong> 
-                                    <a href="/uploads/${h.anexo_salvo}" target="_blank" style="color: var(--saavedra-orange); text-decoration: none; font-weight: bold;">
+                                    <a href="${baseUrlUploads}/uploads/${h.anexo_salvo}" target="_blank" style="color: var(--saavedra-orange); text-decoration: none; font-weight: bold;">
                                     ${h.anexo_nome}
                                     </a>
                                 </div>
@@ -299,15 +319,16 @@
             }
         }
 
-        async function enviarAvaliacao(nota) {
+        async function enviarAvaliacao(nota, autoViaUrl = false) {
             try {
                 const res = await fetch(`${API_BASE_URL}/tarefas/${tarefaId}/avaliar?nota=${nota}`, {
                     method: 'POST',
                     credentials: 'include'
                 });
                 if (res.ok) {
-                    alert("Obrigado por avaliar este atendimento!");
-                    window.location.reload();
+                    const msg = autoViaUrl ? `⭐ Sua nota (${nota}/5 estrelas) foi registrada com sucesso!` : "Obrigado por avaliar este atendimento!";
+                    alert(msg);
+                    window.location.href = `detalhe_chamado.html?id=${tarefaId}`;
                 } else {
                     alert("Falha ao registrar a avaliação.");
                 }
@@ -403,12 +424,11 @@
             }
         }
 
-        // 🌟 CORREÇÃO FINAL: UTILIZANDO SETTIMEOUT PARA EVITAR RACE CONDITION NO JAVASCRIPT
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(async () => {
-                await carregarDropdowns();
-                await carregarDados();
-            }, 400);
+        // Execução assíncrona encadeada sem race condition
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (window.loginPromise) await window.loginPromise;
+            await carregarDropdowns();
+            await carregarDados();
         });
     </script>
 </body>

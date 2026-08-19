@@ -58,6 +58,7 @@
             <div class="menu-item" onclick="carregar('setor', 'Setores')"><span class="material-symbols-outlined">domain</span> Setores</div>
             <div class="menu-item" onclick="carregar('usuario', 'Usuários')"><span class="material-symbols-outlined">manage_accounts</span> Usuários</div>
             <div class="menu-item" onclick="carregarSlaMatrix()"><span class="material-symbols-outlined">timer</span> Configuração de SLA</div>
+            <div class="menu-item" style="color: #10b981; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 18px;" onclick="reenviarPesquisasCsat()"><span class="material-symbols-outlined" style="color: #10b981;">send</span> Reenviar CSAT (<span id="lblCsatCount">0</span>)</div>
         </nav>
     </aside>
     
@@ -301,6 +302,48 @@
             if (res.ok) carregar(epAtual, document.getElementById('tituloTela').innerText.trim());
         }
     }
+
+    async function checarCsatPendentes() {
+        try {
+            const res = await fetch(`${API_BASE_URL}/admin/csat-pendentes-count`, { credentials: 'include' });
+            if (res.ok) {
+                const data = await res.json();
+                const el = document.getElementById('lblCsatCount');
+                if (el) el.innerText = data.total_pendentes;
+            }
+        } catch (e) { console.error(e); }
+    }
+
+    async function reenviarPesquisasCsat() {
+        try {
+            const countRes = await fetch(`${API_BASE_URL}/admin/csat-pendentes-count`, { credentials: 'include' });
+            const countData = await countRes.json();
+            const total = countData.total_pendentes || 0;
+            
+            if (total === 0) {
+                return alert("Nenhum chamado pendente de avaliação CSAT no momento!");
+            }
+
+            if (confirm(`Existem ${total} chamados concluídos sem avaliação CSAT. Deseja disparar os e-mails de lembrete de pesquisa agora?`)) {
+                const res = await fetch(`${API_BASE_URL}/admin/reenviar-csat-pendentes`, { method: 'POST', credentials: 'include' });
+                if (res.ok) {
+                    const data = await res.json();
+                    alert(`Sucesso! Foram colocados na fila de envio ${data.total_disparados} e-mails de lembrete CSAT.`);
+                    checarCsatPendentes();
+                } else {
+                    alert("Falha ao disparar e-mails CSAT.");
+                }
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Erro ao comunicar com a API para reenviar CSAT.");
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+        if (window.loginPromise) await window.loginPromise;
+        checarCsatPendentes();
+    });
 </script>
 
 

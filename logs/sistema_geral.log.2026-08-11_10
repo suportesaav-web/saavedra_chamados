@@ -1,6 +1,0 @@
-[2026-08-11 10:11:31] [WARNING]: ⚠️ [HTTP 401] GET /api/auth/me | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
-[2026-08-11 10:11:31] [WARNING]: ⚠️ [HTTP 401] GET /api/usuarios | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
-[2026-08-11 10:11:31] [WARNING]: ⚠️ [HTTP 401] GET /api/cadastros/tipo | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
-[2026-08-11 10:11:31] [WARNING]: ⚠️ [HTTP 401] GET /api/cadastros/status | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
-[2026-08-11 10:11:31] [WARNING]: ⚠️ [HTTP 401] GET /api/cadastros/causa_raiz | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
-[2026-08-11 10:11:34] [INFO]: 🔑 [LOGIN SUCESSO] Usuário 'marcio.prestes@saavedra.com.br' autenticado com êxito (ID #3).

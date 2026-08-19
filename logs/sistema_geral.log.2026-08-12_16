@@ -1,0 +1,1018 @@
+[2026-08-12 07:52:45] [WARNING]: ⚠️ [HTTP 404] DELETE /api/usuarios/21 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 07:53:12] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 07:53:16] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 07:53:50] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 07:53:52] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 07:53:52] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 07:53:56] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 07:54:41] [WARNING]: ⚠️ [HTTP 404] PUT /api/cadastros/prioridade/1 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 07:58:58] [WARNING]: ⚠️ [HTTP 422] POST /api/tarefas/10163/anexar | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 07:59:56] [WARNING]: ⚠️ [HTTP 422] POST /api/tarefas/10164/anexar | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:26:09] [WARNING]: ⚠️ [HTTP 404] DELETE /api/usuarios/12 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:26:23] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:26:25] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:26:36] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:26:37] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:26:37] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:26:37] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:26:37] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:26:38] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:32:01] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:32:23] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:44:00] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:44:26] [WARNING]: ⚠️ [HTTP 404] PUT /api/usuarios/17 | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:45:19] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-12 08:48:28] [WARNING]: ⚠️ [HTTP 401] GET /api/auth/me | IP: 10.0.0.57 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:48:28] [WARNING]: ⚠️ [HTTP 401] GET /api/usuarios | IP: 10.0.0.57 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:48:28] [WARNING]: ⚠️ [HTTP 401] GET /api/cadastros/tipo | IP: 10.0.0.57 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:48:28] [WARNING]: ⚠️ [HTTP 401] GET /api/cadastros/status | IP: 10.0.0.57 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:48:28] [WARNING]: ⚠️ [HTTP 401] GET /api/cadastros/causa_raiz | IP: 10.0.0.57 | Anônimo | Tempo: 0.00s
+[2026-08-12 08:48:28] [WARNING]: ⚠️ [HTTP 401] GET /api/tarefas/10165 | IP: 10.0.0.57 | Anônimo | Tempo: 0.00s
+[2026-08-12 09:01:30] [WARNING]: ⚠️ [HTTP 401] GET /api/auth/me | IP: 10.0.0.57 | Anônimo | Tempo: 0.00s
+[2026-08-12 09:01:30] [WARNING]: ⚠️ [HTTP 401] GET /api/usuarios | IP: 10.0.0.57 | Anônimo | Tempo: 0.00s
+[2026-08-12 09:01:30] [WARNING]: ⚠️ [HTTP 401] GET /api/cadastros/tipo | IP: 10.0.0.57 | Anônimo | Tempo: 0.00s
+[2026-08-12 09:01:30] [WARNING]: ⚠️ [HTTP 401] GET /api/cadastros/status | IP: 10.0.0.57 | Anônimo | Tempo: 0.00s
+[2026-08-12 09:01:30] [WARNING]: ⚠️ [HTTP 401] GET /api/cadastros/causa_raiz | IP: 10.0.0.57 | Anônimo | Tempo: 0.00s
+[2026-08-12 09:01:38] [INFO]: 🔑 [LOGIN SUCESSO] Usuário 'financeiro2.saav@saavedra.com.br' autenticado com êxito (ID #20).
+[2026-08-12 09:02:49] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-12 09:19:03] [INFO]: 🔑 [LOGIN SUCESSO] Usuário 'consignados2.saav@saavedra.com.br' autenticado com êxito (ID #9).
+[2026-08-12 09:24:36] [INFO]: 🔑 [LOGIN SUCESSO] Usuário 'suporte.saav@saavedra.com.br' autenticado com êxito (ID #1).
+[2026-08-12 09:30:31] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-12 09:30:43] [ERROR]: ❌ [CRITICAL 500] GET /api/auth/logout | IP: 10.0.0.25 | Anônimo | Erro: name 'usuario' is not defined
+Traceback (most recent call last):
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 81, in audit_and_error_logging_middleware
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\sessions.py", line 88, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 670, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 1281, in handle
+    await super().handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 280, in handle
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 354, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 274, in logout
+    logger.info(f"🚪 [LOGOUT] Usuário #{usuario.get('id')} encerrou a sessão.")
+                                        ^^^^^^^
+NameError: name 'usuario' is not defined
+
+[2026-08-12 09:30:53] [INFO]: 🔑 [LOGIN SUCESSO] Usuário 'consignados2.saav@saavedra.com.br' autenticado com êxito (ID #9).
+[2026-08-12 09:33:48] [ERROR]: ❌ [CRITICAL 500] GET /api/auth/logout | IP: 10.0.0.25 | Anônimo | Erro: name 'usuario' is not defined
+Traceback (most recent call last):
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 81, in audit_and_error_logging_middleware
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\sessions.py", line 88, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 670, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 1281, in handle
+    await super().handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 280, in handle
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 354, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 274, in logout
+    logger.info(f"🚪 [LOGOUT] Usuário #{usuario.get('id')} encerrou a sessão.")
+                                        ^^^^^^^
+NameError: name 'usuario' is not defined
+
+[2026-08-12 09:33:55] [INFO]: 🔑 [LOGIN SUCESSO] Usuário 'comercial.saav@saavedra.com.br' autenticado com êxito (ID #18).
+[2026-08-12 09:34:46] [INFO]: 🎫 [NOVO CHAMADO] Ticket #10167 aberto pelo usuário #18.
+[2026-08-12 09:35:18] [ERROR]: ❌ [CRITICAL 500] GET /api/auth/logout | IP: 10.0.0.25 | Anônimo | Erro: name 'usuario' is not defined
+Traceback (most recent call last):
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 81, in audit_and_error_logging_middleware
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\sessions.py", line 88, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 670, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 1281, in handle
+    await super().handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 280, in handle
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 354, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 274, in logout
+    logger.info(f"🚪 [LOGOUT] Usuário #{usuario.get('id')} encerrou a sessão.")
+                                        ^^^^^^^
+NameError: name 'usuario' is not defined
+
+[2026-08-12 09:39:50] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-12 09:40:14] [INFO]: 🔑 [LOGIN SUCESSO] Usuário 'comercial.saav@saavedra.com.br' autenticado com êxito (ID #18).
+[2026-08-12 09:45:55] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-12 09:46:12] [INFO]: 🔑 [LOGIN SUCESSO] Usuário 'comercial.saav@saavedra.com.br' autenticado com êxito (ID #18).
+[2026-08-12 09:50:13] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-12 09:50:34] [INFO]: 🚪 [LOGOUT] Usuário #18 encerrou a sessão.
+[2026-08-12 09:50:45] [INFO]: 🔑 [LOGIN SUCESSO] Usuário 'consignados2.saav@saavedra.com.br' autenticado com êxito (ID #9).
+[2026-08-12 10:00:39] [INFO]: 🚪 [LOGOUT] Usuário #9 encerrou a sessão.
+[2026-08-12 10:00:45] [INFO]: 🔑 [LOGIN SUCESSO] Usuário 'suporte.saav@saavedra.com.br' autenticado com êxito (ID #1).
+[2026-08-12 10:01:30] [INFO]: 🚪 [LOGOUT] Usuário #9 encerrou a sessão.
+[2026-08-12 10:01:35] [INFO]: 🔑 [LOGIN SUCESSO] Usuário 'consignados2.saav@saavedra.com.br' autenticado com êxito (ID #9).
+[2026-08-12 10:11:05] [INFO]: ⭐ [CSAT AVALIADO] Ticket #10154 recebeu nota 4 do usuário #9.
+[2026-08-12 10:11:27] [INFO]: ⭐ [CSAT AVALIADO] Ticket #55 recebeu nota 5 do usuário #9.
+[2026-08-12 10:11:44] [INFO]: ⭐ [CSAT AVALIADO] Ticket #63 recebeu nota 3 do usuário #9.
+[2026-08-12 10:12:02] [INFO]: ⭐ [CSAT AVALIADO] Ticket #87 recebeu nota 5 do usuário #9.
+[2026-08-12 10:12:18] [INFO]: ⭐ [CSAT AVALIADO] Ticket #10094 recebeu nota 4 do usuário #9.
+[2026-08-12 10:13:22] [INFO]: ✏️ [CADASTRO ATUALIZADO] Usuário #1 alterou registro #1 de tbSTATUS.
+[2026-08-12 10:13:29] [INFO]: ✏️ [CADASTRO ATUALIZADO] Usuário #1 alterou registro #2 de tbSTATUS.
+[2026-08-12 10:13:38] [INFO]: ✏️ [CADASTRO ATUALIZADO] Usuário #1 alterou registro #3 de tbSTATUS.
+[2026-08-12 10:13:45] [INFO]: ✏️ [CADASTRO ATUALIZADO] Usuário #1 alterou registro #4 de tbSTATUS.
+[2026-08-12 10:13:54] [INFO]: ✏️ [CADASTRO ATUALIZADO] Usuário #1 alterou registro #5 de tbSTATUS.
+[2026-08-12 10:14:00] [INFO]: ✏️ [CADASTRO ATUALIZADO] Usuário #1 alterou registro #6 de tbSTATUS.
+[2026-08-12 10:14:06] [INFO]: ✏️ [CADASTRO ATUALIZADO] Usuário #1 alterou registro #7 de tbSTATUS.
+[2026-08-12 10:14:14] [INFO]: ✏️ [CADASTRO ATUALIZADO] Usuário #1 alterou registro #2 de tbPRIORIDADE.
+[2026-08-12 10:14:19] [INFO]: ✏️ [CADASTRO ATUALIZADO] Usuário #1 alterou registro #3 de tbPRIORIDADE.
+[2026-08-12 10:14:26] [INFO]: ✏️ [CADASTRO ATUALIZADO] Usuário #1 alterou registro #4 de tbPRIORIDADE.
+[2026-08-12 10:14:34] [INFO]: ✏️ [CADASTRO ATUALIZADO] Usuário #1 alterou registro #5 de tbPRIORIDADE.
+[2026-08-12 10:18:18] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #10166 alterado pelo técnico #1 para status #2.
+[2026-08-12 10:18:42] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #10167 alterado pelo técnico #1 para status #2.
+[2026-08-12 10:19:34] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #10162 alterado pelo técnico #1 para status #4.
+[2026-08-12 10:22:16] [INFO]: 🎫 [NOVO CHAMADO] Ticket #10168 registrado pelo usuário #19.
+[2026-08-12 10:22:38] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #10168 alterado pelo técnico #1 para status #2.
+[2026-08-12 12:53:42] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-12 14:49:16] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-12 14:49:43] [ERROR]: ❌ [CRITICAL 500] GET /api/kpis | IP: 10.0.0.5 | Anônimo | Erro: (pyodbc.ProgrammingError) ('42000', '[42000] [Microsoft][ODBC SQL Server Driver][SQL Server]Não foi possível vincular o identificador de várias partes "S.STATUS_NOME". (4104) (SQLExecDirectW); [42000] [Microsoft][ODBC SQL Server Driver][SQL Server]Não foi possível preparar as instruções. (8180)')
+[SQL: SELECT SUM(CASE WHEN T.STATUS_ID NOT IN (4,6) AND TRY_CAST(T.DATA_LIMITE_SLA AS DATETIME) < GETDATE() THEN 1 ELSE 0 END), SUM(CASE WHEN T.STATUS_ID NOT IN (4,6) AND TRY_CAST(T.DATA_LIMITE_SLA AS DATETIME) >= GETDATE() AND DATEDIFF(MINUTE, GETDATE(), TRY_CAST(T.DATA_LIMITE_SLA AS DATETIME)) <= 120 THEN 1 ELSE 0 END), SUM(CASE WHEN T.STATUS_ID NOT IN (4,6) AND T.PRIORIDADE_ID = 1 THEN 1 ELSE 0 END) FROM tbTAREFAS T LEFT JOIN tbUSUARIO UT ON T.TECNICO_ID = UT.USUARIO_ID LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbSETOR SETOR ON U.SETOR_ID = SETOR.SETOR_ID  WHERE 1=1  AND S.STATUS_NOME = ?]
+[parameters: ('Aberto',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Traceback (most recent call last):
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+pyodbc.ProgrammingError: ('42000', '[42000] [Microsoft][ODBC SQL Server Driver][SQL Server]Não foi possível vincular o identificador de várias partes "S.STATUS_NOME". (4104) (SQLExecDirectW); [42000] [Microsoft][ODBC SQL Server Driver][SQL Server]Não foi possível preparar as instruções. (8180)')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 81, in audit_and_error_logging_middleware
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\sessions.py", line 88, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 670, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 1281, in handle
+    await super().handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 280, in handle
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 354, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 454, in get_kpis
+    res_esp = conn.execute(text(f"SELECT SUM(CASE WHEN T.STATUS_ID NOT IN (4,6) AND TRY_CAST(T.DATA_LIMITE_SLA AS DATETIME) < GETDATE() THEN 1 ELSE 0 END), SUM(CASE WHEN T.STATUS_ID NOT IN (4,6) AND TRY_CAST(T.DATA_LIMITE_SLA AS DATETIME) >= GETDATE() AND DATEDIFF(MINUTE, GETDATE(), TRY_CAST(T.DATA_LIMITE_SLA AS DATETIME)) <= 120 THEN 1 ELSE 0 END), SUM(CASE WHEN T.STATUS_ID NOT IN (4,6) AND T.PRIORIDADE_ID = 1 THEN 1 ELSE 0 END) FROM tbTAREFAS T {joins} {where_clause}"), params).fetchone()
+              ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2365, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.ProgrammingError: (pyodbc.ProgrammingError) ('42000', '[42000] [Microsoft][ODBC SQL Server Driver][SQL Server]Não foi possível vincular o identificador de várias partes "S.STATUS_NOME". (4104) (SQLExecDirectW); [42000] [Microsoft][ODBC SQL Server Driver][SQL Server]Não foi possível preparar as instruções. (8180)')
+[SQL: SELECT SUM(CASE WHEN T.STATUS_ID NOT IN (4,6) AND TRY_CAST(T.DATA_LIMITE_SLA AS DATETIME) < GETDATE() THEN 1 ELSE 0 END), SUM(CASE WHEN T.STATUS_ID NOT IN (4,6) AND TRY_CAST(T.DATA_LIMITE_SLA AS DATETIME) >= GETDATE() AND DATEDIFF(MINUTE, GETDATE(), TRY_CAST(T.DATA_LIMITE_SLA AS DATETIME)) <= 120 THEN 1 ELSE 0 END), SUM(CASE WHEN T.STATUS_ID NOT IN (4,6) AND T.PRIORIDADE_ID = 1 THEN 1 ELSE 0 END) FROM tbTAREFAS T LEFT JOIN tbUSUARIO UT ON T.TECNICO_ID = UT.USUARIO_ID LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbSETOR SETOR ON U.SETOR_ID = SETOR.SETOR_ID  WHERE 1=1  AND S.STATUS_NOME = ?]
+[parameters: ('Aberto',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+
+[2026-08-12 14:49:52] [ERROR]: ❌ [CRITICAL 500] GET /api/relatorios/gerais | IP: 10.0.0.5 | Anônimo | Erro: (pyodbc.ProgrammingError) ('42S22', "[42S22] [Microsoft][ODBC SQL Server Driver][SQL Server]Nome de coluna inválido 'SETOR_NOME'. (207) (SQLExecDirectW); [42S22] [Microsoft][ODBC SQL Server Driver][SQL Server]Não foi possível preparar as instruções. (8180)")
+[SQL: SELECT ISNULL(SETOR.SETOR_NOME, 'Não Informado'), COUNT(T.TAREFA_ID) FROM tbTAREFAS T LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbSETOR SETOR ON U.SETOR_ID = SETOR.SETOR_ID LEFT JOIN tbUSUARIO UT ON T.TECNICO_ID = UT.USUARIO_ID LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID WHERE 1=1  AND S.SETOR_NOME = ? GROUP BY SETOR.SETOR_NOME]
+[parameters: ('Administrativo',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Traceback (most recent call last):
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+pyodbc.ProgrammingError: ('42S22', "[42S22] [Microsoft][ODBC SQL Server Driver][SQL Server]Nome de coluna inválido 'SETOR_NOME'. (207) (SQLExecDirectW); [42S22] [Microsoft][ODBC SQL Server Driver][SQL Server]Não foi possível preparar as instruções. (8180)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 81, in audit_and_error_logging_middleware
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\sessions.py", line 88, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 670, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 1281, in handle
+    await super().handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 280, in handle
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 354, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 406, in get_relatorios_gerais
+    "setores": [{"label": r[0], "value": r[1]} for r in conn.execute(text(f"SELECT ISNULL(SETOR.SETOR_NOME, 'Não Informado'), COUNT(T.TAREFA_ID) FROM tbTAREFAS T LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbSETOR SETOR ON U.SETOR_ID = SETOR.SETOR_ID LEFT JOIN tbUSUARIO UT ON T.TECNICO_ID = UT.USUARIO_ID LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID {where_admin} GROUP BY SETOR.SETOR_NOME"), params).fetchall()],
+                                                        ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2365, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.ProgrammingError: (pyodbc.ProgrammingError) ('42S22', "[42S22] [Microsoft][ODBC SQL Server Driver][SQL Server]Nome de coluna inválido 'SETOR_NOME'. (207) (SQLExecDirectW); [42S22] [Microsoft][ODBC SQL Server Driver][SQL Server]Não foi possível preparar as instruções. (8180)")
+[SQL: SELECT ISNULL(SETOR.SETOR_NOME, 'Não Informado'), COUNT(T.TAREFA_ID) FROM tbTAREFAS T LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbSETOR SETOR ON U.SETOR_ID = SETOR.SETOR_ID LEFT JOIN tbUSUARIO UT ON T.TECNICO_ID = UT.USUARIO_ID LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID WHERE 1=1  AND S.SETOR_NOME = ? GROUP BY SETOR.SETOR_NOME]
+[parameters: ('Administrativo',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+
+[2026-08-12 14:49:55] [ERROR]: ❌ [CRITICAL 500] GET /api/relatorios/gerais | IP: 10.0.0.5 | Anônimo | Erro: (pyodbc.ProgrammingError) ('42S22', "[42S22] [Microsoft][ODBC SQL Server Driver][SQL Server]Nome de coluna inválido 'SETOR_NOME'. (207) (SQLExecDirectW); [42S22] [Microsoft][ODBC SQL Server Driver][SQL Server]Não foi possível preparar as instruções. (8180)")
+[SQL: SELECT ISNULL(SETOR.SETOR_NOME, 'Não Informado'), COUNT(T.TAREFA_ID) FROM tbTAREFAS T LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbSETOR SETOR ON U.SETOR_ID = SETOR.SETOR_ID LEFT JOIN tbUSUARIO UT ON T.TECNICO_ID = UT.USUARIO_ID LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID WHERE 1=1  AND UT.NOME = ? AND S.SETOR_NOME = ? GROUP BY SETOR.SETOR_NOME]
+[parameters: ('Jonatan Filippi Severo', 'Administrativo')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Traceback (most recent call last):
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+pyodbc.ProgrammingError: ('42S22', "[42S22] [Microsoft][ODBC SQL Server Driver][SQL Server]Nome de coluna inválido 'SETOR_NOME'. (207) (SQLExecDirectW); [42S22] [Microsoft][ODBC SQL Server Driver][SQL Server]Não foi possível preparar as instruções. (8180)")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 81, in audit_and_error_logging_middleware
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\sessions.py", line 88, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 670, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 1281, in handle
+    await super().handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 280, in handle
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 354, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 406, in get_relatorios_gerais
+    "setores": [{"label": r[0], "value": r[1]} for r in conn.execute(text(f"SELECT ISNULL(SETOR.SETOR_NOME, 'Não Informado'), COUNT(T.TAREFA_ID) FROM tbTAREFAS T LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbSETOR SETOR ON U.SETOR_ID = SETOR.SETOR_ID LEFT JOIN tbUSUARIO UT ON T.TECNICO_ID = UT.USUARIO_ID LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID {where_admin} GROUP BY SETOR.SETOR_NOME"), params).fetchall()],
+                                                        ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2365, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.ProgrammingError: (pyodbc.ProgrammingError) ('42S22', "[42S22] [Microsoft][ODBC SQL Server Driver][SQL Server]Nome de coluna inválido 'SETOR_NOME'. (207) (SQLExecDirectW); [42S22] [Microsoft][ODBC SQL Server Driver][SQL Server]Não foi possível preparar as instruções. (8180)")
+[SQL: SELECT ISNULL(SETOR.SETOR_NOME, 'Não Informado'), COUNT(T.TAREFA_ID) FROM tbTAREFAS T LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbSETOR SETOR ON U.SETOR_ID = SETOR.SETOR_ID LEFT JOIN tbUSUARIO UT ON T.TECNICO_ID = UT.USUARIO_ID LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID WHERE 1=1  AND UT.NOME = ? AND S.SETOR_NOME = ? GROUP BY SETOR.SETOR_NOME]
+[parameters: ('Jonatan Filippi Severo', 'Administrativo')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+
+[2026-08-12 14:53:00] [ERROR]: ❌ [CRITICAL 500] GET /api/tarefas | IP: 10.0.0.5 | Anônimo | Erro: name 'processar_fila_com_filtros' is not defined
+Traceback (most recent call last):
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 81, in audit_and_error_logging_middleware
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\sessions.py", line 88, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 670, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 1281, in handle
+    await super().handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 280, in handle
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 354, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 481, in get_tarefas
+    return processar_fila_com_filtros(base, "SELECT COUNT(*) FROM tbTAREFAS T", {"offset": (page - 1) * limit, "limit": limit}, status_id=status_id, prioridade_id=prioridade_id, tipo_id=tipo_id, sla_filtro=sla_filtro, data_inicio=data_inicio, data_fim=data_fim, user_id_filtro=user_id_filtro, tecnico_id_filtro=tecnico_filtro, sem_tecnico=sem_tecnico)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'processar_fila_com_filtros' is not defined
+
+[2026-08-12 14:53:07] [ERROR]: ❌ [CRITICAL 500] GET /api/tarefas | IP: 10.0.0.5 | Anônimo | Erro: name 'processar_fila_com_filtros' is not defined
+Traceback (most recent call last):
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 81, in audit_and_error_logging_middleware
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\sessions.py", line 88, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 670, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 1281, in handle
+    await super().handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 280, in handle
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 354, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 481, in get_tarefas
+    return processar_fila_com_filtros(base, "SELECT COUNT(*) FROM tbTAREFAS T", {"offset": (page - 1) * limit, "limit": limit}, status_id=status_id, prioridade_id=prioridade_id, tipo_id=tipo_id, sla_filtro=sla_filtro, data_inicio=data_inicio, data_fim=data_fim, user_id_filtro=user_id_filtro, tecnico_id_filtro=tecnico_filtro, sem_tecnico=sem_tecnico)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'processar_fila_com_filtros' is not defined
+
+[2026-08-12 14:53:24] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-12 14:53:32] [ERROR]: ❌ [CRITICAL 500] GET /api/tarefas | IP: 10.0.0.5 | Anônimo | Erro: name 'processar_fila_com_filtros' is not defined
+Traceback (most recent call last):
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 81, in audit_and_error_logging_middleware
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\sessions.py", line 88, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 670, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 1281, in handle
+    await super().handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 280, in handle
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 354, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 481, in get_tarefas
+    return processar_fila_com_filtros(base, "SELECT COUNT(*) FROM tbTAREFAS T", {"offset": (page - 1) * limit, "limit": limit}, status_id=status_id, prioridade_id=prioridade_id, tipo_id=tipo_id, sla_filtro=sla_filtro, data_inicio=data_inicio, data_fim=data_fim, user_id_filtro=user_id_filtro, tecnico_id_filtro=tecnico_filtro, sem_tecnico=sem_tecnico)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'processar_fila_com_filtros' is not defined
+
+[2026-08-12 14:53:36] [ERROR]: ❌ [CRITICAL 500] GET /api/tarefas | IP: 10.0.0.5 | Anônimo | Erro: name 'processar_fila_com_filtros' is not defined
+Traceback (most recent call last):
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 81, in audit_and_error_logging_middleware
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\sessions.py", line 88, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 670, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 1281, in handle
+    await super().handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 280, in handle
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 354, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 481, in get_tarefas
+    return processar_fila_com_filtros(base, "SELECT COUNT(*) FROM tbTAREFAS T", {"offset": (page - 1) * limit, "limit": limit}, status_id=status_id, prioridade_id=prioridade_id, tipo_id=tipo_id, sla_filtro=sla_filtro, data_inicio=data_inicio, data_fim=data_fim, user_id_filtro=user_id_filtro, tecnico_id_filtro=tecnico_filtro, sem_tecnico=sem_tecnico)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'processar_fila_com_filtros' is not defined
+
+[2026-08-12 14:54:01] [ERROR]: ❌ [CRITICAL 500] GET /api/tarefas | IP: 10.0.0.5 | Anônimo | Erro: name 'processar_fila_com_filtros' is not defined
+Traceback (most recent call last):
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 81, in audit_and_error_logging_middleware
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\sessions.py", line 88, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 670, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 1281, in handle
+    await super().handle(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\routing.py", line 280, in handle
+    await self.app(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\fastapi\routing.py", line 354, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Projetos\Apps\GestaoChamados\api\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+  File "C:\Projetos\Apps\GestaoChamados\api\main.py", line 481, in get_tarefas
+    @app.get("/api/meus-chamados")
+               ^^^^^^^^^^^^^^^^^^^
+NameError: name 'processar_fila_com_filtros' is not defined
+
+[2026-08-12 14:54:09] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-12 15:37:50] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #10116 alterado pelo técnico #1 para status #1.
+[2026-08-12 16:03:06] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #10161 alterado pelo técnico #1 para status #4.
+[2026-08-12 16:09:51] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #10137 alterado pelo técnico #1 para status #7.
+[2026-08-12 16:41:28] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.

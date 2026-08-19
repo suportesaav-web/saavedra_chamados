@@ -1,12 +1,24 @@
+import os
 import pandas as pd
 from sqlalchemy import create_engine, text
 import re
 from datetime import datetime
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv(dotenv_path=r"../api/.env")
+except ImportError:
+    pass
+
 # ==========================================
 # 1. CONFIGURAÇÃO DA CONEXÃO
 # ==========================================
-CONN_STR = "mssql+pyodbc://chamados:WS123br@10.0.0.252/GestaoChamados?driver=SQL+Server"
+DB_USER = os.environ.get("SAAVEDRA_DB_USER", "chamados")
+DB_PASS = os.environ.get("SAAVEDRA_DB_PASS", "WS123br")
+DB_HOST = os.environ.get("SAAVEDRA_DB_HOST", "10.0.0.252")
+DB_NAME = os.environ.get("SAAVEDRA_DB_NAME", "GestaoChamados")
+
+CONN_STR = f"mssql+pyodbc://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}?driver=SQL+Server"
 engine = create_engine(CONN_STR)
 
 ARQUIVO_USUARIOS = "Tarefas TI (1).xlsx - tbUSUARIO.csv"

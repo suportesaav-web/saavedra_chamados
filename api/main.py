@@ -87,7 +87,7 @@ async def audit_and_error_logging_middleware(request: Request, call_next):
         logger.error(f"❌ [CRITICAL 500] {request.method} {request.url.path} | IP: {client_ip} | {user_str} | Erro: {str(exc)}\n{traceback.format_exc()}")
         raise exc
 
-UPLOAD_DIR = r"C:\Projetos\Apps\GestaoChamados\uploads"
+UPLOAD_DIR = os.path.join(ROOT_DIR, "uploads")
 if not os.path.exists(UPLOAD_DIR): os.makedirs(UPLOAD_DIR)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
@@ -96,27 +96,38 @@ DB_PASS = os.environ.get("SAAVEDRA_DB_PASS", "WS123br")
 DB_HOST = os.environ.get("SAAVEDRA_DB_HOST", "10.0.0.252")
 DB_NAME = os.environ.get("SAAVEDRA_DB_NAME", "GestaoChamados")
 CONN_STR = f"mssql+pyodbc://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}?driver=SQL+Server"
-engine = create_engine(CONN_STR)
+engine = create_engine(CONN_STR, pool_pre_ping=True, pool_recycle=3600)
 
 # ==========================================
 # 2. SCHEDULER ITIL
 # ==========================================
+def obter_ou_criar_causa_inatividade(conn) -> int:
+    try:
+        r = conn.execute(text("SELECT CAUSA_ID FROM tbCAUSA_RAIZ WHERE CAUSA_NOME LIKE '%Inatividade%' OR CAUSA_NOME LIKE '%Automátic%'")).fetchone()
+        if r: return r[0]
+        r_new = conn.execute(text("INSERT INTO tbCAUSA_RAIZ (CAUSA_NOME, ATIVO) OUTPUT INSERTED.CAUSA_ID VALUES ('Encerramento Automático (Inatividade ITIL)', 1)")).fetchone()
+        return r_new[0]
+    except Exception as e:
+        logger.error(f"❌ Erro ao obter causa raiz de inatividade: {e}")
+        return 1
+
 def fechar_chamados_inativos():
     try:
         with engine.begin() as conn:
+            causa_id = obter_ou_criar_causa_inatividade(conn)
             query_select = text("""
                 SELECT T.TAREFA_ID, T.SOLICITANTE_ID 
                 FROM tbTAREFAS T
                 INNER JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID
                 WHERE T.STATUS_ID NOT IN (4, 6)
                   AND (S.STATUS_NOME LIKE '%Aguardando%' OR S.STATUS_NOME LIKE '%Valida%' OR S.STATUS_NOME LIKE '%Pendente%')
-                  AND T.DATA_ULTIMA_ATUALIZACAO < DATEADD(day, -3, GETDATE())
+                  AND ISNULL(T.DATA_ULTIMA_ATUALIZACAO, T.DATA_HORA) < DATEADD(day, -3, GETDATE())
             """)
             inativos = conn.execute(query_select).fetchall()
             
             for t in inativos:
                 t_id, solic_id = t[0], t[1]
-                conn.execute(text("UPDATE tbTAREFAS SET STATUS_ID = 4, DATA_ULTIMA_ATUALIZACAO = GETDATE() WHERE TAREFA_ID = :id"), {"id": t_id})
+                conn.execute(text("UPDATE tbTAREFAS SET STATUS_ID = 4, CAUSA_RAIZ_ID = :causa_id, DATA_ULTIMA_ATUALIZACAO = GETDATE() WHERE TAREFA_ID = :id"), {"id": t_id, "causa_id": causa_id})
                 conn.execute(text("INSERT INTO tbTAREFA_HISTORICO (TAREFA_ID, USUARIO_ID, STATUS_ID_NA_OCASIAO, COMENTARIO, DATA_HORA, NOTA_INTERNA) VALUES (:t_id, :u_id, 4, '🤖 [SISTEMA] Chamado encerrado automaticamente por inatividade do solicitante (Prazo de 3 dias expirado).', GETDATE(), 0)"), {"t_id": t_id, "u_id": solic_id})
                 logger.info(f"🤖 [CRON JOB] Chamado #{t_id} encerrado automaticamente por inatividade.")
     except Exception as e:
@@ -216,7 +227,54 @@ def enviar_email_atualizacao(destinatario: str, nome_usuario: str, tarefa_id: in
         </div>
     </div>
     """
-    enviar_email_background(destinatario, f"[{tarefa_id}] Atualização no Chamado - Saavedra", corpo_html)
+def enviar_email_lembrete_csat(destinatario: str, nome_usuario: str, tarefa_id: int, titulo: str):
+    corpo_html = f"""
+    <div style="font-family: 'Segoe UI', Tahoma, sans-serif; color: #25282a; max-width: 600px; margin: 0 auto; border: 1px solid #eaeaea; border-top: 5px solid #1e8e3e; border-radius: 8px;">
+        <div style="background: #25282a; padding: 20px; text-align: center;"><h2 style="margin: 0; color: #ffffff; font-size: 20px;">Saavedra <span style="color: #dc4405;">Chamados</span></h2></div>
+        <div style="padding: 30px; background: #ffffff;">
+            <h3 style="margin-top: 0; color: #1e8e3e;">⭐ Pesquisa de Satisfação de Atendimento</h3>
+            <p style="font-size: 14px; color: #555;">Olá, <strong>{nome_usuario}</strong>. O seu chamado <strong>#{tarefa_id}</strong> foi concluído, mas ainda aguarda a sua avaliação de atendimento.</p>
+            <div style="background: #f8f9fa; padding: 15px; border-left: 4px solid #1e8e3e; border-radius: 4px; margin: 20px 0;">
+                <span style="font-size: 12px; color: #888; font-weight: bold;">Ticket #{tarefa_id}</span><br>
+                <strong style="font-size: 15px;">{titulo}</strong>
+            </div>
+            <div style="background: #f0f4f8; padding: 20px; border-radius: 6px; margin-top: 20px; text-align: center;">
+                <p style="margin: 0 0 12px 0; font-size: 14px; font-weight: bold; color: #25282a;">Como avalia a resolução deste suporte?</p>
+                <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                    <a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}&avaliar=1" style="background: #da291c; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">1 😞 Péssimo</a>
+                    <a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}&avaliar=2" style="background: #e65100; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">2 😕 Ruim</a>
+                    <a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}&avaliar=3" style="background: #f57c00; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">3 😐 Regular</a>
+                    <a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}&avaliar=4" style="background: #2e7d32; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">4 😊 Bom</a>
+                    <a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}&avaliar=5" style="background: #1e8e3e; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">5 🤩 Excelente</a>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 25px;">
+                <a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}" style="display: inline-block; background: #25282a; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-size: 13px;">Ver Chamado no Painel</a>
+            </div>
+        </div>
+    </div>
+    """
+    enviar_email_background(destinatario, f"[{tarefa_id}] Lembrete: Avalie o Atendimento - Saavedra", corpo_html)
+
+def enviar_email_atribuicao_tecnico(destinatario: str, nome_tecnico: str, tarefa_id: int, titulo: str, solicitante_nome: str):
+    corpo_html = f"""
+    <div style="font-family: 'Segoe UI', Tahoma, sans-serif; color: #25282a; max-width: 600px; margin: 0 auto; border: 1px solid #eaeaea; border-top: 5px solid #0056b3; border-radius: 8px;">
+        <div style="background: #25282a; padding: 20px; text-align: center;"><h2 style="margin: 0; color: #ffffff; font-size: 20px;">Saavedra <span style="color: #dc4405;">Chamados</span></h2></div>
+        <div style="padding: 30px; background: #ffffff;">
+            <h3 style="margin-top: 0;">Novo Chamado Atribuído a Você</h3>
+            <p style="font-size: 14px; color: #555;">Olá, <strong>{nome_tecnico}</strong>. Você foi atribuído como responsável técnico pelo chamado abaixo:</p>
+            <div style="background: #f8f9fa; padding: 15px; border-left: 4px solid #0056b3; border-radius: 4px; margin: 20px 0;">
+                <span style="font-size: 12px; color: #888; font-weight: bold;">Ticket #{tarefa_id}</span><br>
+                <strong style="font-size: 15px;">{titulo}</strong><br>
+                <span style="font-size: 13px; color: #555;">Solicitante: {solicitante_nome}</span>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}" style="display: inline-block; background: #0056b3; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 4px; font-weight: bold;">Atender Chamado</a>
+            </div>
+        </div>
+    </div>
+    """
+    enviar_email_background(destinatario, f"[{tarefa_id}] Atribuição Técnico - Saavedra", corpo_html)
 
 # ==========================================
 # MODELOS DE DADOS
@@ -366,6 +424,40 @@ def update_sla_matrix(sla_id: int, data: SlaConfigRequest, usuario: dict = Depen
     with engine.begin() as conn: conn.execute(text("UPDATE tbSLA_CONFIG SET TEMPO_HORAS = :horas WHERE SLA_ID = :id"), {"horas": data.tempo_horas, "id": sla_id})
     return {"status": "sucesso"}
 
+@app.get("/api/admin/csat-pendentes-count")
+def get_csat_pendentes_count(usuario: dict = Depends(exigir_admin)):
+    with engine.connect() as conn:
+        qtd = conn.execute(text("""
+            SELECT COUNT(T.TAREFA_ID) 
+            FROM tbTAREFAS T
+            JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID
+            WHERE T.STATUS_ID = 4 
+              AND (T.NOTA_CSAT IS NULL OR T.NOTA_CSAT = 0)
+              AND U.EMAIL IS NOT NULL AND U.EMAIL LIKE '%@%'
+        """)).scalar() or 0
+    return {"total_pendentes": qtd}
+
+@app.post("/api/admin/reenviar-csat-pendentes")
+def reenviar_csat_pendentes(background_tasks: BackgroundTasks, usuario: dict = Depends(exigir_admin)):
+    with engine.connect() as conn:
+        pendentes = conn.execute(text("""
+            SELECT T.TAREFA_ID, T.TITULO, U.NOME, U.EMAIL 
+            FROM tbTAREFAS T
+            JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID
+            WHERE T.STATUS_ID = 4 
+              AND (T.NOTA_CSAT IS NULL OR T.NOTA_CSAT = 0)
+              AND U.EMAIL IS NOT NULL AND U.EMAIL LIKE '%@%'
+        """)).fetchall()
+    
+    enviados = 0
+    for row in pendentes:
+        t_id, titulo, u_nome, u_email = row[0], row[1], row[2], row[3]
+        background_tasks.add_task(enviar_email_lembrete_csat, u_email, u_nome, t_id, titulo)
+        enviados += 1
+        
+    logger.info(f"📧 [DISPARO CSAT] Administrador #{usuario['id']} solicitou o reenvio de {enviados} e-mails de avaliação CSAT pendentes.")
+    return {"status": "sucesso", "total_disparados": enviados}
+
 # 🌟 RELATÓRIOS INTELIGENTES (COM SUPORTE A CROSS-FILTERING E DATAS)
 @app.get("/api/relatorios/gerais")
 def get_relatorios_gerais(data_inicio: Optional[str] = None, data_fim: Optional[str] = None, tecnico_nome: Optional[str] = None, status_nome: Optional[str] = None, setor_nome: Optional[str] = None, usuario: dict = Depends(get_usuario_sessao)):
@@ -407,6 +499,7 @@ def get_relatorios_gerais(data_inicio: Optional[str] = None, data_fim: Optional[
             "tipos": [{"label": r[0], "value": r[1]} for r in conn.execute(text(f"SELECT ISNULL(TP.TIPO_NOME, 'Não Informado'), COUNT(T.TAREFA_ID) FROM tbTAREFAS T LEFT JOIN tbTIPO TP ON T.TIPO_ID = TP.TIPO_ID LEFT JOIN tbUSUARIO UT ON T.TECNICO_ID = UT.USUARIO_ID LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbSETOR SETOR ON U.SETOR_ID = SETOR.SETOR_ID {where_admin} GROUP BY TP.TIPO_NOME"), params).fetchall()],
             "causas": [{"label": r[0], "value": r[1]} for r in conn.execute(text(f"SELECT ISNULL(C.CAUSA_NOME, 'Em Andamento'), COUNT(T.TAREFA_ID) FROM tbTAREFAS T LEFT JOIN tbCAUSA_RAIZ C ON T.CAUSA_RAIZ_ID = C.CAUSA_ID LEFT JOIN tbUSUARIO UT ON T.TECNICO_ID = UT.USUARIO_ID LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbSETOR SETOR ON U.SETOR_ID = SETOR.SETOR_ID {where_admin} GROUP BY C.CAUSA_NOME"), params).fetchall()],
             "tecnicos": [{"label": r[0], "value": r[1]} for r in conn.execute(text(f"SELECT ISNULL(UT.NOME, 'Fila de Triagem'), COUNT(T.TAREFA_ID) FROM tbTAREFAS T LEFT JOIN tbUSUARIO UT ON T.TECNICO_ID = UT.USUARIO_ID LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbSETOR SETOR ON U.SETOR_ID = SETOR.SETOR_ID {where_admin} GROUP BY UT.NOME"), params).fetchall()],
+            "usuarios_ranking": [{"label": r[0], "value": r[1]} for r in conn.execute(text(f"SELECT TOP 10 ISNULL(U.NOME, 'Não Informado'), COUNT(T.TAREFA_ID) FROM tbTAREFAS T LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbSETOR SETOR ON U.SETOR_ID = SETOR.SETOR_ID LEFT JOIN tbUSUARIO UT ON T.TECNICO_ID = UT.USUARIO_ID LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID {where_admin} GROUP BY U.NOME ORDER BY COUNT(T.TAREFA_ID) DESC"), params).fetchall()],
             "csats": [{"label": f"Nota {r[0]} ⭐️" if r[0] else "Não Avaliado", "value": r[1]} for r in conn.execute(text(f"SELECT ISNULL(NOTA_CSAT, 0), COUNT(TAREFA_ID) FROM tbTAREFAS T LEFT JOIN tbUSUARIO UT ON T.TECNICO_ID = UT.USUARIO_ID LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbSETOR SETOR ON U.SETOR_ID = SETOR.SETOR_ID {where_admin} GROUP BY NOTA_CSAT ORDER BY NOTA_CSAT ASC"), params).fetchall()]
         }
 
@@ -565,14 +658,14 @@ def get_tarefas(page: int = 1, limit: int = 20, visao_equipe: bool = False, sem_
 @app.get("/api/tarefas/{tarefa_id}")
 def get_tarefa_detalhe(tarefa_id: int, usuario: dict = Depends(get_usuario_sessao)):
     with engine.connect() as conn:
-        r = conn.execute(text("SELECT T.TAREFA_ID, T.TITULO, T.DESCRICAO, T.DATA_HORA, T.DATA_LIMITE_SLA, S.STATUS_NOME, T.STATUS_ID, U.NOME, T.SOLICITANTE_ID, TEC.NOME, T.TECNICO_ID, TIP.TIPO_NOME, T.TIPO_ID, T.CAUSA_RAIZ_ID FROM tbTAREFAS T LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbUSUARIO TEC ON T.TECNICO_ID = TEC.USUARIO_ID LEFT JOIN tbTIPO TIP ON T.TIPO_ID = TIP.TIPO_ID WHERE T.TAREFA_ID = :id"), {"id": tarefa_id}).fetchone()
+        r = conn.execute(text("SELECT T.TAREFA_ID, T.TITULO, T.DESCRICAO, T.DATA_HORA, T.DATA_LIMITE_SLA, S.STATUS_NOME, T.STATUS_ID, U.NOME, T.SOLICITANTE_ID, TEC.NOME, T.TECNICO_ID, TIP.TIPO_NOME, T.TIPO_ID, T.CAUSA_RAIZ_ID, T.NOTA_CSAT FROM tbTAREFAS T LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbUSUARIO TEC ON T.TECNICO_ID = TEC.USUARIO_ID LEFT JOIN tbTIPO TIP ON T.TIPO_ID = TIP.TIPO_ID WHERE T.TAREFA_ID = :id"), {"id": tarefa_id}).fetchone()
         if not r: raise HTTPException(status_code=404, detail="Chamado não encontrado.")
         
         if usuario.get("perfil") not in PERFIS_ADMIN and r[8] != usuario["id"]:
             raise HTTPException(status_code=403, detail="Você não tem permissão para visualizar este chamado.")
             
         anexos = conn.execute(text("SELECT ANEXO_ID, NOME_ORIGINAL, NOME_SALVO FROM tbTAREFA_ANEXO WHERE TAREFA_ID = :id AND HISTORICO_ID IS NULL"), {"id": tarefa_id}).fetchall()
-    return {"id": r[0], "titulo": r[1], "descricao": r[2], "data_hora": formatar_data_segura(r[3]), "data_limite_sla": formatar_data_segura(r[4]), "status_nome": r[5], "status_id": r[6], "solicitante_nome": r[7], "solicitante_id": r[8], "tecnico_nome": r[9], "tecnico_id": r[10], "tipo_nome": r[11], "tipo_id": r[12], "causa_raiz_id": r[13], "anexos": [{"id": a.ANEXO_ID, "nome_original": a.NOME_ORIGINAL, "nome_salvo": a.NOME_SALVO} for a in anexos]}
+    return {"id": r[0], "titulo": r[1], "descricao": r[2], "data_hora": formatar_data_segura(r[3]), "data_limite_sla": formatar_data_segura(r[4]), "status_nome": r[5], "status_id": r[6], "solicitante_nome": r[7], "solicitante_id": r[8], "tecnico_nome": r[9], "tecnico_id": r[10], "tipo_nome": r[11], "tipo_id": r[12], "causa_raiz_id": r[13], "nota_csat": r[14], "anexos": [{"id": a.ANEXO_ID, "nome_original": a.NOME_ORIGINAL, "nome_salvo": a.NOME_SALVO} for a in anexos]}
 
 @app.get("/api/tarefas/{tarefa_id}/historico")
 def get_tarefa_historico(tarefa_id: int, usuario: dict = Depends(get_usuario_sessao)):
@@ -598,6 +691,12 @@ def create_tarefa(tarefa: TarefaCreate, background_tasks: BackgroundTasks, usuar
         solicitante = conn.execute(text("SELECT NOME, EMAIL FROM tbUSUARIO WHERE USUARIO_ID = :id"), {"id": tarefa.solicitante_id}).fetchone()
     logger.info(f"🎫 [NOVO CHAMADO] Ticket #{novo_id} registrado pelo usuário #{tarefa.solicitante_id}.")
     if solicitante and solicitante.EMAIL: background_tasks.add_task(enviar_email_abertura, solicitante.EMAIL, solicitante.NOME, novo_id, tarefa.titulo)
+    if tecnico_id_final:
+        with engine.connect() as conn:
+            tec = conn.execute(text("SELECT NOME, EMAIL FROM tbUSUARIO WHERE USUARIO_ID = :id"), {"id": tecnico_id_final}).fetchone()
+        if tec and tec.EMAIL:
+            solic_nome = solicitante.NOME if solicitante else "N/A"
+            background_tasks.add_task(enviar_email_atribuicao_tecnico, tec.EMAIL, tec.NOME, novo_id, tarefa.titulo, solic_nome)
     return {"message": "Criado", "id": novo_id}
 
 @app.put("/api/tarefas/{tarefa_id}")
@@ -606,6 +705,7 @@ async def update_tarefa(tarefa_id: int, update: TarefaUpdate, background_tasks: 
         raise HTTPException(status_code=400, detail="Causa raiz obrigatória.")
     
     with engine.begin() as conn:
+        tec_antigo = conn.execute(text("SELECT TECNICO_ID FROM tbTAREFAS WHERE TAREFA_ID = :id"), {"id": tarefa_id}).scalar()
         conn.execute(text("UPDATE tbTAREFAS SET STATUS_ID = :status, TIPO_ID = :tipo, TECNICO_ID = :tec, CAUSA_RAIZ_ID = :causa, DATA_ULTIMA_ATUALIZACAO = GETDATE() WHERE TAREFA_ID = :id"), {"id": tarefa_id, "status": update.novo_status_id, "tipo": update.novo_tipo_id, "tec": update.novo_tecnico_id, "causa": update.causa_raiz_id})
         interna_flag = 1 if update.nota_interna else 0
         historico_id = conn.execute(text("INSERT INTO tbTAREFA_HISTORICO (TAREFA_ID, USUARIO_ID, STATUS_ID_NA_OCASIAO, COMENTARIO, DATA_HORA, NOTA_INTERNA) OUTPUT INSERTED.HISTORICO_ID VALUES (:tarefa_id, :usuario_acao, :status, :comentario, GETDATE(), :interna)"), {"tarefa_id": tarefa_id, "usuario_acao": usuario["id"], "status": update.novo_status_id, "comentario": update.comentario, "interna": interna_flag}).fetchone()[0]
@@ -615,6 +715,14 @@ async def update_tarefa(tarefa_id: int, update: TarefaUpdate, background_tasks: 
     if ticket and ticket.EMAIL and not update.nota_interna: 
         background_tasks.add_task(enviar_email_atualizacao, ticket.EMAIL, ticket.NOME, tarefa_id, ticket.STATUS_NOME, update.comentario, update.novo_status_id)
         
+    if update.novo_tecnico_id and update.novo_tecnico_id != tec_antigo:
+        with engine.connect() as conn:
+            tec_novo = conn.execute(text("SELECT NOME, EMAIL FROM tbUSUARIO WHERE USUARIO_ID = :id"), {"id": update.novo_tecnico_id}).fetchone()
+        if tec_novo and tec_novo.EMAIL:
+            solic_nome = ticket.NOME if ticket else "N/A"
+            titulo_ticket = ticket.TITULO if ticket else f"Chamado #{tarefa_id}"
+            background_tasks.add_task(enviar_email_atribuicao_tecnico, tec_novo.EMAIL, tec_novo.NOME, tarefa_id, titulo_ticket, solic_nome)
+
     return {"message": "Atualizado", "historico_id": historico_id}
 
 @app.post("/api/tarefas/{tarefa_id}/responder")
