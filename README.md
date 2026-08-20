@@ -14,6 +14,7 @@
 
 - [Visão Geral](#-visão-geral)
 - [Funcionalidades Principais](#-funcionalidades-principais)
+- [Arquitetura do Banco de Dados](#-arquitetura-do-banco-de-dados)
 - [Arquitetura e Tecnologias](#-arquitetura-e-tecnologias)
 - [Estrutura do Repositório](#-estrutura-do-repositório)
 - [Pré-requisitos e Instalação](#-pré-requisitos-e-instalação)
@@ -21,6 +22,7 @@
 - [Endpoints da API REST](#-endpoints-da-api-rest)
 - [Automações & Cron Jobs ITIL](#-automações--cron-jobs-itil)
 - [Plano de Estudos & Automação DevOps (30 Dias)](#-plano-de-estudos--automação-devops-30-dias)
+- [Desenvolvedor & Autoria](#-desenvolvedor--autoria)
 - [Licença](#-licença)
 
 ---
@@ -71,6 +73,93 @@ O **Saavedra Chamados** foi desenvolvido para centralizar, organizar e automatiz
 - **Autenticação de Sessão:** Controle via cookie de sessão encriptado (`SessionMiddleware`).
 - **Criptografia de Senhas:** Armazenamento seguro de senhas com algoritmo **Bcrypt** puro.
 - **Sistema de Auditoria & Logs:** Log rotativo de requisições HTTP, exceções e auditoria de ações críticas armazenado em `logs/sistema_geral.log` com limpeza automática a cada 7 dias.
+
+---
+
+## 🗄️ Arquitetura do Banco de Dados
+
+O banco de dados relacional **Microsoft SQL Server** foi modelado sob princípios de integridade referencial, suportando alta volumetria de tickets e rastreabilidade total de histórico.
+
+### Diagrama Entidade-Relacionamento (ER)
+
+```mermaid
+erDiagram
+    tbUSUARIO ||--o{ tbTAREFAS : "solicita (SOLICITANTE_ID)"
+    tbUSUARIO ||--o{ tbTAREFAS : "atende (TECNICO_ID)"
+    tbUSUARIO }|--|| tbSETOR : "pertence a"
+    tbTAREFAS }|--|| tbSTATUS : "possui status"
+    tbTAREFAS }|--|| tbPRIORIDADE : "possui prioridade"
+    tbTAREFAS }|--|| tbTIPO : "classificado como"
+    tbTAREFAS }|--o| tbCAUSA_RAIZ : "encerrado com"
+    tbTAREFAS ||--o{ tbTAREFA_HISTORICO : "registra histórico"
+    tbTAREFAS ||--o{ tbTAREFA_ANEXO : "possui anexos"
+    tbTAREFA_HISTORICO }|--|| tbUSUARIO : "registrado por"
+    tbSLA_CONFIG }|--|| tbPRIORIDADE : "combina prioridade"
+    tbSLA_CONFIG }|--|| tbTIPO : "combina tipo"
+
+    tbUSUARIO {
+        int USUARIO_ID PK
+        string NOME
+        string EMAIL
+        string AD_LOGIN
+        int SETOR_ID FK
+        string PERFIL "Admin | Gestor | Tecnico | Comum"
+        int NIVEL_ACESSO
+        string SENHA_HASH "Bcrypt 60 chars"
+        bit ATIVO
+    }
+
+    tbTAREFAS {
+        int TAREFA_ID PK
+        string TITULO
+        text DESCRICAO
+        int PRIORIDADE_ID FK
+        int STATUS_ID FK
+        int SOLICITANTE_ID FK
+        int TECNICO_ID FK "Nullable (Fila de Triagem)"
+        int TIPO_ID FK
+        int CAUSA_RAIZ_ID FK "Nullable"
+        datetime DATA_HORA
+        datetime DATA_LIMITE_SLA
+        datetime DATA_ULTIMA_ATUALIZACAO
+        int NOTA_CSAT "1 a 5 estrelas"
+    }
+
+    tbTAREFA_HISTORICO {
+        int HISTORICO_ID PK
+        int TAREFA_ID FK
+        int USUARIO_ID FK
+        int STATUS_ID_NA_OCASIAO FK
+        text COMENTARIO
+        datetime DATA_HORA
+        bit NOTA_INTERNA "1 = Restrito Equipe / 0 = Publico"
+    }
+
+    tbTAREFA_ANEXO {
+        int ANEXO_ID PK
+        int TAREFA_ID FK
+        int HISTORICO_ID FK "Nullable"
+        string NOME_ORIGINAL
+        string NOME_SALVO "UUID no disco"
+        datetime DATA_HORA
+    }
+
+    tbSLA_CONFIG {
+        int SLA_ID PK
+        int PRIORIDADE_ID FK
+        int TIPO_ID FK
+        int TEMPO_HORAS
+    }
+```
+
+### 📋 Descrição das Principais Tabelas
+
+1. **`tbTAREFAS`**: Tabela central contendo os tickets de suporte. Registra datas de abertura, limites calculados de SLA, nota CSAT atribuída pelo usuário e chaves para o solicitante e técnico responsável.
+2. **`tbUSUARIO`**: Gerencia usuários, credenciais hash Bcrypt, vínculo com setor e níveis de permissão (`Admin`, `Gestor`, `Tecnico`, `Comum`).
+3. **`tbTAREFA_HISTORICO`**: Armazena a linha do tempo completa do chamado. Contém a flag `NOTA_INTERNA` para separar apontamentos privados entre técnicos das respostas públicas para os solicitantes.
+4. **`tbTAREFA_ANEXO`**: Registra ficheiros anexados no momento da abertura ou no decorrer dos atendimentos, armazenados em disco com nome seguro UUID em `uploads/`.
+5. **`tbSLA_CONFIG`**: Matriz de configuração onde o Administrador estabelece o tempo em horas limite para cada combinação de Prioridade (ex: Crítica, Alta, Média) e Tipo (ex: Incidente, Solicitação).
+6. **Tabelas Auxiliares de Domínio (`tbSTATUS`, `tbPRIORIDADE`, `tbTIPO`, `tbCAUSA_RAIZ`, `tbSETOR`)**: Mantêm os cadastros dinâmicos e inativáveis que alimentam os selects e dashboards da aplicação.
 
 ---
 
@@ -173,9 +262,9 @@ SAAVEDRA_SECRET_KEY=sua_chave_secreta_super_segura_aqui!
 # Configurações de E-mail (SMTP)
 SAAVEDRA_SMTP_HOST=smtp.office365.com
 SAAVEDRA_SMTP_PORT=587
-SAAVEDRA_SMTP_USER=suporte@suaempresa.com.br
+SAAVEDRA_SMTP_USER=suporte.saav@saavedra.com.br
 SAAVEDRA_SMTP_PASS=SuaSenhaSMTP
-SAAVEDRA_SMTP_FROM=suporte@suaempresa.com.br
+SAAVEDRA_SMTP_FROM=suporte.saav@saavedra.com.br
 ```
 
 ---
@@ -188,7 +277,7 @@ Dentro do diretório `api/` (com o ambiente virtual ativo):
 uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-A documentação interativaSwagger da API estará disponível em:
+A documentação interativa Swagger da API estará disponível em:
 👉 **`http://localhost:8000/docs`**
 
 ### **Acessando o Frontend**
@@ -241,6 +330,16 @@ Além da aplicação de chamados, este repositório serve como base prática do 
 
 ---
 
+## 👨‍💻 Desenvolvedor & Autoria
+
+Projetado e desenvolvido por **Jonatan Severo**.
+
+- 📧 **E-mail:** [suporte.saav@saavedra.com.br](mailto:suporte.saav@saavedra.com.br)
+- 💼 **LinkedIn:** [linkedin.com/in/jonatanfsevero](https://www.linkedin.com/in/jonatanfsevero/)
+- 🏢 **Organização:** Saavedra Suporte Web
+
+---
+
 ## 📄 Licença
 
 Este projeto está licenciado sob os termos da licença **MIT**. Para mais detalhes, consulte o arquivo [`LICENSE`](file:///m:/GestaoChamados/LICENSE).
@@ -248,5 +347,5 @@ Este projeto está licenciado sob os termos da licença **MIT**. Para mais detal
 ---
 
 <p align="center">
-  Desenvolvido com 🧡 pela equipe <strong>Saavedra Suporte Web</strong>
+  Desenvolvido com 🧡 por <strong>Jonatan Severo</strong> — Saavedra Suporte Web
 </p>
