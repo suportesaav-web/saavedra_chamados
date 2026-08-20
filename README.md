@@ -35,4 +35,4 @@ Este plano foi desenvolvido para guiar um aprendizado prático e estruturado ao 
 - **Laboratórios Densos e Práticos:** Foque na escrita de código e resolução de problemas reais, seguindo a abordagem de treinamento prático (estilo 4Linux).
 - **Assistência com IA:** Utilize assistentes de IA para sanar dúvidas imediatas de sintaxe, debugar erros de execução e discutir arquitetura de código.
 - **Registro Contínuo:** Utilize a pasta `anotacoes/` duplicando o arquivo `semana-01.md` para registrar seus aprendizados (`semana-02.md`, `semana-03.md`, etc.).
-- **Versionamento:** Faça commits diários ou a cada laboratório concluído para criar um histórico sólido no seu GitHub.
+- **Versionamento:** Faça commits diários ou a cada laboratório concluído para criar um histórico sólido no seu GitHub.# saavedra_chamados
