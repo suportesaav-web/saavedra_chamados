@@ -49,7 +49,8 @@ O **Saavedra Chamados** foi desenvolvido para centralizar, organizar e automatiz
 ## ✨ Funcionalidades Principais
 
 ### 🎫 Gestão do Ciclo de Vida do Chamado (ITIL)
-- **Abertura e Triagem:** Formulário intuitivo de abertura com suporte a múltiplos anexos (documentos, imagens, prints de erro).
+- **Abertura e Triagem:** Formulário intuitivo de abertura com suporte a múltiplos anexos e recurso **Copy & Paste** dinâmico (com visualização de miniaturas).
+- **Editor Rico (WYSIWYG):** Descrições e Work Notes contam com formatação avançada (Quill.js) para inserção estruturada de textos, listas e blocos de código.
 - **Atribuição & Fila:** Triagem automatizada com opção de atribuição direta a técnicos ou permanência na fila geral.
 - **Histórico & Notas Internas:** Linha do tempo detalhada das movimentações do ticket, permitindo comentários públicos ou **notas internas restritas** à equipe técnica.
 - **Fechamento Obrigatório:** Validação de **Causa Raiz** para encerramento ou cancelamento de tickets.
@@ -167,7 +168,7 @@ erDiagram
 
 ### **Backend**
 - **Linguagem:** Python 3.10+
-- **Framework Web:** [FastAPI](https://fastapi.tiangolo.com/) com servidor ASGI [Uvicorn](https://www.uvicorn.org/)
+- **Framework Web:** [FastAPI](https://fastapi.tiangolo.com/) com servidor ASGI [Uvicorn](https://www.uvicorn.org/) (Arquitetura modular baseada em `APIRouter`)
 - **OR/Query Layer:** [SQLAlchemy](https://www.sqlalchemy.org/) com driver [PyODBC](https://github.com/mkleehammer/pyodbc)
 - **Segurança:** `bcrypt` para hash de credenciais e `Starlette SessionMiddleware`
 - **Validação de Dados:** `Pydantic v2`
@@ -187,11 +188,20 @@ erDiagram
 ```text
 .
 ├── api/                      # Backend em Python FastAPI
-│   ├── main.py               # Servidor principal, endpoints REST, middlewares e scheduler ITIL
+│   ├── main.py               # Ponto de entrada (Uvicorn), middlewares e scheduler ITIL
+│   ├── utils.py              # Funções utilitárias centralizadas (e-mail, data, logs)
+│   ├── routers/              # Controladores isolados por domínio (Modularização APIRouter)
+│   │   ├── admin.py          # Lógica administrativa (SLAs e configurações)
+│   │   ├── auth.py           # Autenticação e gestão de sessão
+│   │   ├── cadastros.py      # CRUD de usuários e domínios básicos
+│   │   ├── relatorios.py     # KPIs e métricas do BI
+│   │   └── tarefas.py        # Fila principal de chamados e ações
 │   ├── migrasenha.py         # Script utilitário para migração segura de senhas em lote para Bcrypt
 │   ├── reenviar_csat.py      # Disparador automatizado de lembretes de pesquisa de satisfação
 │   └── testar_email.py       # Script utilitário para validação de conexões SMTP
 ├── frontend/                 # Frontend Web
+│   ├── js/                   # Scripts isolados
+│   │   └── anexos.js         # Módulo avançado de anexos e manipulação de DataTransfer (Copy & Paste)
 │   ├── auth.js               # Gestor global de autenticação, sessão e níveis de permissão DOM
 │   ├── style.css             # Design System moderno, variáveis de temas e componentes
 │   ├── index.html            # Dashboard principal e Fila de Chamados
@@ -199,7 +209,7 @@ erDiagram
 │   ├── bi.html               # Painel de Business Intelligence / Analytics
 │   ├── detalhe_chamado.html  # Visualização de ticket, inclusão de anexos e histórico
 │   ├── login.html            # Tela de autenticação corporativa
-│   ├── novo_chamado.html     # Formulário de abertura de chamados
+│   ├── novo_chamado.html     # Formulário de abertura de chamados com WYSIWYG
 │   ├── relatorios.html       # Painel de Relatórios Gerenciais (Admin/Gestor)
 │   └── relatorios_comum.html # Painel de Acompanhamento Pessoal (Solicitante)
 ├── anotacoes/                # Registros semanais de aprendizado e laboratórios
