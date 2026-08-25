@@ -1,0 +1,13 @@
+[2026-08-20 14:21:05] [WARNING]: ⚠️ [HTTP 403] GET /api/tarefas/10133 | IP: 10.0.0.26 | Anônimo | Tempo: 0.00s
+[2026-08-20 14:23:00] [INFO]: 🎫 [NOVO CHAMADO] Ticket #20112 registrado pelo usuário #9.
+[2026-08-20 14:23:08] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-20 14:25:30] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #10166 alterado pelo técnico #1 para status #4.
+[2026-08-20 14:26:19] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #20112 alterado pelo técnico #1 para status #1.
+[2026-08-20 14:27:06] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #20 alterado pelo técnico #1 para status #2.
+[2026-08-20 14:29:58] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #20111 alterado pelo técnico #1 para status #3.
+[2026-08-20 14:41:35] [WARNING]: ⚠️ [HTTP 401] GET /api/auth/me | IP: 10.0.0.16 | Anônimo | Tempo: 0.00s
+[2026-08-20 14:41:44] [INFO]: 🔑 [LOGIN SUCESSO] Usuário 'mkt.saav@saavedra.com.br' autenticado com êxito (ID #17).
+[2026-08-20 14:42:54] [INFO]: 🎫 [NOVO CHAMADO] Ticket #20113 registrado pelo usuário #18.
+[2026-08-20 14:43:27] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #20113 alterado pelo técnico #17 para status #2.
+[2026-08-20 15:00:28] [INFO]: 🎫 [NOVO CHAMADO] Ticket #20114 registrado pelo usuário #18.
+[2026-08-20 15:00:41] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #20114 alterado pelo técnico #1 para status #2.

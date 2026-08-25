@@ -13,17 +13,14 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from fastapi import FastAPI, HTTPException, Request, Depends, File, UploadFile, Form, BackgroundTasks
 from fastapi.staticfiles import StaticFiles  
-from sqlalchemy import create_engine, text
+from sqlalchemy import text
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from pydantic import BaseModel
 from typing import Optional, List
 
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    pass
+from config import SECRET_KEY, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM, FRONTEND_URL
+from database import engine
 
 # ==========================================
 # 1. SISTEMA DE LOGS E AUDITORIA AVANÇADO
@@ -66,7 +63,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-SECRET_KEY = os.environ.get("SAAVEDRA_SECRET_KEY", "chave_secreta_padrao_segura_123!@#")
 app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
 
 @app.middleware("http")
@@ -91,12 +87,6 @@ UPLOAD_DIR = os.path.join(ROOT_DIR, "uploads")
 if not os.path.exists(UPLOAD_DIR): os.makedirs(UPLOAD_DIR)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
-DB_USER = os.environ.get("SAAVEDRA_DB_USER", "chamados")
-DB_PASS = os.environ.get("SAAVEDRA_DB_PASS", "WS123br")
-DB_HOST = os.environ.get("SAAVEDRA_DB_HOST", "10.0.0.252")
-DB_NAME = os.environ.get("SAAVEDRA_DB_NAME", "GestaoChamados")
-CONN_STR = f"mssql+pyodbc://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}?driver=SQL+Server"
-engine = create_engine(CONN_STR, pool_pre_ping=True, pool_recycle=3600)
 
 # ==========================================
 # 2. SCHEDULER ITIL
@@ -145,11 +135,6 @@ async def iniciar_scheduler():
 # ==========================================
 # 3. SUPORTE E EMAIL
 # ==========================================
-SMTP_HOST = os.environ.get("SAAVEDRA_SMTP_HOST")
-SMTP_PORT = int(os.environ.get("SAAVEDRA_SMTP_PORT", 587))
-SMTP_USER = os.environ.get("SAAVEDRA_SMTP_USER")
-SMTP_PASS = os.environ.get("SAAVEDRA_SMTP_PASS")
-SMTP_FROM = os.environ.get("SAAVEDRA_SMTP_FROM")
 
 def hash_senha(senha_plana: str) -> str:
     return bcrypt.hashpw(senha_plana.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
@@ -192,7 +177,7 @@ def enviar_email_abertura(destinatario: str, nome_usuario: str, tarefa_id: int, 
                 <strong style="font-size: 15px;">{titulo}</strong>
             </div>
             <div style="text-align: center; margin-top: 30px;">
-                <a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}" style="display: inline-block; background: #dc4405; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 4px; font-weight: bold;">Acessar o Chamado</a>
+                <a href="{FRONTEND_URL}/detalhe_chamado.html?id={tarefa_id}" style="display: inline-block; background: #dc4405; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 4px; font-weight: bold;">Acessar o Chamado</a>
             </div>
         </div>
     </div>
@@ -207,8 +192,8 @@ def enviar_email_atualizacao(destinatario: str, nome_usuario: str, tarefa_id: in
         <div style="background: #f0f4f8; padding: 20px; border-radius: 6px; margin-top: 20px; text-align: center;">
             <p style="margin: 0 0 10px 0; font-size: 14px; font-weight: bold; color: #25282a;">Como avalia este atendimento?</p>
             <div style="display: flex; justify-content: center; gap: 8px;">
-                <a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}&avaliar=1" style="background: #da291c; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">1 😞</a>
-                <a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}&avaliar=5" style="background: #1e8e3e; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">5 🤩</a>
+                <a href="{FRONTEND_URL}/detalhe_chamado.html?id={tarefa_id}&avaliar=1" style="background: #da291c; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">1 😞</a>
+                <a href="{FRONTEND_URL}/detalhe_chamado.html?id={tarefa_id}&avaliar=5" style="background: #1e8e3e; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">5 🤩</a>
             </div>
         </div>
         """
@@ -223,7 +208,7 @@ def enviar_email_atualizacao(destinatario: str, nome_usuario: str, tarefa_id: in
                 <div><span style="font-size: 12px; color: #888;">Nota da Equipa Técnica:</span><p style="margin: 0; font-size: 14px; background: #ffffff; padding: 12px; border-radius: 4px; border: 1px solid #e0e0e0; white-space: pre-wrap;">{comentario}</p></div>
             </div>
             {bloco_csat}
-            <div style="text-align: center; margin-top: 30px;"><a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}" style="display: inline-block; background: {cor_topo}; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 4px; font-weight: bold;">Ver Detalhes</a></div>
+            <div style="text-align: center; margin-top: 30px;"><a href="{FRONTEND_URL}/detalhe_chamado.html?id={tarefa_id}" style="display: inline-block; background: {cor_topo}; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 4px; font-weight: bold;">Ver Detalhes</a></div>
         </div>
     </div>
     """
@@ -241,15 +226,15 @@ def enviar_email_lembrete_csat(destinatario: str, nome_usuario: str, tarefa_id: 
             <div style="background: #f0f4f8; padding: 20px; border-radius: 6px; margin-top: 20px; text-align: center;">
                 <p style="margin: 0 0 12px 0; font-size: 14px; font-weight: bold; color: #25282a;">Como avalia a resolução deste suporte?</p>
                 <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
-                    <a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}&avaliar=1" style="background: #da291c; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">1 😞 Péssimo</a>
-                    <a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}&avaliar=2" style="background: #e65100; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">2 😕 Ruim</a>
-                    <a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}&avaliar=3" style="background: #f57c00; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">3 😐 Regular</a>
-                    <a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}&avaliar=4" style="background: #2e7d32; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">4 😊 Bom</a>
-                    <a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}&avaliar=5" style="background: #1e8e3e; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">5 🤩 Excelente</a>
+                    <a href="{FRONTEND_URL}/detalhe_chamado.html?id={tarefa_id}&avaliar=1" style="background: #da291c; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">1 😞 Péssimo</a>
+                    <a href="{FRONTEND_URL}/detalhe_chamado.html?id={tarefa_id}&avaliar=2" style="background: #e65100; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">2 😕 Ruim</a>
+                    <a href="{FRONTEND_URL}/detalhe_chamado.html?id={tarefa_id}&avaliar=3" style="background: #f57c00; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">3 😐 Regular</a>
+                    <a href="{FRONTEND_URL}/detalhe_chamado.html?id={tarefa_id}&avaliar=4" style="background: #2e7d32; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">4 😊 Bom</a>
+                    <a href="{FRONTEND_URL}/detalhe_chamado.html?id={tarefa_id}&avaliar=5" style="background: #1e8e3e; color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 12px;">5 🤩 Excelente</a>
                 </div>
             </div>
             <div style="text-align: center; margin-top: 25px;">
-                <a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}" style="display: inline-block; background: #25282a; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-size: 13px;">Ver Chamado no Painel</a>
+                <a href="{FRONTEND_URL}/detalhe_chamado.html?id={tarefa_id}" style="display: inline-block; background: #25282a; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-size: 13px;">Ver Chamado no Painel</a>
             </div>
         </div>
     </div>
@@ -269,7 +254,7 @@ def enviar_email_atribuicao_tecnico(destinatario: str, nome_tecnico: str, tarefa
                 <span style="font-size: 13px; color: #555;">Solicitante: {solicitante_nome}</span>
             </div>
             <div style="text-align: center; margin-top: 30px;">
-                <a href="http://10.0.0.252:8082/detalhe_chamado.html?id={tarefa_id}" style="display: inline-block; background: #0056b3; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 4px; font-weight: bold;">Atender Chamado</a>
+                <a href="{FRONTEND_URL}/detalhe_chamado.html?id={tarefa_id}" style="display: inline-block; background: #0056b3; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 4px; font-weight: bold;">Atender Chamado</a>
             </div>
         </div>
     </div>
@@ -279,23 +264,7 @@ def enviar_email_atribuicao_tecnico(destinatario: str, nome_tecnico: str, tarefa
 # ==========================================
 # MODELOS DE DADOS
 # ==========================================
-class ItemCadastro(BaseModel): descricao: str
-class LoginRequest(BaseModel): email: str; senha: str
-class AlterarSenhaRequest(BaseModel): senha_atual: str; nova_senha: str
-class SlaConfigRequest(BaseModel): prioridade_id: int; tipo_id: int; tempo_horas: int
-class TarefaCreate(BaseModel): titulo: str; descricao: str; prioridade_id: int; tecnico_id: Optional[int] = None; status_id: int; solicitante_id: int; tipo_id: int
-
-class TarefaUpdate(BaseModel): 
-    novo_status_id: int
-    novo_tipo_id: int
-    novo_tecnico_id: Optional[int] = None
-    causa_raiz_id: Optional[int] = None
-    comentario: str
-    nota_interna: bool = False
-
-class RespostaSolicitanteRequest(BaseModel): comentario: str
-class UsuarioCreate(BaseModel): nome: str; email: str; ad_login: str; setor_id: Optional[int] = None; perfil: str; nivel_acesso: int; senha: Optional[str] = "saavedra123"
-class UsuarioUpdate(BaseModel): nome: str; email: str; ad_login: str; setor_id: Optional[int] = None; perfil: str; nivel_acesso: int
+from schemas import ItemCadastro, LoginRequest, AlterarSenhaRequest, SlaConfigRequest, TarefaCreate, TarefaUpdate, RespostaSolicitanteRequest, UsuarioCreate, UsuarioUpdate
 
 TABELAS_PERMITIDAS = {"status": {"tabela": "tbSTATUS", "id": "STATUS_ID", "nome": "STATUS_NOME"}, "prioridade": {"tabela": "tbPRIORIDADE", "id": "PRIORIDADE_ID", "nome": "PRIORIDADE_NOME"}, "tipo": {"tabela": "tbTIPO", "id": "TIPO_ID", "nome": "TIPO_NOME"}, "causa_raiz": {"tabela": "tbCAUSA_RAIZ", "id": "CAUSA_ID", "nome": "CAUSA_NOME"}, "setor": {"tabela": "tbSETOR", "id": "SETOR_ID", "nome": "SETOR_NOME"}}
 PERFIS_ADMIN = {"Admin", "Gestor", "Tecnico"}
@@ -592,7 +561,7 @@ def get_kpis(visao_equipe: bool = False, data_inicio: Optional[str] = None, data
         "status_dinamicos": [{"id": r[0], "nome": r[1], "qtd": r[2]} for r in res_status]
     }
 
-def processar_fila_com_filtros(base_query: str, count_query: str, params: dict, status_id: Optional[int], prioridade_id: Optional[int], tipo_id: Optional[int], sla_filtro: Optional[str], data_inicio: Optional[str], data_fim: Optional[str], user_id_filtro: Optional[int] = None, tecnico_id_filtro: Optional[int] = None, sem_tecnico: bool = False, apenas_nao_avaliados: bool = False):
+def processar_fila_com_filtros(base_query: str, count_query: str, params: dict, status_id: Optional[int], prioridade_id: Optional[int], tipo_id: Optional[int], sla_filtro: Optional[str], data_inicio: Optional[str], data_fim: Optional[str], user_id_filtro: Optional[int] = None, tecnico_id_filtro: Optional[int] = None, sem_tecnico: bool = False, apenas_nao_avaliados: bool = False, pesquisa: Optional[str] = None):
     where_conds = []
     
     if user_id_filtro is not None: 
@@ -628,6 +597,14 @@ def processar_fila_com_filtros(base_query: str, count_query: str, params: dict, 
     elif sla_filtro == 'atencao':
         where_conds.extend(["T.STATUS_ID NOT IN (4,6)", "T.DATA_LIMITE_SLA >= GETDATE()", "DATEDIFF(hour, GETDATE(), T.DATA_LIMITE_SLA) <= 2"])
 
+    if pesquisa:
+        conds = ["T.TITULO LIKE :pesq_str"]
+        params["pesq_str"] = f"%{pesquisa}%"
+        if pesquisa.isdigit():
+            conds.append("T.TAREFA_ID = :pesq_id")
+            params["pesq_id"] = int(pesquisa)
+        where_conds.append("(" + " OR ".join(conds) + ")")
+
     where_clause = " WHERE " + " AND ".join(where_conds) if where_conds else ""
     
     with engine.connect() as conn:
@@ -638,19 +615,19 @@ def processar_fila_com_filtros(base_query: str, count_query: str, params: dict, 
     return {"dados": [{"id": r[0], "titulo": r[1], "status": r[2], "solicitante": r[3], "tecnico": r[4], "data_limite_sla": formatar_data_segura(r[5]), "status_id": r[6], "prioridade_id": r[7]} for r in rows], "paginas": (total_items + params["limit"] - 1) // params["limit"]}
 
 @app.get("/api/meus-chamados")
-async def listar_meus_chamados(request: Request, page: int = 1, limit: int = 20, status_id: Optional[int] = None, tipo_id: Optional[int] = None, prioridade_id: Optional[int] = None, sla_filtro: Optional[str] = None, data_inicio: Optional[str] = None, data_fim: Optional[str] = None, sem_tecnico: bool = False, pendente_csat: bool = False):
+async def listar_meus_chamados(request: Request, page: int = 1, limit: int = 20, status_id: Optional[int] = None, tipo_id: Optional[int] = None, prioridade_id: Optional[int] = None, sla_filtro: Optional[str] = None, data_inicio: Optional[str] = None, data_fim: Optional[str] = None, sem_tecnico: bool = False, pendente_csat: bool = False, pesquisa: Optional[str] = None):
     usuario = request.session.get("user")
     if not usuario: raise HTTPException(status_code=401, detail="Não autorizado")
     usuario_id = usuario.get("id") or usuario.get("usuario_id")
     base = "SELECT T.TAREFA_ID, T.TITULO, S.STATUS_NOME, U.NOME, TEC.NOME, T.DATA_LIMITE_SLA, T.STATUS_ID, T.PRIORIDADE_ID FROM tbTAREFAS T LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbUSUARIO TEC ON T.TECNICO_ID = TEC.USUARIO_ID"
-    return processar_fila_com_filtros(base, "SELECT COUNT(*) FROM tbTAREFAS T", {"offset": (page - 1) * limit, "limit": limit}, status_id=status_id, prioridade_id=prioridade_id, tipo_id=tipo_id, sla_filtro=sla_filtro, data_inicio=data_inicio, data_fim=data_fim, user_id_filtro=usuario_id, tecnico_id_filtro=None, sem_tecnico=sem_tecnico, apenas_nao_avaliados=pendente_csat)
+    return processar_fila_com_filtros(base, "SELECT COUNT(*) FROM tbTAREFAS T", {"offset": (page - 1) * limit, "limit": limit}, status_id=status_id, prioridade_id=prioridade_id, tipo_id=tipo_id, sla_filtro=sla_filtro, data_inicio=data_inicio, data_fim=data_fim, user_id_filtro=usuario_id, tecnico_id_filtro=None, sem_tecnico=sem_tecnico, apenas_nao_avaliados=pendente_csat, pesquisa=pesquisa)
 
 @app.get("/api/tarefas")
-def get_tarefas(page: int = 1, limit: int = 20, visao_equipe: bool = False, sem_tecnico: bool = False, meus_pessoais: bool = False, status_id: Optional[int] = None, tipo_id: Optional[int] = None, prioridade_id: Optional[int] = None, sla_filtro: Optional[str] = None, data_inicio: Optional[str] = None, data_fim: Optional[str] = None, usuario: dict = Depends(exigir_admin)):
+def get_tarefas(page: int = 1, limit: int = 20, visao_equipe: bool = False, sem_tecnico: bool = False, meus_pessoais: bool = False, status_id: Optional[int] = None, tipo_id: Optional[int] = None, prioridade_id: Optional[int] = None, sla_filtro: Optional[str] = None, data_inicio: Optional[str] = None, data_fim: Optional[str] = None, pesquisa: Optional[str] = None, usuario: dict = Depends(exigir_admin)):
     base = "SELECT T.TAREFA_ID, T.TITULO, S.STATUS_NOME, U.NOME, TEC.NOME, T.DATA_LIMITE_SLA, T.STATUS_ID, T.PRIORIDADE_ID FROM tbTAREFAS T LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbUSUARIO TEC ON T.TECNICO_ID = TEC.USUARIO_ID"
     user_id_filtro = usuario["id"] if meus_pessoais else None
     tecnico_filtro = None if (visao_equipe or sem_tecnico or meus_pessoais) else usuario["id"]
-    return processar_fila_com_filtros(base, "SELECT COUNT(*) FROM tbTAREFAS T", {"offset": (page - 1) * limit, "limit": limit}, status_id=status_id, prioridade_id=prioridade_id, tipo_id=tipo_id, sla_filtro=sla_filtro, data_inicio=data_inicio, data_fim=data_fim, user_id_filtro=user_id_filtro, tecnico_id_filtro=tecnico_filtro, sem_tecnico=sem_tecnico)
+    return processar_fila_com_filtros(base, "SELECT COUNT(*) FROM tbTAREFAS T", {"offset": (page - 1) * limit, "limit": limit}, status_id=status_id, prioridade_id=prioridade_id, tipo_id=tipo_id, sla_filtro=sla_filtro, data_inicio=data_inicio, data_fim=data_fim, user_id_filtro=user_id_filtro, tecnico_id_filtro=tecnico_filtro, sem_tecnico=sem_tecnico, pesquisa=pesquisa)
 
 # ==========================================
 # DETALHES, CRIAÇÃO E AVALIAÇÃO DO CHAMADO

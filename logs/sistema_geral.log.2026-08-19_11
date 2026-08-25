@@ -1,0 +1,62 @@
+[2026-08-19 07:45:53] [INFO]: 🎫 [NOVO CHAMADO] Ticket #20111 registrado pelo usuário #18.
+[2026-08-19 07:48:34] [WARNING]: ⚠️ [HTTP 401] GET /api/auth/me | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-19 07:48:41] [INFO]: 🔑 [LOGIN SUCESSO] Usuário 'marcio.prestes@saavedra.com.br' autenticado com êxito (ID #3).
+[2026-08-19 07:49:59] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #10103 alterado pelo técnico #3 para status #3.
+[2026-08-19 10:20:31] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #20110 alterado pelo técnico #1 para status #3.
+[2026-08-19 10:39:02] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #20109 alterado pelo técnico #1 para status #4.
+[2026-08-19 10:39:19] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #20111 alterado pelo técnico #1 para status #2.
+[2026-08-19 10:43:09] [INFO]: 🔄 [CHAMADO MOVIMENTADO] Ticket #20111 alterado pelo técnico #1 para status #3.
+[2026-08-19 10:43:29] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-19 10:54:48] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-19 11:01:49] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-19 11:16:13] [INFO]: ⭐ [CSAT AVALIADO] Ticket #20107 recebeu nota 4 do usuário #9.
+[2026-08-19 11:16:30] [INFO]: ⭐ [CSAT AVALIADO] Ticket #20106 recebeu nota 4 do usuário #9.
+[2026-08-19 11:16:38] [INFO]: ⭐ [CSAT AVALIADO] Ticket #10162 recebeu nota 4 do usuário #9.
+[2026-08-19 11:23:23] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-19 11:24:18] [INFO]: 📧 [DISPARO CSAT] Administrador #1 solicitou o reenvio de 117 e-mails de avaliação CSAT pendentes.
+[2026-08-19 11:27:52] [WARNING]: ⚠️ [HTTP 401] GET /api/auth/me | IP: 10.0.0.32 | Anônimo | Tempo: 0.00s
+[2026-08-19 11:27:52] [WARNING]: ⚠️ [HTTP 401] GET /api/tarefas/10117 | IP: 10.0.0.32 | Anônimo | Tempo: 0.00s
+[2026-08-19 11:28:22] [WARNING]: ⚠️ [HTTP 403] GET /api/tarefas/77 | IP: 10.0.0.26 | Anônimo | Tempo: 0.00s
+[2026-08-19 11:30:21] [WARNING]: ⚠️ [HTTP 401] GET /api/auth/me | IP: 10.0.0.43 | Anônimo | Tempo: 0.00s
+[2026-08-19 11:30:21] [WARNING]: ⚠️ [HTTP 401] GET /api/tarefas/10135 | IP: 10.0.0.43 | Anônimo | Tempo: 0.00s
+[2026-08-19 11:30:34] [WARNING]: ⚠️ [HTTP 401] GET /api/auth/me | IP: 10.0.0.43 | Anônimo | Tempo: 0.00s
+[2026-08-19 11:30:34] [WARNING]: ⚠️ [HTTP 401] GET /api/tarefas/85 | IP: 10.0.0.43 | Anônimo | Tempo: 0.00s
+[2026-08-19 11:30:52] [WARNING]: ⚠️ [HTTP 401] GET /api/auth/me | IP: 10.0.0.43 | Anônimo | Tempo: 0.00s
+[2026-08-19 11:30:52] [WARNING]: ⚠️ [HTTP 401] GET /api/tarefas/85 | IP: 10.0.0.43 | Anônimo | Tempo: 0.00s
+[2026-08-19 11:31:11] [INFO]: 🔑 [LOGIN SUCESSO] Usuário 'faturamento.saav@saavedra.com.br' autenticado com êxito (ID #15).
+[2026-08-19 11:31:13] [WARNING]: ⚠️ [HTTP 403] GET /api/tarefas/10133 | IP: 10.0.0.26 | Anônimo | Tempo: 0.00s
+[2026-08-19 11:31:22] [WARNING]: ⚠️ [HTTP 403] GET /api/tarefas/80 | IP: 10.0.0.26 | Anônimo | Tempo: 0.00s
+[2026-08-19 11:31:24] [INFO]: ⭐ [CSAT AVALIADO] Ticket #18 recebeu nota 5 do usuário #15.
+[2026-08-19 11:31:29] [INFO]: ⚙️ Scheduler de fecho automático ITIL iniciado em background.
+[2026-08-19 11:31:40] [INFO]: ⭐ [CSAT AVALIADO] Ticket #95 recebeu nota 5 do usuário #1.
+[2026-08-19 11:31:44] [INFO]: ⭐ [CSAT AVALIADO] Ticket #10135 recebeu nota 5 do usuário #15.
+[2026-08-19 11:32:02] [INFO]: 📧 [DISPARO CSAT] Administrador #1 solicitou o reenvio de 114 e-mails de avaliação CSAT pendentes.
+[2026-08-19 11:32:18] [INFO]: 💬 [RESPOSTA REGISTRADA] Usuário #15 respondeu no Ticket #10130.
+[2026-08-19 11:32:24] [INFO]: ⭐ [CSAT AVALIADO] Ticket #10096 recebeu nota 5 do usuário #1.
+[2026-08-19 11:32:33] [INFO]: ⭐ [CSAT AVALIADO] Ticket #94 recebeu nota 4 do usuário #1.
+[2026-08-19 11:32:40] [INFO]: ⭐ [CSAT AVALIADO] Ticket #93 recebeu nota 4 do usuário #1.
+[2026-08-19 11:32:40] [INFO]: ⭐ [CSAT AVALIADO] Ticket #17 recebeu nota 5 do usuário #15.
+[2026-08-19 11:32:47] [INFO]: ⭐ [CSAT AVALIADO] Ticket #15 recebeu nota 4 do usuário #1.
+[2026-08-19 11:32:51] [INFO]: ⭐ [CSAT AVALIADO] Ticket #6 recebeu nota 5 do usuário #15.
+[2026-08-19 11:32:58] [INFO]: ⭐ [CSAT AVALIADO] Ticket #39 recebeu nota 5 do usuário #15.
+[2026-08-19 11:33:07] [INFO]: ⭐ [CSAT AVALIADO] Ticket #85 recebeu nota 5 do usuário #15.
+[2026-08-19 11:33:17] [INFO]: ⭐ [CSAT AVALIADO] Ticket #10098 recebeu nota 5 do usuário #15.
+[2026-08-19 11:36:05] [WARNING]: ⚠️ [HTTP 403] GET /api/tarefas/77 | IP: 10.0.0.26 | Anônimo | Tempo: 0.00s
+[2026-08-19 11:37:05] [WARNING]: ⚠️ [HTTP 403] GET /api/tarefas/80 | IP: 10.0.0.26 | Anônimo | Tempo: 0.00s
+[2026-08-19 11:37:16] [WARNING]: ⚠️ [HTTP 403] GET /api/tarefas/10133 | IP: 10.0.0.26 | Anônimo | Tempo: 0.00s
+[2026-08-19 11:41:33] [INFO]: ⭐ [CSAT AVALIADO] Ticket #10165 recebeu nota 5 do usuário #20.
+[2026-08-19 11:43:16] [WARNING]: ⚠️ [HTTP 401] GET /api/auth/me | IP: 10.0.0.29 | Anônimo | Tempo: 0.00s
+[2026-08-19 11:43:17] [WARNING]: ⚠️ [HTTP 401] GET /api/tarefas/47 | IP: 10.0.0.29 | Anônimo | Tempo: 0.00s
+[2026-08-19 11:47:54] [WARNING]: ⚠️ [HTTP 401] GET /api/auth/me | IP: 10.0.0.36 | Anônimo | Tempo: 0.00s
+[2026-08-19 11:47:54] [WARNING]: ⚠️ [HTTP 401] GET /api/tarefas/10134 | IP: 10.0.0.36 | Anônimo | Tempo: 0.00s
+[2026-08-19 14:17:29] [WARNING]: ⚠️ [HTTP 401] GET /api/auth/me | IP: 10.0.0.5 | Anônimo | Tempo: 0.00s
+[2026-08-19 14:17:45] [WARNING]: 🔒 [LOGIN FALHA] Tentativa de login inválida para o e-mail 'estoque.saav@saavedra.com.br'.
+[2026-08-19 14:17:45] [WARNING]: ⚠️ [HTTP 401] POST /api/auth/login | IP: 10.0.0.5 | Anônimo | Tempo: 0.39s
+[2026-08-19 16:14:18] [WARNING]: ⚠️ [HTTP 403] GET /api/tarefas/10144 | IP: 10.0.0.45 | Anônimo | Tempo: 0.00s
+[2026-08-19 16:17:42] [INFO]: ⭐ [CSAT AVALIADO] Ticket #10099 recebeu nota 5 do usuário #16.
+[2026-08-19 16:17:59] [INFO]: ⭐ [CSAT AVALIADO] Ticket #90 recebeu nota 4 do usuário #16.
+[2026-08-19 16:18:12] [INFO]: ⭐ [CSAT AVALIADO] Ticket #10095 recebeu nota 4 do usuário #16.
+[2026-08-19 16:18:25] [INFO]: ⭐ [CSAT AVALIADO] Ticket #10125 recebeu nota 4 do usuário #16.
+[2026-08-19 16:18:40] [INFO]: ⭐ [CSAT AVALIADO] Ticket #30 recebeu nota 4 do usuário #16.
+[2026-08-19 16:19:06] [INFO]: ⭐ [CSAT AVALIADO] Ticket #28 recebeu nota 4 do usuário #16.
+[2026-08-19 16:19:28] [INFO]: ⭐ [CSAT AVALIADO] Ticket #51 recebeu nota 4 do usuário #16.

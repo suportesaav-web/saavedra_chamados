@@ -77,7 +77,7 @@
                     
                     <div style="position: relative;">
                         <span class="material-symbols-outlined" style="position: absolute; left: 8px; top: 8px; color: #9ca3af; font-size: 20px;">search</span>
-                        <input type="text" id="inputPesquisa" class="form-input" style="padding-left: 35px; width: 200px;" placeholder="Pesquisar ticket..." onkeyup="renderizarTabela()">
+                        <input type="text" id="inputPesquisa" class="form-input" style="padding-left: 35px; width: 200px;" placeholder="Pesquisar ticket..." onkeyup="clearTimeout(window.searchTimeout); window.searchTimeout = setTimeout(() => carregarDashboard(1), 500);">
                     </div>
                     
                     <button class="btn btn-outline" onclick="exportarCSV()" data-admin-only>
@@ -113,6 +113,13 @@
                 <button id="btnPagProx" class="pagination-btn" onclick="mudarPagina(1)">
                     Próximo <span class="material-symbols-outlined" style="font-size: 18px; vertical-align: bottom;">arrow_forward</span>
                 </button>
+                
+                <select id="txtLimitePaginacao" class="form-input" style="margin-left: 15px; width: auto; padding: 4px 8px;" onchange="carregarDashboard(1)">
+                    <option value="15">15 itens</option>
+                    <option value="25" selected>25 itens</option>
+                    <option value="50">50 itens</option>
+                    <option value="100">100 itens</option>
+                </select>
             </nav>
         </section>
     </main>
@@ -155,6 +162,16 @@
         let totalPaginas = 1;
         let tiposCarregados = false;
         let visaoEquipe = false;
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
 
         function setVisao(isEquipe) {
             visaoEquipe = isEquipe;
@@ -279,8 +296,9 @@
                 
                 document.getElementById('kpiContainer').innerHTML = kpiHtml;
 
+                const limiteItens = document.getElementById('txtLimitePaginacao') ? document.getElementById('txtLimitePaginacao').value : 25;
                 const endpoint = isAdmin ? 'tarefas' : 'meus-chamados';
-                let url = `${API_BASE_URL}/${endpoint}?page=${paginaAtual}&limit=20`;
+                let url = `${API_BASE_URL}/${endpoint}?page=${paginaAtual}&limit=${limiteItens}`;
                 if (isAdmin) url += `&visao_equipe=${visaoEquipe}`;
 
                 const dataInicio = document.getElementById('txtDataInicio').value;
@@ -290,6 +308,9 @@
                 if (dataInicio) url += `&data_inicio=${dataInicio}`;
                 if (dataFim) url += `&data_fim=${dataFim}`;
                 if (filtroTipoId) url += `&tipo_id=${filtroTipoId}`;
+                
+                const inputPesquisa = document.getElementById("inputPesquisa").value.trim();
+                if (inputPesquisa) url += `&pesquisa=${encodeURIComponent(inputPesquisa)}`;
                 
                 if (filtroAtivo) {
                     if (filtroAtivo.tipo === 'status') url += `&status_id=${filtroAtivo.id}`;
@@ -325,12 +346,9 @@
 
         function renderizarTabela() {
             const tbody = document.getElementById('listaCorpo');
-            const inputPesquisa = document.getElementById("inputPesquisa").value.toLowerCase();
             const agora = new Date();
             
-            let tarefasFiltradas = chamadosGlobais.filter(t => {
-                return `${t.id} ${t.titulo} ${t.tecnico || ''} ${t.solicitante || ''} ${t.status || ''}`.toLowerCase().includes(inputPesquisa);
-            });
+            let tarefasFiltradas = chamadosGlobais;
 
             if (tarefasFiltradas.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 40px; color:#6b7280;">Nenhum chamado atende aos filtros atuais.</td></tr>';
@@ -354,9 +372,9 @@
                 
                 return `<tr>
                     <td>${idDisplay}</td>
-                    <td style="font-weight: 500; color:#1f2937;">${t.titulo}</td>
-                    <td style="font-size: 13px; color:#4b5563;">${t.solicitante || 'N/A'}</td>
-                    <td style="font-size: 13px; color: var(--saavedra-orange); font-weight: bold;">${t.tecnico || 'Aguardando triagem...'}</td>
+                    <td style="font-weight: 500; color:#1f2937;">${escapeHTML(t.titulo)}</td>
+                    <td style="font-size: 13px; color:#4b5563;">${escapeHTML(t.solicitante) || 'N/A'}</td>
+                    <td style="font-size: 13px; color: var(--saavedra-orange); font-weight: bold;">${escapeHTML(t.tecnico) || 'Aguardando triagem...'}</td>
                     <td><span class="badge badge-status">${t.status}</span></td>
                     <td>${slaHtml}</td>
                     <td style="text-align: center;"><a href="detalhe_chamado.html?id=${t.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">Ver Chamado</a></td>
