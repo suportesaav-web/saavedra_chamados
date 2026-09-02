@@ -19,7 +19,7 @@ UPLOAD_DIR = os.path.join(ROOT_DIR, "uploads")
 if not os.path.exists(UPLOAD_DIR):
     os.makedirs(UPLOAD_DIR)
 
-def processar_fila_com_filtros(base_query: str, count_query: str, params: dict, status_id: Optional[int], prioridade_id: Optional[int], tipo_id: Optional[int], sla_filtro: Optional[str], data_inicio: Optional[str], data_fim: Optional[str], user_id_filtro: Optional[int] = None, tecnico_id_filtro: Optional[int] = None, sem_tecnico: bool = False, apenas_nao_avaliados: bool = False, pesquisa: Optional[str] = None):
+def processar_fila_com_filtros(base_query: str, count_query: str, params: dict, status_id: Optional[int], prioridade_id: Optional[int], tipo_id: Optional[int], sla_filtro: Optional[str], data_inicio: Optional[str], data_fim: Optional[str], user_id_filtro: Optional[int] = None, tecnico_id_filtro: Optional[int] = None, sem_tecnico: bool = False, apenas_nao_avaliados: bool = False, pesquisa: Optional[str] = None, criticos_ativos: bool = False):
     where_conds = []
     
     if user_id_filtro is not None: 
@@ -32,6 +32,8 @@ def processar_fila_com_filtros(base_query: str, count_query: str, params: dict, 
         where_conds.extend(["T.TECNICO_ID IS NULL", "T.STATUS_ID NOT IN (4,6)"])
     if apenas_nao_avaliados:
         where_conds.extend(["T.STATUS_ID = 4", "(T.NOTA_CSAT IS NULL OR T.NOTA_CSAT = 0)"])
+    if criticos_ativos:
+        where_conds.append("T.STATUS_ID NOT IN (4,6)")
         
     if status_id: 
         where_conds.append("T.STATUS_ID = :status_id")
@@ -73,19 +75,19 @@ def processar_fila_com_filtros(base_query: str, count_query: str, params: dict, 
     return {"dados": [{"id": r[0], "titulo": r[1], "status": r[2], "solicitante": r[3], "tecnico": r[4], "data_limite_sla": formatar_data_segura(r[5]), "status_id": r[6], "prioridade_id": r[7]} for r in rows], "paginas": (total_items + params["limit"] - 1) // params["limit"]}
 
 @router.get("/meus-chamados")
-async def listar_meus_chamados(request: Request, page: int = 1, limit: int = 20, status_id: Optional[int] = None, tipo_id: Optional[int] = None, prioridade_id: Optional[int] = None, sla_filtro: Optional[str] = None, data_inicio: Optional[str] = None, data_fim: Optional[str] = None, sem_tecnico: bool = False, pendente_csat: bool = False, pesquisa: Optional[str] = None):
+async def listar_meus_chamados(request: Request, page: int = 1, limit: int = 20, status_id: Optional[int] = None, tipo_id: Optional[int] = None, prioridade_id: Optional[int] = None, sla_filtro: Optional[str] = None, data_inicio: Optional[str] = None, data_fim: Optional[str] = None, sem_tecnico: bool = False, pendente_csat: bool = False, pesquisa: Optional[str] = None, criticos_ativos: bool = False):
     usuario = request.session.get("user")
     if not usuario: raise HTTPException(status_code=401, detail="Não autorizado")
     usuario_id = usuario.get("id") or usuario.get("usuario_id")
     base = "SELECT T.TAREFA_ID, T.TITULO, S.STATUS_NOME, U.NOME, TEC.NOME, T.DATA_LIMITE_SLA, T.STATUS_ID, T.PRIORIDADE_ID FROM tbTAREFAS T LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbUSUARIO TEC ON T.TECNICO_ID = TEC.USUARIO_ID"
-    return processar_fila_com_filtros(base, "SELECT COUNT(*) FROM tbTAREFAS T", {"offset": (page - 1) * limit, "limit": limit}, status_id=status_id, prioridade_id=prioridade_id, tipo_id=tipo_id, sla_filtro=sla_filtro, data_inicio=data_inicio, data_fim=data_fim, user_id_filtro=usuario_id, tecnico_id_filtro=None, sem_tecnico=sem_tecnico, apenas_nao_avaliados=pendente_csat, pesquisa=pesquisa)
+    return processar_fila_com_filtros(base, "SELECT COUNT(*) FROM tbTAREFAS T", {"offset": (page - 1) * limit, "limit": limit}, status_id=status_id, prioridade_id=prioridade_id, tipo_id=tipo_id, sla_filtro=sla_filtro, data_inicio=data_inicio, data_fim=data_fim, user_id_filtro=usuario_id, tecnico_id_filtro=None, sem_tecnico=sem_tecnico, apenas_nao_avaliados=pendente_csat, pesquisa=pesquisa, criticos_ativos=criticos_ativos)
 
 @router.get("/tarefas")
-def get_tarefas(page: int = 1, limit: int = 20, visao_equipe: bool = False, sem_tecnico: bool = False, meus_pessoais: bool = False, status_id: Optional[int] = None, tipo_id: Optional[int] = None, prioridade_id: Optional[int] = None, sla_filtro: Optional[str] = None, data_inicio: Optional[str] = None, data_fim: Optional[str] = None, pesquisa: Optional[str] = None, usuario: dict = Depends(exigir_admin)):
+def get_tarefas(page: int = 1, limit: int = 20, visao_equipe: bool = False, sem_tecnico: bool = False, meus_pessoais: bool = False, status_id: Optional[int] = None, tipo_id: Optional[int] = None, prioridade_id: Optional[int] = None, sla_filtro: Optional[str] = None, data_inicio: Optional[str] = None, data_fim: Optional[str] = None, pesquisa: Optional[str] = None, criticos_ativos: bool = False, usuario: dict = Depends(exigir_admin)):
     base = "SELECT T.TAREFA_ID, T.TITULO, S.STATUS_NOME, U.NOME, TEC.NOME, T.DATA_LIMITE_SLA, T.STATUS_ID, T.PRIORIDADE_ID FROM tbTAREFAS T LEFT JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID LEFT JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID LEFT JOIN tbUSUARIO TEC ON T.TECNICO_ID = TEC.USUARIO_ID"
     user_id_filtro = usuario["id"] if meus_pessoais else None
     tecnico_filtro = None if (visao_equipe or sem_tecnico or meus_pessoais) else usuario["id"]
-    return processar_fila_com_filtros(base, "SELECT COUNT(*) FROM tbTAREFAS T", {"offset": (page - 1) * limit, "limit": limit}, status_id=status_id, prioridade_id=prioridade_id, tipo_id=tipo_id, sla_filtro=sla_filtro, data_inicio=data_inicio, data_fim=data_fim, user_id_filtro=user_id_filtro, tecnico_id_filtro=tecnico_filtro, sem_tecnico=sem_tecnico, pesquisa=pesquisa)
+    return processar_fila_com_filtros(base, "SELECT COUNT(*) FROM tbTAREFAS T", {"offset": (page - 1) * limit, "limit": limit}, status_id=status_id, prioridade_id=prioridade_id, tipo_id=tipo_id, sla_filtro=sla_filtro, data_inicio=data_inicio, data_fim=data_fim, user_id_filtro=user_id_filtro, tecnico_id_filtro=tecnico_filtro, sem_tecnico=sem_tecnico, pesquisa=pesquisa, criticos_ativos=criticos_ativos)
 
 @router.get("/tarefas/{tarefa_id}")
 def get_tarefa_detalhe(tarefa_id: int, usuario: dict = Depends(get_usuario_sessao)):
@@ -142,12 +144,19 @@ async def update_tarefa(tarefa_id: int, update: TarefaUpdate, background_tasks: 
     
     with engine.begin() as conn:
         tec_antigo = conn.execute(text("SELECT TECNICO_ID FROM tbTAREFAS WHERE TAREFA_ID = :id"), {"id": tarefa_id}).scalar()
-        conn.execute(text("UPDATE tbTAREFAS SET STATUS_ID = :status, TIPO_ID = :tipo, TECNICO_ID = :tec, CAUSA_RAIZ_ID = :causa, DATA_ULTIMA_ATUALIZACAO = GETDATE() WHERE TAREFA_ID = :id"), {"id": tarefa_id, "status": update.novo_status_id, "tipo": update.novo_tipo_id, "tec": update.novo_tecnico_id, "causa": update.causa_raiz_id})
+        
+        status_final = update.novo_status_id
+        if update.novo_tecnico_id is None and tec_antigo is not None:
+            ultimo_status = conn.execute(text("SELECT TOP 1 STATUS_ID_NA_OCASIAO FROM tbTAREFA_HISTORICO WHERE TAREFA_ID = :id AND STATUS_ID_NA_OCASIAO != :status_atual ORDER BY HISTORICO_ID DESC"), {"id": tarefa_id, "status_atual": update.novo_status_id}).scalar()
+            if ultimo_status:
+                status_final = ultimo_status
+
+        conn.execute(text("UPDATE tbTAREFAS SET STATUS_ID = :status, TIPO_ID = :tipo, TECNICO_ID = :tec, CAUSA_RAIZ_ID = :causa, PRIORIDADE_ID = ISNULL(:prio, PRIORIDADE_ID), DATA_ULTIMA_ATUALIZACAO = GETDATE() WHERE TAREFA_ID = :id"), {"id": tarefa_id, "status": status_final, "tipo": update.novo_tipo_id, "tec": update.novo_tecnico_id, "causa": update.causa_raiz_id, "prio": update.nova_prioridade_id})
         interna_flag = 1 if update.nota_interna else 0
-        historico_id = conn.execute(text("INSERT INTO tbTAREFA_HISTORICO (TAREFA_ID, USUARIO_ID, STATUS_ID_NA_OCASIAO, COMENTARIO, DATA_HORA, NOTA_INTERNA) OUTPUT INSERTED.HISTORICO_ID VALUES (:tarefa_id, :usuario_acao, :status, :comentario, GETDATE(), :interna)"), {"tarefa_id": tarefa_id, "usuario_acao": usuario["id"], "status": update.novo_status_id, "comentario": update.comentario, "interna": interna_flag}).fetchone()[0]
+        historico_id = conn.execute(text("INSERT INTO tbTAREFA_HISTORICO (TAREFA_ID, USUARIO_ID, STATUS_ID_NA_OCASIAO, COMENTARIO, DATA_HORA, NOTA_INTERNA) OUTPUT INSERTED.HISTORICO_ID VALUES (:tarefa_id, :usuario_acao, :status, :comentario, GETDATE(), :interna)"), {"tarefa_id": tarefa_id, "usuario_acao": usuario["id"], "status": status_final, "comentario": update.comentario, "interna": interna_flag}).fetchone()[0]
         ticket = conn.execute(text("SELECT T.TITULO, S.STATUS_NOME, U.NOME, U.EMAIL FROM tbTAREFAS T JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID JOIN tbUSUARIO U ON T.SOLICITANTE_ID = U.USUARIO_ID WHERE T.TAREFA_ID = :id"), {"id": tarefa_id}).fetchone()
     
-    logger.info(f"🔄 [CHAMADO MOVIMENTADO] Ticket #{tarefa_id} alterado pelo técnico #{usuario['id']} para status #{update.novo_status_id}.")
+    logger.info(f"🔄 [CHAMADO MOVIMENTADO] Ticket #{tarefa_id} alterado pelo técnico #{usuario['id']} para status #{status_final}.")
     if ticket and ticket.EMAIL and not update.nota_interna: 
         background_tasks.add_task(enviar_email_atualizacao, ticket.EMAIL, ticket.NOME, tarefa_id, ticket.STATUS_NOME, update.comentario, update.novo_status_id)
         

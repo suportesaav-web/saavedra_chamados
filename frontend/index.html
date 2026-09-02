@@ -83,6 +83,9 @@
                     <button class="btn btn-outline" onclick="exportarCSV()" data-admin-only>
                         <span class="material-symbols-outlined">download</span> Excel
                     </button>
+                    <button id="btnToggleKanban" class="btn btn-outline" onclick="toggleKanban()" style="margin-left: 5px;">
+                        <span class="material-symbols-outlined">view_kanban</span> Kanban
+                    </button>
                 </div>
             </header>
 
@@ -314,7 +317,7 @@
                 
                 if (filtroAtivo) {
                     if (filtroAtivo.tipo === 'status') url += `&status_id=${filtroAtivo.id}`;
-                    if (filtroAtivo.tipo === 'criticos') url += `&prioridade_id=1`;
+                    if (filtroAtivo.tipo === 'criticos') url += `&prioridade_id=1&criticos_ativos=true`;
                     if (filtroAtivo.tipo === 'estourado') url += `&sla_filtro=estourado`;
                     if (filtroAtivo.tipo === 'atencao') url += `&sla_filtro=atencao`;
                     if (filtroAtivo.tipo === 'triagem') url += `&sem_tecnico=true`;
@@ -344,18 +347,74 @@
             if (novaPag >= 1 && novaPag <= totalPaginas) { carregarDashboard(novaPag); }
         }
 
+        let isKanban = false;
+        function toggleKanban() {
+            isKanban = !isKanban;
+            const btn = document.getElementById('btnToggleKanban');
+            if (isKanban) {
+                btn.innerHTML = '<span class="material-symbols-outlined">table</span> Tabela';
+                btn.classList.add('btn-solid');
+                btn.classList.remove('btn-outline');
+            } else {
+                btn.innerHTML = '<span class="material-symbols-outlined">view_kanban</span> Kanban';
+                btn.classList.add('btn-outline');
+                btn.classList.remove('btn-solid');
+            }
+            renderizarTabela();
+        }
+
         function renderizarTabela() {
             const tbody = document.getElementById('listaCorpo');
+            const tabela = document.getElementById('tabelaChamados');
+            let kanbanBoard = document.getElementById('kanbanBoard');
+            if (!kanbanBoard) {
+                kanbanBoard = document.createElement('div');
+                kanbanBoard.id = 'kanbanBoard';
+                kanbanBoard.className = 'kanban-board';
+                tabela.parentNode.insertBefore(kanbanBoard, tabela.nextSibling);
+            }
             const agora = new Date();
             
             let tarefasFiltradas = chamadosGlobais;
 
             if (tarefasFiltradas.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 40px; color:#6b7280;">Nenhum chamado atende aos filtros atuais.</td></tr>';
+                kanbanBoard.innerHTML = '<div style="width: 100%; text-align: center; padding: 40px; color:#6b7280;">Nenhum chamado atende aos filtros atuais.</div>';
                 return;
             }
 
-            tbody.innerHTML = tarefasFiltradas.map(t => {
+            if (isKanban) {
+                tabela.style.display = 'none';
+                kanbanBoard.style.display = 'flex';
+                
+                const grouped = {};
+                tarefasFiltradas.forEach(t => {
+                    if (!grouped[t.status]) grouped[t.status] = [];
+                    grouped[t.status].push(t);
+                });
+                
+                let kanbanHtml = '';
+                for (const [status, chamados] of Object.entries(grouped)) {
+                    kanbanHtml += `<div class="kanban-column">
+                        <div class="kanban-header">${status} <span class="badge badge-status">${chamados.length}</span></div>
+                        <div class="kanban-cards">`;
+                    chamados.forEach(t => {
+                        let idDisplay = `<strong>#${t.id}</strong>`;
+                        if(t.prioridade_id === 1) idDisplay += ` <span class="badge badge-prioridade-alta" style="padding: 2px 4px;"><span class="material-symbols-outlined" style="font-size:10px;">warning</span></span>`;
+                        kanbanHtml += `<div class="kanban-card" onclick="window.location.href='detalhe_chamado.html?id=${t.id}'">
+                            <div class="kanban-card-title">${idDisplay} - ${escapeHTML(t.titulo)}</div>
+                            <div class="kanban-card-info"><span class="material-symbols-outlined" style="font-size:14px;">person</span> ${escapeHTML(t.solicitante) || 'N/A'}</div>
+                            <div class="kanban-card-info" style="color: var(--saavedra-orange);"><span class="material-symbols-outlined" style="font-size:14px;">engineering</span> ${escapeHTML(t.tecnico) || 'Fila'}</div>
+                        </div>`;
+                    });
+                    kanbanHtml += `</div></div>`;
+                }
+                kanbanBoard.innerHTML = kanbanHtml;
+            } else {
+                tabela.style.display = 'table';
+                kanbanBoard.style.display = 'none';
+                
+                tbody.innerHTML = tarefasFiltradas.map(t => {
                 let idDisplay = `<strong>#${t.id}</strong>`;
                 if(t.prioridade_id === 1) idDisplay += ` <br><span class="badge badge-prioridade-alta"><span class="material-symbols-outlined" style="font-size:12px;">warning</span> Crítico</span>`;
 
@@ -380,6 +439,7 @@
                     <td style="text-align: center;"><a href="detalhe_chamado.html?id=${t.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">Ver Chamado</a></td>
                 </tr>`;
             }).join('');
+            }
         }
 
         function exportarCSV() {

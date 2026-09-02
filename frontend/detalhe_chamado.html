@@ -54,7 +54,7 @@
                     <span class="material-symbols-outlined" style="font-size: 28px; color: var(--saavedra-orange);">warning</span>
                     <div>
                         <strong style="font-size: 15px; display: block; margin-bottom: 4px;">Aviso de Governança ITIL: Pendente de Resposta</strong>
-                        <span>Este chamado encontra-se com o status <strong id="lblStatusAlertaItil">Aguardando Validação</strong>. O ticket será <strong>encerrado automaticamente</strong> em 3 dias se não houver interação.</span>
+                        <span>Este chamado encontra-se com o status <strong id="lblStatusAlertaItil">Aguardando Validação</strong>. O ticket será <strong>encerrado automaticamente</strong> em 7 dias se não houver interação.</span>
                     </div>
                 </div>
             </div>
@@ -116,6 +116,10 @@
                     <select id="updTipo" class="form-input"><option value="">Carregando...</option></select>
                 </div>
                 <div class="form-group-custom">
+                    <label style="font-size: 13px; font-weight: 600;">Prioridade</label>
+                    <select id="updPrioridade" class="form-input"><option value="">Carregando...</option></select>
+                </div>
+                <div class="form-group-custom">
                     <label style="font-size: 13px; font-weight: 600;">Novo Status</label>
                     <select id="updStatus" class="form-input"><option value="">Carregando...</option></select>
                 </div>
@@ -167,11 +171,12 @@
                     fetch(`${API_BASE_URL}/usuarios/tecnicos`, { credentials: 'include' }), // 🌟 APENAS TÉCNICOS AGORA!
                     fetch(`${API_BASE_URL}/cadastros/tipo`, { credentials: 'include' }),
                     fetch(`${API_BASE_URL}/cadastros/status`, { credentials: 'include' }),
-                    fetch(`${API_BASE_URL}/cadastros/causa_raiz`, { credentials: 'include' })
+                    fetch(`${API_BASE_URL}/cadastros/causa_raiz`, { credentials: 'include' }),
+                    fetch(`${API_BASE_URL}/cadastros/prioridade`, { credentials: 'include' })
                 ];
                 
                 const res = await Promise.all(reqs);
-                const [tecnicos, tipos, status, causas] = await Promise.all(res.map(r => r.json()));
+                const [tecnicos, tipos, status, causas, prioridades] = await Promise.all(res.map(r => r.json()));
 
                 const pop = (id, data, defaultTxt) => {
                     const el = document.getElementById(id);
@@ -184,6 +189,7 @@
                 pop('updTipo', tipos, 'Selecione um tipo...');
                 pop('updStatus', status, 'Selecione um status...');
                 pop('updCausaRaiz', causas, 'Selecione uma causa...');
+                pop('updPrioridade', prioridades, 'Selecione uma prioridade...');
 
                 const updStatusEl = document.getElementById('updStatus');
                 if (updStatusEl) {
@@ -243,6 +249,7 @@
                         if (boxCR) boxCR.style.display = (t.status_id === 4 || t.status_id === 6) ? 'flex' : 'none';
                     }
                     if(t.causa_raiz_id && document.getElementById('updCausaRaiz')) document.getElementById('updCausaRaiz').value = t.causa_raiz_id;
+                    if(t.prioridade_id && document.getElementById('updPrioridade')) document.getElementById('updPrioridade').value = t.prioridade_id;
                 }
 
                 // 🌟 LÓGICA INTELIGENTE DE EXIBIÇÃO E AUTO-DISPARO DO CSAT
@@ -413,6 +420,7 @@
                 novo_status_id: parseInt(status),
                 novo_tipo_id: parseInt(document.getElementById('updTipo').value),
                 novo_tecnico_id: parseInt(document.getElementById('updTecnico').value) || null,
+                nova_prioridade_id: parseInt(document.getElementById('updPrioridade').value) || null,
                 causa_raiz_id: causa,
                 comentario: nota,
                 nota_interna: ehNotaInterna

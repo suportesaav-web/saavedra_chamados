@@ -219,6 +219,9 @@ api/migrasenha.py
 api/testar_email.py
 bk/
 uploads/
+logs/
+*.log*
+api/*.log*
 .env
 marimo/_lsp/
 __marimo__/

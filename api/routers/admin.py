@@ -22,6 +22,19 @@ def update_sla_matrix(sla_id: int, data: SlaConfigRequest, usuario: dict = Depen
         conn.execute(text("UPDATE tbSLA_CONFIG SET TEMPO_HORAS = :horas WHERE SLA_ID = :id"), {"horas": data.tempo_horas, "id": sla_id})
     return {"status": "sucesso"}
 
+@router.post("/recalcular-sla")
+def recalcular_sla(usuario: dict = Depends(exigir_admin)):
+    with engine.begin() as conn:
+        conn.execute(text("""
+            UPDATE T
+            SET T.DATA_LIMITE_SLA = DATEADD(hour, ISNULL(C.TEMPO_HORAS, 24), T.DATA_HORA)
+            FROM tbTAREFAS T
+            LEFT JOIN tbSLA_CONFIG C ON T.PRIORIDADE_ID = C.PRIORIDADE_ID AND T.TIPO_ID = C.TIPO_ID
+            WHERE T.STATUS_ID NOT IN (4, 6)
+        """))
+    logger.info(f"🔄 [SLA RECALC] Administrador #{usuario['id']} forçou o recálculo de SLA para todos os chamados abertos.")
+    return {"status": "sucesso"}
+
 @router.get("/csat-pendentes-count")
 def get_csat_pendentes_count(usuario: dict = Depends(exigir_admin)):
     with engine.connect() as conn:

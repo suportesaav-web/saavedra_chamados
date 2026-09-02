@@ -29,6 +29,7 @@ class TarefaCreate(BaseModel):
 class TarefaUpdate(BaseModel): 
     novo_status_id: int
     novo_tipo_id: int
+    nova_prioridade_id: Optional[int] = None
     novo_tecnico_id: Optional[int] = None
     causa_raiz_id: Optional[int] = None
     comentario: str

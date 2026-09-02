@@ -69,6 +69,9 @@
                 <button class="btn btn-solid" onclick="abrirForm()" id="btnNovo" style="display: none;">
                     <span class="material-symbols-outlined">add</span> Novo Registro
                 </button>
+                <button class="btn btn-outline" onclick="recalcularSLA()" id="btnRecalcularSLA" style="display: none; border-color: var(--saavedra-blue); color: var(--saavedra-blue); margin-left: 10px;">
+                    <span class="material-symbols-outlined">refresh</span> Recalcular SLAs (Geral)
+                </button>
             </header>
 
             <div id="formGenerico" class="form-container">
@@ -166,6 +169,7 @@
         
         document.getElementById('tituloTela').innerHTML = `<span class="material-symbols-outlined">list_alt</span> ${titulo}`;
         document.getElementById('btnNovo').style.display = 'inline-flex';
+        document.getElementById('btnRecalcularSLA').style.display = 'none';
         fecharForms(); destacarMenu(titulo);
 
         try {
@@ -188,6 +192,7 @@
         epAtual = 'sla'; modoAtual = 'sla';
         document.getElementById('tituloTela').innerHTML = '<span class="material-symbols-outlined">timer</span> Matriz de Acordo de SLA (ITIL)';
         document.getElementById('btnNovo').style.display = 'none';
+        document.getElementById('btnRecalcularSLA').style.display = 'inline-flex';
         fecharForms(); destacarMenu('Configuração de SLA');
 
         try {
@@ -300,6 +305,22 @@
         if(confirm('Tem certeza que deseja desativar este utilizador?')) {
             const res = await fetch(`${API_BASE_URL}/usuarios/${id}`, { method: 'DELETE', credentials: 'include' });
             if (res.ok) carregar(epAtual, document.getElementById('tituloTela').innerText.trim());
+        }
+    }
+
+    async function recalcularSLA() {
+        if(confirm('Atenção: Isso recalculará a Data Limite de todos os chamados abertos baseando-se na configuração de SLA atual. Deseja prosseguir?')) {
+            try {
+                const res = await fetch(`${API_BASE_URL}/admin/recalcular-sla`, { method: 'POST', credentials: 'include' });
+                if (res.ok) {
+                    alert('SLAs recalculados com sucesso para todos os chamados abertos!');
+                } else {
+                    alert('Falha ao recalcular SLAs.');
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Erro de conexão ao tentar recalcular SLAs.');
+            }
         }
     }
 

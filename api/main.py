@@ -103,14 +103,14 @@ def fechar_chamados_inativos():
                 INNER JOIN tbSTATUS S ON T.STATUS_ID = S.STATUS_ID
                 WHERE T.STATUS_ID NOT IN (4, 6)
                   AND (S.STATUS_NOME LIKE '%Aguardando%' OR S.STATUS_NOME LIKE '%Valida%' OR S.STATUS_NOME LIKE '%Pendente%')
-                  AND ISNULL(T.DATA_ULTIMA_ATUALIZACAO, T.DATA_HORA) < DATEADD(day, -3, GETDATE())
+                  AND ISNULL(T.DATA_ULTIMA_ATUALIZACAO, T.DATA_HORA) < DATEADD(day, -7, GETDATE())
             """)
             inativos = conn.execute(query_select).fetchall()
             
             for t in inativos:
                 t_id, solic_id = t[0], t[1]
                 conn.execute(text("UPDATE tbTAREFAS SET STATUS_ID = 4, CAUSA_RAIZ_ID = :causa_id, DATA_ULTIMA_ATUALIZACAO = GETDATE() WHERE TAREFA_ID = :id"), {"id": t_id, "causa_id": causa_id})
-                conn.execute(text("INSERT INTO tbTAREFA_HISTORICO (TAREFA_ID, USUARIO_ID, STATUS_ID_NA_OCASIAO, COMENTARIO, DATA_HORA, NOTA_INTERNA) VALUES (:t_id, :u_id, 4, '🤖 [SISTEMA] Chamado encerrado automaticamente por inatividade do solicitante (Prazo de 3 dias expirado).', GETDATE(), 0)"), {"t_id": t_id, "u_id": solic_id})
+                conn.execute(text("INSERT INTO tbTAREFA_HISTORICO (TAREFA_ID, USUARIO_ID, STATUS_ID_NA_OCASIAO, COMENTARIO, DATA_HORA, NOTA_INTERNA) VALUES (:t_id, :u_id, 4, '🤖 [SISTEMA] Chamado encerrado automaticamente por inatividade do solicitante (Prazo de 7 dias expirado).', GETDATE(), 0)"), {"t_id": t_id, "u_id": solic_id})
                 logger.info(f"🤖 [CRON JOB] Chamado #{t_id} encerrado automaticamente por inatividade.")
     except Exception as e:
         logger.error(f"❌ [CRON JOB ERROR] Falha na varredura de inativos: {e}")
