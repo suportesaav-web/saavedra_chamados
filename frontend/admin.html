@@ -172,18 +172,28 @@
         document.getElementById('btnRecalcularSLA').style.display = 'none';
         fecharForms(); destacarMenu(titulo);
 
+        const dadosAdminUsuarios = {};
+        const dadosAdminGenerico = {};
+        const dadosAdminSla = {};
+
         try {
             if (modoAtual === 'usuario') {
                 await carregarDropdownSetores();
                 const res = await fetch(`${API_BASE_URL}/usuarios`, {credentials: 'include'});
                 const data = await res.json();
                 document.getElementById('tableHead').innerHTML = `<tr><th>ID</th><th>Nome</th><th>Setor</th><th>Perfil</th><th style="text-align: center;">Ações</th></tr>`;
-                document.getElementById('tableBody').innerHTML = data.map(u => `<tr><td><strong>#${u.id}</strong></td><td><div style="font-weight: 500; color:#1f2937;">${u.nome}</div><div style="color:#6b7280; font-size: 12px;">${u.email}</div></td><td>${u.setor || 'N/A'}</td><td><span class="badge badge-status">${u.perfil}</span></td><td style="text-align: center; white-space: nowrap;"><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;" onclick="abrirFormUsuario(${u.id}, '${u.nome.replace(/'/g, "\\'")}', '${u.email}', '${u.ad_login}', ${u.setor_id || 'null'}, '${u.perfil}', ${u.nivel_acesso})"><span class="material-symbols-outlined" style="font-size: 16px;">edit</span></button> <button class="btn btn-danger" style="padding: 4px 10px; font-size: 12px;" onclick="excluirUsuario(${u.id})"><span class="material-symbols-outlined" style="font-size: 16px;">delete</span></button></td></tr>`).join('');
+                document.getElementById('tableBody').innerHTML = data.map(u => {
+                    dadosAdminUsuarios[u.id] = u;
+                    return `<tr><td><strong>#${u.id}</strong></td><td><div style="font-weight: 500; color:#1f2937;">${escapeHTML(u.nome)}</div><div style="color:#6b7280; font-size: 12px;">${escapeHTML(u.email)}</div></td><td>${escapeHTML(u.setor) || 'N/A'}</td><td><span class="badge badge-status">${escapeHTML(u.perfil)}</span></td><td style="text-align: center; white-space: nowrap;"><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;" onclick="abrirFormUsuarioPorId(${u.id})"><span class="material-symbols-outlined" style="font-size: 16px;">edit</span></button> <button class="btn btn-danger" style="padding: 4px 10px; font-size: 12px;" onclick="excluirUsuario(${u.id})"><span class="material-symbols-outlined" style="font-size: 16px;">delete</span></button></td></tr>`;
+                }).join('');
             } else {
                 const res = await fetch(`${API_BASE_URL}/cadastros/${ep}`, {credentials: 'include'});
                 const data = await res.json();
                 document.getElementById('tableHead').innerHTML = `<tr><th>ID</th><th>Nome da Definição</th><th style="text-align: center;">Ações</th></tr>`;
-                document.getElementById('tableBody').innerHTML = data.map(i => `<tr><td><strong>#${i.id}</strong></td><td style="font-weight: 500; color:#1f2937;">${i.nome}</td><td style="text-align: center; white-space: nowrap;"><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;" onclick="abrirFormGenerico(${i.id}, '${i.nome.replace(/'/g, "\\'")}')"><span class="material-symbols-outlined" style="font-size: 16px;">edit</span></button> <button class="btn btn-danger" style="padding: 4px 10px; font-size: 12px;" onclick="excluirGenerico(${i.id})"><span class="material-symbols-outlined" style="font-size: 16px;">delete</span></button></td></tr>`).join('');
+                document.getElementById('tableBody').innerHTML = data.map(i => {
+                    dadosAdminGenerico[i.id] = i;
+                    return `<tr><td><strong>#${i.id}</strong></td><td style="font-weight: 500; color:#1f2937;">${escapeHTML(i.nome)}</td><td style="text-align: center; white-space: nowrap;"><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;" onclick="abrirFormGenericoPorId(${i.id})"><span class="material-symbols-outlined" style="font-size: 16px;">edit</span></button> <button class="btn btn-danger" style="padding: 4px 10px; font-size: 12px;" onclick="excluirGenerico(${i.id})"><span class="material-symbols-outlined" style="font-size: 16px;">delete</span></button></td></tr>`;
+                }).join('');
             }
         } catch (e) { alert("Erro ao carregar dados."); }
     }
@@ -200,7 +210,10 @@
             const data = await res.json();
             
             document.getElementById('tableHead').innerHTML = `<tr><th>Classificação (Tipo)</th><th>Prioridade do Ticket</th><th>Tempo Acordado</th><th style="text-align: center; width: 120px;">Ação</th></tr>`;
-            document.getElementById('tableBody').innerHTML = data.map(s => `<tr><td style="font-weight: 600; color: var(--saavedra-orange);">${s.tipo}</td><td><span class="badge badge-status">${s.prioridade}</span></td><td><strong>${s.tempo_horas} horas</strong> correntes</td><td style="text-align:center;"><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;" onclick="abrirFormSla(${s.id}, '${s.tipo}', '${s.prioridade}', ${s.tempo_horas}, ${s.prioridade_id}, ${s.tipo_id})"><span class="material-symbols-outlined" style="font-size: 16px;">edit</span> Ajustar</button></td></tr>`).join('');
+            document.getElementById('tableBody').innerHTML = data.map(s => {
+                dadosAdminSla[s.id] = s;
+                return `<tr><td style="font-weight: 600; color: var(--saavedra-orange);">${escapeHTML(s.tipo)}</td><td><span class="badge badge-status">${escapeHTML(s.prioridade)}</span></td><td><strong>${s.tempo_horas} horas</strong> correntes</td><td style="text-align:center;"><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;" onclick="abrirFormSlaPorId(${s.id})"><span class="material-symbols-outlined" style="font-size: 16px;">edit</span> Ajustar</button></td></tr>`;
+            }).join('');
         } catch(e) { alert("Erro ao carregar a matriz."); }
     }
 
@@ -224,6 +237,10 @@
         }
     }
 
+    function abrirFormGenericoPorId(id) { const i = dadosAdminGenerico[id]; if (i) abrirFormGenerico(i.id, i.nome); }
+    function abrirFormUsuarioPorId(id) { const u = dadosAdminUsuarios[id]; if (u) abrirFormUsuario(u.id, u.nome, u.email, u.ad_login, u.setor_id, u.perfil, u.nivel_acesso); }
+    function abrirFormSlaPorId(id) { const s = dadosAdminSla[id]; if (s) abrirFormSla(s.id, s.tipo, s.prioridade, s.tempo_horas, s.prioridade_id, s.tipo_id); }
+
     function abrirFormGenerico(id, nome) { abrirForm(); document.getElementById('fgId').value = id; document.getElementById('fgDesc').value = nome; document.getElementById('fgTitle').innerHTML = `<span class="material-symbols-outlined">edit_document</span> Editar Registro #${id}`; }
     function abrirFormUsuario(id, nome, email, ad_login, setor_id, perfil, nivel) { abrirForm(); document.getElementById('fuId').value = id; document.getElementById('fuNome').value = nome; document.getElementById('fuEmail').value = email; document.getElementById('fuAdLogin').value = ad_login; document.getElementById('fuSetor').value = (setor_id && setor_id !== 'null') ? setor_id : ''; document.getElementById('fuPerfil').value = perfil; document.getElementById('fuNivel').value = nivel; document.getElementById('fuTitle').innerHTML = `<span class="material-symbols-outlined">manage_accounts</span> Modificar Usuário #${id}`; }
     
@@ -233,7 +250,7 @@
         document.getElementById('fsPrioridadeId').value = p_id;
         document.getElementById('fsTipoId').value = t_id;
         document.getElementById('fsHoras').value = horas;
-        document.getElementById('fsTitle').innerHTML = `<span class="material-symbols-outlined">update</span> Ajustar SLA: ${tipo} (${prioridade})`;
+        document.getElementById('fsTitle').innerHTML = `<span class="material-symbols-outlined">update</span> Ajustar SLA: ${escapeHTML(tipo)} (${escapeHTML(prioridade)})`;
         document.getElementById('formSla').classList.add('active');
     }
 

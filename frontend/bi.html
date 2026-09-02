@@ -317,10 +317,10 @@
                         return `
                         <tr style="border-bottom: 1px solid #f3f4f6;">
                             <td style="padding: 12px;"><strong>#${c.id}</strong></td>
-                            <td style="padding: 12px; color: #1f2937;">${c.titulo}</td>
-                            <td style="padding: 12px; color: #4b5563;">${c.solicitante || '-'}</td>
-                            <td style="padding: 12px; color: var(--saavedra-orange); font-weight: bold;">${c.tecnico || 'Triagem'}</td>
-                            <td style="padding: 12px;"><span class="badge badge-status">${c.status}</span></td>
+                            <td style="padding: 12px; color: #1f2937;">${escapeHTML(c.titulo)}</td>
+                            <td style="padding: 12px; color: #4b5563;">${escapeHTML(c.solicitante) || '-'}</td>
+                            <td style="padding: 12px; color: var(--saavedra-orange); font-weight: bold;">${escapeHTML(c.tecnico) || 'Triagem'}</td>
+                            <td style="padding: 12px;"><span class="badge badge-status">${escapeHTML(c.status)}</span></td>
                             <td style="padding: 12px; font-weight: bold; color: ${corSla};">${slaTxt}</td>
                         </tr>
                     `}).join('');

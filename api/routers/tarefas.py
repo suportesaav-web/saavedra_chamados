@@ -75,7 +75,7 @@ def processar_fila_com_filtros(base_query: str, count_query: str, params: dict, 
     return {"dados": [{"id": r[0], "titulo": r[1], "status": r[2], "solicitante": r[3], "tecnico": r[4], "data_limite_sla": formatar_data_segura(r[5]), "status_id": r[6], "prioridade_id": r[7]} for r in rows], "paginas": (total_items + params["limit"] - 1) // params["limit"]}
 
 @router.get("/meus-chamados")
-async def listar_meus_chamados(request: Request, page: int = 1, limit: int = 20, status_id: Optional[int] = None, tipo_id: Optional[int] = None, prioridade_id: Optional[int] = None, sla_filtro: Optional[str] = None, data_inicio: Optional[str] = None, data_fim: Optional[str] = None, sem_tecnico: bool = False, pendente_csat: bool = False, pesquisa: Optional[str] = None, criticos_ativos: bool = False):
+def listar_meus_chamados(request: Request, page: int = 1, limit: int = 20, status_id: Optional[int] = None, tipo_id: Optional[int] = None, prioridade_id: Optional[int] = None, sla_filtro: Optional[str] = None, data_inicio: Optional[str] = None, data_fim: Optional[str] = None, sem_tecnico: bool = False, pendente_csat: bool = False, pesquisa: Optional[str] = None, criticos_ativos: bool = False):
     usuario = request.session.get("user")
     if not usuario: raise HTTPException(status_code=401, detail="Não autorizado")
     usuario_id = usuario.get("id") or usuario.get("usuario_id")
@@ -138,7 +138,7 @@ def create_tarefa(tarefa: TarefaCreate, background_tasks: BackgroundTasks, usuar
     return {"message": "Criado", "id": novo_id}
 
 @router.put("/tarefas/{tarefa_id}")
-async def update_tarefa(tarefa_id: int, update: TarefaUpdate, background_tasks: BackgroundTasks, usuario: dict = Depends(exigir_admin)):
+def update_tarefa(tarefa_id: int, update: TarefaUpdate, background_tasks: BackgroundTasks, usuario: dict = Depends(exigir_admin)):
     if update.novo_status_id in (4, 6) and not update.causa_raiz_id: 
         raise HTTPException(status_code=400, detail="Causa raiz obrigatória.")
     
@@ -185,7 +185,7 @@ def responder_tarefa(tarefa_id: int, resp: RespostaSolicitanteRequest, backgroun
     return {"message": "Resposta inserida com sucesso", "historico_id": historico_id}
 
 @router.post("/tarefas/{tarefa_id}/anexar")
-async def anexar_arquivo(tarefa_id: int, historico_id: Optional[int] = Form(None), files: List[UploadFile] = File(...), usuario: dict = Depends(get_usuario_sessao)):
+def anexar_arquivo(tarefa_id: int, historico_id: Optional[int] = Form(None), files: List[UploadFile] = File(...), usuario: dict = Depends(get_usuario_sessao)):
     with engine.connect() as conn: 
         t = conn.execute(text("SELECT SOLICITANTE_ID FROM tbTAREFAS WHERE TAREFA_ID = :id"), {"id": tarefa_id}).fetchone()
     if not t or (usuario.get("perfil") not in PERFIS_ADMIN and t.SOLICITANTE_ID != usuario["id"]): 

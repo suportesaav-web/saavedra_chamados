@@ -5,6 +5,7 @@ from logging.handlers import TimedRotatingFileHandler
 import traceback
 import asyncio
 from datetime import datetime
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles  
 from sqlalchemy import text
@@ -45,43 +46,8 @@ def limpar_logs_antigos():
 
 limpar_logs_antigos()
 
-app = FastAPI(title="API Gestão de Chamados Saavedra")
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
-
-@app.middleware("http")
-async def audit_and_error_logging_middleware(request: Request, call_next):
-    start_time = datetime.now()
-    try: user = request.session.get("user", {})
-    except Exception: user = {}
-    user_str = f"User #{user.get('id')} ({user.get('nome')})" if user.get("id") else "Anônimo"
-    client_ip = request.client.host if request.client else "127.0.0.1"
-
-    try:
-        response = await call_next(request)
-        process_time = (datetime.now() - start_time).total_seconds()
-        if response.status_code >= 400:
-            logger.warning(f"⚠️ [HTTP {response.status_code}] {request.method} {request.url.path} | IP: {client_ip} | {user_str} | Tempo: {process_time:.2f}s")
-        return response
-    except Exception as exc:
-        logger.error(f"❌ [CRITICAL 500] {request.method} {request.url.path} | IP: {client_ip} | {user_str} | Erro: {str(exc)}\n{traceback.format_exc()}")
-        raise exc
-
-UPLOAD_DIR = os.path.join(ROOT_DIR, "uploads")
-if not os.path.exists(UPLOAD_DIR): os.makedirs(UPLOAD_DIR)
-app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
-
-
 # ==========================================
-# 2. SCHEDULER ITIL
+# 2. SCHEDULER ITIL & LIFESPAN (MODERNIZADO)
 # ==========================================
 def obter_ou_criar_causa_inatividade(conn) -> int:
     try:
@@ -115,17 +81,63 @@ def fechar_chamados_inativos():
     except Exception as e:
         logger.error(f"❌ [CRON JOB ERROR] Falha na varredura de inativos: {e}")
 
-@app.on_event("startup")
-async def iniciar_scheduler():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     async def loop_fechamento():
         while True:
-            fechar_chamados_inativos()
+            try:
+                fechar_chamados_inativos()
+            except Exception as e:
+                logger.error(f"❌ [CRON JOB ERROR] {e}")
             await asyncio.sleep(43200)
-    asyncio.create_task(loop_fechamento())
-    logger.info("⚙️ Scheduler de fecho automático ITIL iniciado em background.")
+            
+    task = asyncio.create_task(loop_fechamento())
+    logger.info("⚙️ Scheduler de fecho automático ITIL iniciado em background (Lifespan).")
+    try:
+        yield
+    finally:
+        task.cancel()
+        logger.info("🛑 Scheduler de fecho automático ITIL finalizado.")
 
 # ==========================================
-# 3. REGISTRO DOS ROUTERS
+# 3. INSTÂNCIA E MIDDLEWARES
+# ==========================================
+app = FastAPI(title="API Gestão de Chamados Saavedra", lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
+
+@app.middleware("http")
+async def audit_and_error_logging_middleware(request: Request, call_next):
+    start_time = datetime.now()
+    try: user = request.session.get("user", {})
+    except Exception: user = {}
+    user_str = f"User #{user.get('id')} ({user.get('nome')})" if user.get("id") else "Anônimo"
+    client_ip = request.client.host if request.client else "127.0.0.1"
+
+    try:
+        response = await call_next(request)
+        process_time = (datetime.now() - start_time).total_seconds()
+        if response.status_code >= 400:
+            logger.warning(f"⚠️ [HTTP {response.status_code}] {request.method} {request.url.path} | IP: {client_ip} | {user_str} | Tempo: {process_time:.2f}s")
+        return response
+    except Exception as exc:
+        logger.error(f"❌ [CRITICAL 500] {request.method} {request.url.path} | IP: {client_ip} | {user_str} | Erro: {str(exc)}\n{traceback.format_exc()}")
+        raise exc
+
+UPLOAD_DIR = os.path.join(ROOT_DIR, "uploads")
+if not os.path.exists(UPLOAD_DIR): os.makedirs(UPLOAD_DIR)
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
+
+# ==========================================
+# 4. REGISTRO DOS ROUTERS
 # ==========================================
 from routers import auth, cadastros, admin, tarefas, relatorios
 
