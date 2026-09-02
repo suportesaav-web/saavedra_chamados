@@ -1,114 +1,152 @@
-# 🎧 Saavedra Chamados — Sistema de Gestão de Serviços & Helpdesk ITIL
+<div align="center">
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![SQL Server](https://img.shields.io/badge/SQL%20Server-2016-CC292B.svg?logo=microsoftsqlserver&logoColor=white)](https://www.microsoft.com/sql-server)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Architecture](https://img.shields.io/badge/Architecture-REST%20%7C%20ITIL%20v4-orange.svg)]()
+# <span style="color: #25282a;">Saavedra</span> <span style="color: #dc4405;">Chamados</span>
 
-> **Saavedra Chamados** é uma plataforma corporativa completa para gestão de serviços de TI e Helpdesk alinhada às melhores práticas **ITIL v4**. O sistema engloba controle de SLA, cálculo matricial de prioridades, pesquisa de satisfação (CSAT), dashboard interativo de BI e automação de rotinas de suporte técnico.
+### 🎧 Sistema Corporativo de Gestão de Serviços de TI & Helpdesk ITIL v4
 
----
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10%2B-25282a.svg?logo=python&logoColor=white" alt="Python 3.10+" />
+  <img src="https://img.shields.io/badge/FastAPI-0.100%2B-009688.svg?logo=fastapi&logoColor=white" alt="FastAPI" />
+  <img src="https://img.shields.io/badge/SQL%20Server-2016%20Standard-da291c.svg?logo=microsoftsqlserver&logoColor=white" alt="SQL Server 2016" />
+  <img src="https://img.shields.io/badge/Arquitetura-REST%20%7C%20ITIL%20v4-dc4405.svg" alt="ITIL v4" />
+  <img src="https://img.shields.io/badge/Uso-Exclusivo%20Saavedra-25282a.svg" alt="Uso Exclusivo" />
+</p>
 
-## 📌 Sumário
-
-- [Visão Geral](#-visão-geral)
-- [Ciclo de Vida do Chamado (Fluxo ITIL)](#-ciclo-de-vida-do-chamado-fluxo-itil)
-- [Funcionalidades Principais](#-funcionalidades-principais)
-- [Telas do Sistema](#-telas-do-sistema)
-- [Arquitetura e Tecnologias](#-arquitetura-e-tecnologias)
-- [Estrutura do Repositório](#-estrutura-do-repositório)
-- [Pré-requisitos e Instalação](#-pré-requisitos-e-instalação)
-- [Configuração de Variáveis de Ambiente (`.env`)](#-configuração-de-variáveis-de-ambiente-env)
-- [Endpoints da API REST](#-endpoints-da-api-rest)
-- [Automações & Cron Jobs ITIL](#-automações--cron-jobs-itil)
-- [Documentação Adicional](#-documentação-adicional)
-- [Desenvolvedor & Licença](#-desenvolvedor--licença)
+<p align="center">
+  <a href="#-visão-geral"><b>Visão Geral</b></a> &bull;
+  <a href="#-ciclo-de-vida-do-chamado-itil"><b>Fluxo ITIL</b></a> &bull;
+  <a href="#-recursos-e-funcionalidades"><b>Funcionalidades</b></a> &bull;
+  <a href="#-telas-da-plataforma"><b>Telas</b></a> &bull;
+  <a href="#-arquitetura-e-tecnologias"><b>Tecnologias</b></a> &bull;
+  <a href="#-instalação-e-execução"><b>Instalação</b></a> &bull;
+  <a href="#-endpoints-da-api"><b>Endpoints</b></a>
+</p>
 
 ---
+
+</div>
 
 ## 🌐 Visão Geral
 
-O **Saavedra Chamados** foi desenvolvido para centralizar, organizar e automatizar as operações de suporte de TI. Oferece interfaces distintas e adaptativas conforme o perfil do usuário (**Administrador, Gestor, Técnico e Solicitante/Comum**), garantindo segurança, controle rigoroso de prazos e métricas analíticas em tempo real.
+O **Saavedra Chamados** é uma plataforma corporativa robusta desenvolvida para unificar, padronizar e monitorar os processos de suporte e atendimento de Tecnologia da Informação. 
+
+Projetada especificamente para as operações da **Saavedra**, a ferramenta oferece interfaces especializadas por perfil de acesso (**Administrador**, **Gestor**, **Técnico** e **Solicitante**), garantindo conformidade com as diretrizes da biblioteca **ITIL v4**, controle matricial de prazos (SLA), histórico auditável e métricas em tempo real.
 
 ```text
-┌─────────────────┐       ┌─────────────────┐       ┌────────────────────────┐
-│  Frontend Web   │ ◄───► │  Backend REST   │ ◄───► │ Banco SQL Server 2016  │
-│ HTML5/CSS3/JS   │ HTTP  │ FastAPI/Uvicorn │ PyODBC│  - tbTAREFAS           │
-└─────────────────┘       └─────────────────┘       │  - tbUSUARIO           │
-                                   │                │  - tbSLA_CONFIG        │
-                                   ▼                └────────────────────────┘
-                            ┌───────────────┐
-                            │ Servidor SMTP │
-                            │ (Notificações)│
-                            └───────────────┘
+┌─────────────────────────┐          ┌─────────────────────────┐          ┌───────────────────────────────┐
+│      Frontend Web       │  HTTP    │      Backend REST       │  PyODBC  │   Banco SQL Server 2016       │
+│  HTML5 / CSS3 / Vanilla │ ◄──────► │  FastAPI / Uvicorn ASGI │ ◄──────► │   - tbTAREFAS                 │
+│  Editor Quill / ChartJS │          │  Auditoria & Scheduler  │          │   - tbUSUARIO                 │
+└─────────────────────────┘          └────────────┬────────────┘          │   - tbSLA_CONFIG / tbHISTORICO│
+                                                  │                       └───────────────────────────────┘
+                                                  ▼
+                                     ┌─────────────────────────┐
+                                     │  Servidor SMTP Saavedra │
+                                     │  Disparos & Pesquisa    │
+                                     └─────────────────────────┘
 ```
 
 ---
 
-## 🔄 Ciclo de Vida do Chamado (Fluxo ITIL)
+## 🔄 Ciclo de Vida do Chamado (ITIL)
 
-O ciclo de vida das solicitações segue um fluxo controlado de governança, garantindo rastreabilidade desde a abertura até a avaliação pós-atendimento:
+O fluxo de atendimento é automatizado e auditável, garantindo que nenhum chamado fique estagnado sem governança:
 
 ```mermaid
 graph TD
     A([1. Abertura do Chamado]) --> B[Fila de Triagem Geral]
-    B -->|Atribuição Manual ou Automática| C[2. Técnico Atribuído]
+    B -->|Atribuição Técnica| C[2. Técnico Responsável]
     C --> D[3. Em Atendimento]
-    D -->|Necessita de Dados do Usuário| E[4. Aguardando Validação / Terceiro]
-    E -->|Resposta Registrada pelo Solicitante| D
-    E -->|Inatividade > 7 dias sem resposta| F[🤖 Encerramento Automático ITIL]
+    D -->|Aguardando Dados do Solicitante| E[4. Aguardando Validação]
+    E -->|Interação / Resposta do Solicitante| D
+    E -->|Inatividade > 7 dias corridos| F[🤖 Encerramento Automático ITIL]
     D -->|Resolução com Causa Raiz Obrigatória| G[5. Concluído / Resolvido]
     G --> H[Disparo Automático de E-mail CSAT]
-    H --> I([6. Avaliação de Satisfação 1 a 5 ⭐])
+    H --> I([6. Avaliação de Atendimento 1 a 5 ⭐])
+
+    classDef saavOrange fill:#dc4405,stroke:#25282a,stroke-width:2px,color:#fff;
+    classDef saavDark fill:#25282a,stroke:#dc4405,stroke-width:2px,color:#fff;
+    classDef saavRed fill:#da291c,stroke:#25282a,stroke-width:1px,color:#fff;
+
+    class A,I saavOrange;
+    class B,C,D,E,G saavDark;
+    class F,H saavRed;
 ```
 
 ---
 
-## ✨ Funcionalidades Principais
+## ✨ Recursos e Funcionalidades
 
-### 🎫 Gestão do Ciclo de Vida do Chamado (ITIL)
-- **Abertura e Triagem:** Formulário intuitivo de abertura com suporte a múltiplos anexos e recurso **Copy & Paste** dinâmico (com visualização de miniaturas).
-- **Editor Rico (WYSIWYG):** Descrições e Work Notes contam com formatação avançada (Quill.js) para inserção estruturada de textos, listas e blocos de código.
-- **Visualização Flexível:** Alternância dinâmica entre visualização em **Tabela** e quadro **Kanban**.
-- **Histórico & Notas Internas:** Linha do tempo detalhada das movimentações do ticket, permitindo comentários públicos ou **notas internas restritas** à equipe técnica.
-- **Fechamento Obrigatório:** Validação de **Causa Raiz** para encerramento ou cancelamento de tickets.
-
-### ⏱️ Gestão Inteligente de SLA (Service Level Agreement)
-- Matriz dinâmica de tempo de atendimento baseada em **Prioridade x Tipo de Incidente/Solicitação**.
-- Indicadores visuais de status do SLA: **No prazo**, **Em Atenção (prazo crítico < 2h)** e **Estourado (Vencido)**.
-- Recálculo de prazos conforme alterações de classificação pelo técnico ou forçado em lote pelo administrador.
-
-### ⭐ Pesquisa de Satisfação (CSAT - Customer Satisfaction)
-- Avaliação de atendimento pós-encerramento (escala de 1 a 5 estrelas).
-- Envio automático de e-mail interativo contendo links diretos para avaliação com 1 clique.
-- Disparo em massa de lembretes para aumentar o engajamento dos solicitantes.
-
-### 📊 Painel BI & Relatórios Gerenciais
-- Dashboard analítico interativo (`bi.html`) com **suporte a cross-filtering**, drill-through para dados brutos e filtros temporais.
-- Indicadores de Volume de Chamados por Setor, Ranking de Solicitantes, Distribuição de Causas Raiz e Nota Média de CSAT.
-- Exportação de relatórios para **Excel / CSV** e exportação executiva em **PDF**.
-
-### 🔐 Segurança & Auditoria Avançada
-- **Autenticação de Sessão:** Controle via cookie de sessão seguro (`SessionMiddleware`).
-- **Criptografia de Senhas:** Armazenamento seguro de credenciais utilizando algoritmo **Bcrypt** nativo.
-- **Sistema de Auditoria & Logs:** Log rotativo de requisições HTTP, exceções e auditoria de ações críticas armazenado em `logs/sistema_geral.log` com retenção automática de 7 dias.
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <h3 style="color: #dc4405; margin-top: 0;">🎫 Gestão Operacional de Chamados</h3>
+      <ul>
+        <li><b>Abertura Simplificada:</b> Formulário intuitivo com suporte nativo a múltiplos anexos e <b>Copy & Paste de imagens (Ctrl+V)</b> direto da área de transferência.</li>
+        <li><b>Editor Rico (WYSIWYG):</b> Formatação completa de texto com listas, blocos de código e destaques via Quill.js.</li>
+        <li><b>Linha do Tempo & Work Notes:</b> Histórico cronológico detalhado com separação entre comentários públicos e <b>notas internas confidenciais</b>.</li>
+        <li><b>Visualização Flexível:</b> Alternância em tempo real entre listagem tabular paginada e quadro visual <b>Kanban</b>.</li>
+      </ul>
+    </td>
+    <td width="50%" valign="top">
+      <h3 style="color: #da291c; margin-top: 0;">⏱️ Acordo de Nível de Serviço (SLA)</h3>
+      <ul>
+        <li><b>Matriz Dinâmica:</b> Tempo de resposta e resolução calculado automaticamente pelo cruzamento de <i>Prioridade &times; Tipo de Demanda</i>.</li>
+        <li><b>Alertas Visuais:</b> Indicadores em tempo real para chamados <b>No Prazo</b>, <b>Em Atenção (&le; 2h)</b> e <b>SLA Estourado</b>.</li>
+        <li><b>Recálculo Global:</b> Ferramenta administrativa para reprocessar prazos de SLAs de todos os tickets ativos em lote.</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <h3 style="color: #25282a; margin-top: 0;">⭐ Pesquisa de Satisfação (CSAT)</h3>
+      <ul>
+        <li><b>Avaliação Integrada:</b> Classificação imediata de 1 a 5 estrelas após o encerramento do chamado.</li>
+        <li><b>Disparo Automático via E-mail:</b> Template HTML responsivo com links diretos de avaliação com 1 clique.</li>
+        <li><b>Reenvio em Lote:</b> Rotina administrativa para disparar lembretes a usuários com avaliações pendentes.</li>
+      </ul>
+    </td>
+    <td width="50%" valign="top">
+      <h3 style="color: #dc4405; margin-top: 0;">📊 Business Intelligence & Auditoria</h3>
+      <ul>
+        <li><b>Painel Interativo de BI:</b> Gráficos com <b>cross-filtering</b> por técnico, setor, status e período temporal.</li>
+        <li><b>Drill-Through:</b> Modal de auditoria com acesso imediato aos dados brutos das fatias selecionadas.</li>
+        <li><b>Exportação Corporativa:</b> Relatórios em planilhas <b>CSV</b> e exportação executiva formatada em <b>PDF</b>.</li>
+        <li><b>Rastreabilidade Total:</b> Log rotativo de requisições, IPs, tempos de resposta e exceções.</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
 ---
 
-## 🖥️ Telas do Sistema
+## 🖥️ Telas da Plataforma
 
-| Visão Geral da Fila de Chamados | Painel Executivo de BI |
-| :---: | :---: |
-| ![Fila de Chamados](docs/img/dashboard.png) | ![Painel BI](docs/img/bi.png) |
-| *Fila principal com badges de SLA e filtros rápidos* | *Cross-filtering dinâmico por setor, técnico e status* |
+<div align="center">
 
-| Detalhes do Chamado & Histórico | Modo Kanban Interativo |
-| :---: | :---: |
-| ![Detalhe Chamado](docs/img/detalhe.png) | ![Kanban](docs/img/kanban.png) |
-| *Timeline com notas internas e upload de evidências* | *Distribuição visual dos tickets por status operacional* |
+### Fila Geral de Chamados
+*Painel central com filtros avançados, badges de SLA e alternância para Kanban*  
+<img src="docs/img/dashboard.png" alt="Fila de Chamados Saavedra" width="90%" style="border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);" />
 
-> 💡 *Dica:* Para visualizar os prints em tamanho real ou atualizar as imagens, consulte o diretório [`docs/img/`](docs/img/).
+<br><br>
+
+### Painel Executivo de Business Intelligence (BI)
+*Cross-filtering dinâmico, volumetria por setor, causas raiz e média CSAT*  
+<img src="docs/img/bi.png" alt="Painel BI Saavedra" width="90%" style="border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);" />
+
+<br><br>
+
+### Detalhes do Chamado, Timeline & Notas Internas
+*Visão completa com notas sigilosas da equipe técnica, download de anexos e gestão de status*  
+<img src="docs/img/detalhe.png" alt="Detalhe do Chamado" width="90%" style="border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);" />
+
+<br><br>
+
+### Visão Ágil em Quadro Kanban
+*Organização visual por colunas de status operacional em tempo real*  
+<img src="docs/img/kanban.png" alt="Quadro Kanban Saavedra" width="90%" style="border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);" />
+
+</div>
 
 ---
 
@@ -116,20 +154,19 @@ graph TD
 
 ### **Backend**
 - **Linguagem:** Python 3.10+
-- **Framework Web:** [FastAPI](https://fastapi.tiangolo.com/) com servidor ASGI [Uvicorn](https://www.uvicorn.org/) (Arquitetura modular baseada em `APIRouter`)
-- **OR/Query Layer:** [SQLAlchemy](https://www.sqlalchemy.org/) com driver [PyODBC](https://github.com/mkleehammer/pyodbc)
-- **Segurança:** `bcrypt` para hash de credenciais e `Starlette SessionMiddleware`
-- **Validação de Dados:** `Pydantic v2`
+- **Framework Web:** [FastAPI](https://fastapi.tiangolo.com/) + Servidor ASGI [Uvicorn](https://www.uvicorn.org/)
+- **Camada de Dados:** [SQLAlchemy](https://www.sqlalchemy.org/) com driver de alta performance [PyODBC](https://github.com/mkleehammer/pyodbc)
+- **Segurança de Acesso:** Criptografia de senhas com algoritmo **Bcrypt puro** e gestão de sessão via `Starlette SessionMiddleware`
+- **Validação de Schemas:** Pydantic v2
 
 ### **Frontend**
-- **Core:** Vanilla JavaScript (ES6+), HTML5 Semântico
-- **Estilização:** CSS3 puro com Design System proprietário (variáveis CSS, layouts flex/grid e suporte a modo responsivo)
-- **Editores e Gráficos:** [Quill.js](https://quilljs.com/) (Editor WYSIWYG) e [Chart.js](https://www.chartjs.org/) (Gráficos Interativos)
-- **Ícones:** [Google Material Symbols](https://fonts.google.com/icons)
+- **Fundação:** Vanilla JavaScript (ES6+), HTML5 Semântico
+- **Estilização:** CSS3 puro baseado no Design System proprietário da Saavedra (paleta corporativa, variáveis CSS e responsividade nativa)
+- **Componentes:** [Quill.js](https://quilljs.com/) (Editor WYSIWYG) &bull; [Chart.js](https://www.chartjs.org/) (Analytics) &bull; [Google Material Symbols](https://fonts.google.com/icons)
 
 ### **Banco de Dados**
-- **Engine:** **Microsoft SQL Server 2016 Standard Edition**
-- 📄 Documentação completa do modelo de dados e diagrama ER: **[`docs/database.md`](docs/database.md)**
+- **Motor:** **Microsoft SQL Server 2016 Standard Edition**
+- 📄 Documentação técnica, campos e diagrama ER: **[`docs/database.md`](docs/database.md)**
 
 ---
 
@@ -137,72 +174,72 @@ graph TD
 
 ```text
 .
-├── api/                      # Backend em Python FastAPI
-│   ├── main.py               # Ponto de entrada (Uvicorn), middlewares e scheduler ITIL
-│   ├── config.py             # Carregador de variáveis de ambiente e parâmetros de infra
-│   ├── database.py           # Conexão e pooling SQLAlchemy com SQL Server
-│   ├── schemas.py            # Modelos de validação Pydantic
+├── api/                      # Camada de Serviços Backend (FastAPI)
+│   ├── main.py               # Ponto de entrada, middlewares de auditoria e scheduler ITIL
+│   ├── config.py             # Variáveis de ambiente e parâmetros de infraestrutura
+│   ├── database.py           # Conexão e pool de conexões com SQL Server
+│   ├── schemas.py            # Modelos de validação de dados Pydantic
 │   ├── utils.py              # Utilitários de e-mail (SMTP), formatação e logs
-│   ├── routers/              # Controladores isolados por domínio (APIRouter)
-│   │   ├── admin.py          # Lógica administrativa (SLAs, recálculo e CSAT)
-│   │   ├── auth.py           # Autenticação de usuários e gestão de sessão
-│   │   ├── cadastros.py      # Gestão de usuários, setores e tabelas auxiliares
+│   ├── routers/              # Endpoints modularizados por domínio de negócio
+│   │   ├── admin.py          # Gestão administrativa de SLAs, recálculo e CSAT
+│   │   ├── auth.py           # Autenticação de usuários e controle de sessão
+│   │   ├── cadastros.py      # Gestão de colaboradores, setores e tabelas de domínio
 │   │   ├── relatorios.py     # Endpoints de KPIs e métricas do BI
 │   │   └── tarefas.py        # Fila principal de chamados, anexos e ações
-│   ├── migrasenha.py         # Script utilitário para migração segura de senhas para Bcrypt
-│   ├── reenviar_csat.py      # Disparador automatizado de pesquisas de satisfação
-│   └── testar_email.py       # Validador de credenciais e envio SMTP
+│   ├── migrasenha.py         # Utilitário para migração segura de senhas para Bcrypt
+│   ├── reenviar_csat.py      # Script de disparo automatizado de pesquisas pendentes
+│   └── testar_email.py       # Validador de conexão e credenciais SMTP
 ├── frontend/                 # Interface Web da Aplicação
 │   ├── js/                   # Módulos JavaScript utilitários
-│   │   └── anexos.js         # Módulo avançado de múltiplos anexos e Copy & Paste
-│   ├── auth.js               # Gerenciador global de sessão e permissões de tela
-│   ├── style.css             # Design System moderno, variáveis e temas
-│   ├── index.html            # Dashboard principal, Kanban e Fila de Chamados
-│   ├── admin.html            # Painel Administrativo (Usuários, SLAs e Domínios)
-│   ├── bi.html               # Painel de Business Intelligence / Analytics
-│   ├── detalhe_chamado.html  # Visualização de ticket, inclusão de anexos e histórico
+│   │   └── anexos.js         # Módulo de múltiplos anexos e Copy & Paste (DataTransfer)
+│   ├── auth.js               # Gestor de autenticação e permissões de tela
+│   ├── style.css             # Folha de estilos e Design System Saavedra
+│   ├── index.html            # Dashboard principal, Kanban e Fila de Atendimento
+│   ├── admin.html            # Painel Administrativo (Usuários, SLAs e Cadastros)
+│   ├── bi.html               # Painel Executivo de BI & Analytics
+│   ├── detalhe_chamado.html  # Visualização de ticket, histórico e Work Notes
 │   ├── login.html            # Tela de autenticação corporativa
 │   ├── novo_chamado.html     # Formulário de abertura de chamados com WYSIWYG
-│   ├── relatorios.html       # Painel de Relatórios Gerenciais (Admin/Gestor)
-│   └── relatorios_comum.html # Painel de Acompanhamento Pessoal (Solicitante)
+│   ├── relatorios.html       # Painel de Relatórios Gerenciais (Equipe/Gestores)
+│   └── relatorios_comum.html # Painel de Acompanhamento do Solicitante
 ├── docs/                     # Documentações Técnicas e Arquiteturais
-│   ├── database.md           # Diagrama ER detalhado e Dicionário de Dados SQL Server
-│   ├── img/                  # Capturas de tela e evidências visuais
-│   └── learning/             # Cronogramas e materiais de capacitação técnica
-├── DOCUMENTACAO_CONFLUENCE.md# Manual detalhado para publicação na base de conhecimento
-├── LICENSE                   # Licença de uso do software (MIT)
-└── README.md                 # Visão geral do projeto (este arquivo)
+│   ├── database.md           # Modelagem detalhada e Dicionário de Dados SQL Server
+│   ├── img/                  # Imagens e capturas de tela da plataforma
+│   └── learning/             # Materiais internos de capacitação e DevOps
+├── DOCUMENTACAO_CONFLUENCE.md# Manual completo para publicação em base de conhecimento
+├── LICENSE                   # Termo de uso proprietário e confidencial
+└── README.md                 # Visão geral do sistema (este documento)
 ```
 
 ---
 
-## 🚀 Pré-requisitos e Instalação
+## 🚀 Instalação e Execução
 
-### **1. Requisitos do Sistema**
-- **Python 3.10** ou superior instalado.
-- **Microsoft SQL Server 2016** (ou superior) acessível na rede.
-- **Driver ODBC para SQL Server** (*Microsoft ODBC Driver 17 or 18 for SQL Server* ou driver legado *SQL Server*).
+### **1. Requisitos do Servidor**
+- **Python 3.10+** instalado
+- **Microsoft SQL Server 2016** acessível na rede corporativa
+- **Microsoft ODBC Driver para SQL Server** (*Driver 17, 18 ou SQL Server nativo*)
 
 ### **2. Configuração do Backend**
 
-Clone o repositório e navegue até a pasta da API:
+Clone o repositório corporativo e acesse o diretório da API:
 ```bash
 git clone https://github.com/suportesaav-web/saavedra_chamados.git
 cd saavedra_chamados/api
 ```
 
-Crie e ative um ambiente virtual Python:
+Crie e ative o ambiente virtual:
 ```bash
 # Windows (PowerShell)
 python -m venv venv
 .\venv\Scripts\activate
 
-# Linux/macOS
+# Linux / Bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-Instale as dependências exigidas:
+Instale as dependências da aplicação:
 ```bash
 pip install fastapi uvicorn sqlalchemy pyodbc bcrypt python-dotenv pydantic
 ```
@@ -211,107 +248,97 @@ pip install fastapi uvicorn sqlalchemy pyodbc bcrypt python-dotenv pydantic
 
 ## 🔑 Configuração de Variáveis de Ambiente (`.env`)
 
-Crie um arquivo `.env` dentro do diretório `api/` com a seguinte estrutura de configuração:
+Crie o arquivo `.env` dentro da pasta `api/` com os parâmetros corporativos:
 
 ```ini
-# Configurações do Banco de Dados SQL Server
+# Conexão com o Microsoft SQL Server
 SAAVEDRA_DB_USER=chamados
 SAAVEDRA_DB_PASS=SuaSenhaSegura123
 SAAVEDRA_DB_HOST=10.0.0.252
 SAAVEDRA_DB_NAME=GestaoChamados
 
-# Chave de Criptografia da Sessão Web (Starlette)
+# Chave Criptográfica para Sessão Web
 SAAVEDRA_SECRET_KEY=sua_chave_secreta_super_segura_aqui!
 
-# Configurações de Notificações de E-mail (SMTP)
+# Configurações do Servidor SMTP de Notificações
 SAAVEDRA_SMTP_HOST=smtp.office365.com
 SAAVEDRA_SMTP_PORT=587
 SAAVEDRA_SMTP_USER=suporte.saav@saavedra.com.br
 SAAVEDRA_SMTP_PASS=SuaSenhaSMTP
 SAAVEDRA_SMTP_FROM=suporte.saav@saavedra.com.br
 
-# URL Base da Aplicação Web
+# URL Base do Frontend
 SAAVEDRA_FRONTEND_URL=http://10.0.0.252:8082
 ```
 
 ---
 
-## 🏃 Executando a Aplicação
+## 🏃 Inicialização dos Serviços
 
-### **Iniciando a API Backend**
-Dentro do diretório `api/` (com o ambiente virtual ativo):
+### **Iniciando a API**
+Dentro de `api/` (com o ambiente virtual ativo):
 ```bash
 uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-A documentação interativa Swagger da API estará disponível em:
+A documentação interativa Swagger estará disponível em:  
 👉 **`http://localhost:8000/docs`**
 
-### **Acessando o Frontend**
-Abra o arquivo `frontend/index.html` em seu navegador ou utilize um servidor web estático (ex: Nginx, IIS ou extensão *Live Server* no VS Code).
+### **Acessando a Interface Web**
+Abra o arquivo `frontend/index.html` em seu navegador ou disponibilize-o através do IIS, Nginx ou servidor de arquivos corporativo.
 
 ---
 
-## 🔌 Endpoints da API REST
+## 🔌 Endpoints da API
 
-| Método | Rota | Descrição | Acesso |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/auth/login` | Realiza autenticação e inicia sessão web | Público |
-| `GET` | `/api/auth/me` | Retorna dados do usuário autenticado | Autenticado |
-| `GET` | `/api/auth/logout` | Encerra a sessão ativa do usuário | Autenticado |
-| `POST` | `/api/auth/alterar-senha` | Altera a senha do usuário logado | Autenticado |
-| `GET` | `/api/kpis` | Retorna métricas e contadores dinâmicos de SLA/Status | Autenticado |
-| `GET` | `/api/tarefas` | Lista chamados da fila com filtros e paginação | Admin / Gestor / Técnico |
-| `GET` | `/api/meus-chamados` | Lista os chamados abertos pelo solicitante logado | Solicitante |
-| `GET` | `/api/tarefas/{id}` | Retorna detalhes completos e anexos do chamado | Autenticado |
-| `POST` | `/api/tarefas` | Registra um novo chamado na plataforma | Autenticado |
-| `PUT` | `/api/tarefas/{id}` | Atualiza status, técnico, tipo ou causa raiz do chamado | Admin / Gestor / Técnico |
-| `POST` | `/api/tarefas/{id}/responder` | Adiciona comentário/resposta ao histórico do chamado | Autenticado |
-| `POST` | `/api/tarefas/{id}/anexar` | Envia e vincula ficheiros/anexos ao chamado | Autenticado |
-| `POST` | `/api/tarefas/{id}/avaliar` | Registra nota CSAT (1 a 5 estrelas) no chamado | Solicitante |
-| `GET` | `/api/usuarios` | Lista todos os usuários cadastrados | Admin / Gestor |
-| `GET` | `/api/admin/sla-matrix` | Retorna a matriz configurável de SLAs | Admin |
-| `POST` | `/api/admin/recalcular-sla` | Força recálculo dos SLAs de tickets em aberto | Admin |
-| `POST` | `/api/admin/reenviar-csat-pendentes`| Dispara e-mails de lembrete CSAT pendentes em lote | Admin |
+| Método | Rota | Descrição | Perfil Mínimo |
+| :---: | :--- | :--- | :--- |
+| `POST` | `/api/auth/login` | Autenticação e geração de sessão web | Público |
+| `GET` | `/api/auth/me` | Dados do usuário atualmente autenticado | Autenticado |
+| `GET` | `/api/auth/logout` | Encerramento seguro da sessão | Autenticado |
+| `POST` | `/api/auth/alterar-senha` | Atualização de credencial do usuário | Autenticado |
+| `GET` | `/api/kpis` | Contadores em tempo real de status e SLA | Autenticado |
+| `GET` | `/api/tarefas` | Listagem da fila geral com filtros e paginação | Técnico / Gestor / Admin |
+| `GET` | `/api/meus-chamados` | Chamados abertos pelo solicitante conectado | Solicitante / Comum |
+| `GET` | `/api/tarefas/{id}` | Ficha detalhada, anexos e metadados do chamado | Autenticado |
+| `POST` | `/api/tarefas` | Abertura de nova solicitação ou incidente | Autenticado |
+| `PUT` | `/api/tarefas/{id}` | Movimentação técnica de status, técnico e causa raiz | Técnico / Gestor / Admin |
+| `POST` | `/api/tarefas/{id}/responder` | Registro de comentário público na linha do tempo | Autenticado |
+| `POST` | `/api/tarefas/{id}/anexar` | Envio de múltiplos arquivos e evidências | Autenticado |
+| `POST` | `/api/tarefas/{id}/avaliar` | Registro de nota CSAT (1 a 5 estrelas) | Solicitante do chamado |
+| `GET` | `/api/usuarios` | Relação de usuários e perfis cadastrados | Gestor / Admin |
+| `GET` | `/api/admin/sla-matrix` | Matriz configurável de SLA (Horas por Tipo/Prioridade)| Admin |
+| `POST` | `/api/admin/recalcular-sla` | Recálculo em lote de prazos de chamados ativos | Admin |
+| `POST` | `/api/admin/reenviar-csat-pendentes` | Disparo em lote de e-mails de avaliação CSAT | Admin |
 
 ---
 
-## 🤖 Automações & Cron Jobs ITIL
-
-O backend conta com rotinas automáticas de background:
+## 🤖 Automações & Rotinas ITIL em Background
 
 1. **Encerramento Automático por Inatividade (ITIL):**
-   Chamados que estejam com status de *Aguardando Solicitante* ou *Validação* há mais de **7 dias** sem qualquer interação são automaticamente encerrados pela rotina ITIL em background, atribuindo a causa raiz `"Encerramento Automático (Inatividade ITIL)"` e registrando o histórico no ticket.
+   Chamados que permaneçam nos status *Aguardando Solicitante* ou *Aguardando Validação* por mais de **7 dias corridos** sem nenhuma resposta são automaticamente encerrados pelo robô do sistema com a causa raiz `"Encerramento Automático (Inatividade ITIL)"`.
 
-2. **Limpeza e Rotação de Logs de Auditoria:**
-   Logs de auditoria gerados em `logs/sistema_geral.log` com mais de 7 dias de criação são expurgados periodicamente para preservação de integridade e espaço em disco.
-
----
-
-## 📖 Documentação Adicional
-
-- 🗄️ **[Modelagem e Arquitetura do Banco de Dados](docs/database.md)**: Diagrama ER completo, campos, chaves e dicionário de dados.
-- 📘 **[Manual de Publicação e Operação (Confluence)](DOCUMENTACAO_CONFLUENCE.md)**: Guia completo para equipes de suporte e implantação corporativa.
-- 🎓 **[Roteiros de Capacitação Técnica](docs/learning/cronograma.md)**: Trilhas de estudos e materiais complementares de automação DevOps.
+2. **Auditoria e Expurgamento Seguro de Logs:**
+   Logs de auditoria em `logs/sistema_geral.log` passam por rotação horária contínua e expurgo automático após 7 dias de retenção para conservação de espaço e conformidade.
 
 ---
 
-## 👨‍💻 Desenvolvedor & Autoria
+<div align="center">
 
-Projetado e desenvolvido por **Jonatan Severo**.
+### 📘 Documentação Adicional
 
-- 📧 **E-mail:** [suporte.saav@saavedra.com.br](mailto:suporte.saav@saavedra.com.br)
-- 💼 **LinkedIn:** [linkedin.com/in/jonatanfsevero](https://www.linkedin.com/in/jonatanfsevero/)
-- 🏢 **Organização:** Saavedra Suporte Web
+[**Modelagem de Banco de Dados**](docs/database.md) &bull; 
+[**Manual de Confluence**](DOCUMENTACAO_CONFLUENCE.md) &bull; 
+[**Trilhas Técnicas Internas**](docs/learning/cronograma.md)
 
----
-
-## 📄 Licença
-
-Este projeto está licenciado sob os termos da licença **MIT**. Para mais detalhes, consulte o arquivo [`LICENSE`](LICENSE).
+<br>
 
 ---
 
 <p align="center">
-  Desenvolvido com 🧡 por <strong>Jonatan Severo</strong> — Saavedra Suporte Web
+  <b>Saavedra Chamados</b> &bull; Sistema Corporativo de Gestão de Serviços de TI<br>
+  Desenvolvido por <b>Jonatan Severo</b> &bull; Saavedra Suporte Web<br>
+  <sub>Propriedade exclusiva e confidencial da Saavedra. Todos os direitos reservados.</sub>
 </p>
+
+</div>
